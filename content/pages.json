@@ -1,0 +1,503 @@
+[
+  {
+    "slug": "",
+    "file": "home.html",
+    "type": "page",
+    "breadcrumb": "Home",
+    "title": "Accountants in Gqeberha (Port Elizabeth) | Knoesen Accounting",
+    "description": "SAIPA-registered accountant in Gqeberha. Bookkeeping, financial statements, tax, VAT, payroll and CIPC returns for Nelson Mandela Bay businesses.",
+    "h1": "Knoesen Accounting, Tax & Payroll",
+    "changefreq": "weekly",
+    "priority": "1.0",
+    "updated": "2026-08-03",
+    "faq": [
+      {
+        "q": "Do you work with small businesses and sole proprietors?",
+        "a": "Yes. We support a wide range of SMEs, sole proprietors and growing businesses that need dependable financial administration and practical advice, from one-person operations to companies with staff on payroll."
+      },
+      {
+        "q": "Can you help with payroll and SARS submissions?",
+        "a": "Yes. We manage monthly EMP201 declarations, bi-annual EMP501 reconciliations, UIF submissions to the Department of Employment and Labour, and SARS-related compliance work as part of our service."
+      },
+      {
+        "q": "Where are you based and which areas do you serve?",
+        "a": "The practice is based in Walmer Heights, Gqeberha (Port Elizabeth). We serve clients across the Nelson Mandela Bay Metro, including Walmer, Newton Park, Summerstrand, Lorraine, Kariega and Despatch, as well as surrounding Eastern Cape towns. Much of the work is handled digitally, so distance is rarely an obstacle."
+      },
+      {
+        "q": "What makes your service different from a larger firm?",
+        "a": "You deal directly with Lourens Knoesen, the principal accountant, rather than being passed between junior staff. That means one person who knows your business, answers your calls, and explains things without jargon."
+      },
+      {
+        "q": "I have not filed tax returns in years. Can you still help?",
+        "a": "Yes. Bringing overdue returns up to date is common work for us. The sooner outstanding returns are addressed the better, because SARS administrative penalties accumulate monthly per outstanding return."
+      }
+    ]
+  },
+  {
+    "slug": "about",
+    "file": "about.html",
+    "type": "page",
+    "breadcrumb": "About",
+    "breadcrumbs": [],
+    "eyebrow": "About the Practice",
+    "title": "About Lourens Knoesen | Professional Accountant, Gqeberha",
+    "description": "Lourens Knoesen is a SAIPA-registered Professional Accountant (SA) with 10+ years' experience, running an accounting practice in Walmer Heights, Gqeberha.",
+    "h1": "The accountant behind the ledger",
+    "lead": "Knoesen Accounting, Tax &amp; Payroll is a one-accountant practice by design. When you call, you speak to the person who does the work.",
+    "priority": "0.8",
+    "updated": "2026-08-03"
+  },
+  {
+    "slug": "services",
+    "file": "services.html",
+    "type": "page",
+    "breadcrumb": "Services",
+    "breadcrumbs": [],
+    "eyebrow": "What We Do",
+    "title": "Accounting, Tax & Payroll Services in Gqeberha | Knoesen",
+    "description": "Bookkeeping, annual financial statements, income tax and VAT returns, payroll and CIPC filings for small businesses in Gqeberha and Nelson Mandela Bay.",
+    "h1": "Four ledgers, one accountant",
+    "lead": "From the first bookkeeping entry to the final statutory return, every service below is handled directly by {{principal_first}} — no call centre, no hand-offs, no junior learning on your file.",
+    "priority": "0.9",
+    "updated": "2026-08-03"
+  },
+  {
+    "slug": "services/accounting",
+    "file": "service-accounting.html",
+    "type": "service",
+    "service_type": "Accounting and bookkeeping services",
+    "breadcrumb": "Accounting & Financial Statements",
+    "breadcrumbs": [
+      {
+        "name": "Services",
+        "slug": "services"
+      }
+    ],
+    "eyebrow": "The General Ledger",
+    "title": "Bookkeeping & Financial Statements Gqeberha | Knoesen",
+    "description": "Monthly bookkeeping, management accounts and compiled annual financial statements for companies, sole proprietors, trusts and NPOs in Gqeberha.",
+    "h1": "Accounting & Financial Statements",
+    "lead": "Books that are actually up to date, and financial statements you can hand to a bank, a funder or SARS with confidence.",
+    "priority": "0.8",
+    "updated": "2026-08-03",
+    "faq": [
+      {
+        "q": "What is the difference between an audit, a review and a compilation?",
+        "a": "A compilation means the accountant prepares the annual financial statements from your records without expressing an assurance opinion. An independent review and an audit are assurance engagements with progressively more testing. Which one your company needs depends on its Public Interest Score and its Memorandum of Incorporation. Most owner-managed small companies in South Africa require only a compilation."
+      },
+      {
+        "q": "How often should bookkeeping be done?",
+        "a": "Monthly, in almost every case. Monthly bookkeeping keeps VAT returns accurate, makes payroll reconciliations straightforward, and means year-end is a review rather than a scramble. It also means you can see how the business is actually performing while you can still do something about it."
+      },
+      {
+        "q": "Do you work with Xero, Sage, QuickBooks or spreadsheets?",
+        "a": "We work with whatever you already use, including well-kept spreadsheets. If your current system is causing more problems than it solves, we will say so and help you move — but changing software is never a precondition for working together."
+      },
+      {
+        "q": "My books are years behind. Is that a problem?",
+        "a": "It is common and it is fixable. We reconstruct the records period by period, bring the filings up to date, and then set up a routine so it does not happen again."
+      }
+    ]
+  },
+  {
+    "slug": "services/tax",
+    "file": "service-tax.html",
+    "type": "service",
+    "service_type": "Tax preparation and SARS compliance services",
+    "breadcrumb": "Tax & SARS",
+    "breadcrumbs": [
+      {
+        "name": "Services",
+        "slug": "services"
+      }
+    ],
+    "eyebrow": "SARS & Revenue",
+    "title": "Tax Services & SARS Returns Gqeberha | Knoesen Accounting",
+    "description": "Income tax, provisional tax and VAT returns for individuals and companies in Gqeberha, plus SARS registrations, disputes and overdue return clean-ups.",
+    "h1": "Tax & SARS Services",
+    "lead": "Returns filed correctly and on time, and a straight answer when SARS sends something you do not understand.",
+    "priority": "0.8",
+    "updated": "2026-08-03",
+    "faq": [
+      {
+        "q": "Am I a provisional taxpayer?",
+        "a": "Generally, you are a provisional taxpayer if you earn income that is not subject to PAYE — such as business income, rental income or significant investment income. Someone who earns only a salary usually is not. There is an exemption where income from interest, dividends, foreign dividends, rental from fixed property and remuneration from an unregistered employer totals R30 000 or less for the tax year."
+      },
+      {
+        "q": "What happens if I file my tax return late?",
+        "a": "SARS charges administrative non-compliance penalties that recur every month a return remains outstanding, and interest accrues on any unpaid tax. The penalties are levied per outstanding return, so several late years compound quickly. Filing late is always better than not filing."
+      },
+      {
+        "q": "Can you deal with SARS on my behalf?",
+        "a": "Yes. Once you appoint us and we are linked to your profile on SARS eFiling, we can submit returns, respond to verification requests, and handle correspondence directly with SARS on your behalf."
+      },
+      {
+        "q": "I received an auto-assessment. Do I need to do anything?",
+        "a": "Only if it is wrong or incomplete. An auto-assessment uses third-party data SARS already holds. If you have deductions SARS does not know about — home office costs, travel claims, retirement annuity contributions or medical expenses not on a scheme certificate — you should file a return rather than accept it."
+      }
+    ]
+  },
+  {
+    "slug": "services/payroll",
+    "file": "service-payroll.html",
+    "type": "service",
+    "service_type": "Payroll processing and employment tax services",
+    "breadcrumb": "Payroll",
+    "breadcrumbs": [
+      {
+        "name": "Services",
+        "slug": "services"
+      }
+    ],
+    "eyebrow": "The Payroll Book",
+    "title": "Payroll Services Gqeberha | PAYE, UIF & SDL Compliance",
+    "description": "Outsourced payroll in Gqeberha: payslips, EMP201 and EMP501 submissions, IRP5 certificates, UIF and SDL. For teams of one to a hundred.",
+    "h1": "Payroll Services",
+    "lead": "Staff paid correctly, PAYE and UIF submitted on time, and IRP5s that reconcile at year-end without drama.",
+    "priority": "0.8",
+    "updated": "2026-08-03",
+    "faq": [
+      {
+        "q": "When must PAYE, UIF and SDL be paid over to SARS?",
+        "a": "The EMP201 declaration and payment are due within seven days after the end of the month the deductions relate to. Where the seventh falls on a weekend or public holiday, the deadline moves to the last business day before it."
+      },
+      {
+        "q": "Does my business have to pay the Skills Development Levy?",
+        "a": "SDL is levied at 1% of total remuneration paid to employees. Employers whose total annual remuneration is less than R500 000 are exempt from paying SDL."
+      },
+      {
+        "q": "How much UIF must be contributed?",
+        "a": "Unemployment insurance contributions are payable monthly, made up of 1% contributed by the employer and 1% by the employee, based on the employee's remuneration below a prescribed ceiling."
+      },
+      {
+        "q": "When are the EMP501 reconciliations due?",
+        "a": "There are two each year: an interim reconciliation covering March to August, and an annual reconciliation covering the full tax year. These are what generate employees' IRP5 and IT3(a) certificates, so errors here surface directly on your staff's tax returns."
+      }
+    ]
+  },
+  {
+    "slug": "services/company-secretarial",
+    "file": "service-company-secretarial.html",
+    "type": "service",
+    "service_type": "Company secretarial and CIPC statutory services",
+    "breadcrumb": "Company Secretarial & CIPC",
+    "breadcrumbs": [
+      {
+        "name": "Services",
+        "slug": "services"
+      }
+    ],
+    "eyebrow": "The Registrar",
+    "title": "CIPC Annual Returns & Company Registration | Gqeberha",
+    "description": "CIPC annual returns, beneficial ownership filings, company registrations and deregistrations, handled from Gqeberha for Nelson Mandela Bay businesses.",
+    "h1": "Company Secretarial & CIPC",
+    "lead": "The statutory filings that quietly accumulate in the background — kept current, so your company never drifts into deregistration.",
+    "priority": "0.8",
+    "updated": "2026-08-03",
+    "faq": [
+      {
+        "q": "What happens if I do not file my CIPC annual return?",
+        "a": "CIPC may place the company in deregistration process and ultimately deregister it. A deregistered company loses its legal existence: its bank accounts can be frozen, it cannot contract lawfully, and directors lose the protection of separate legal personality. Reinstatement is possible but slower and more expensive than simply filing on time."
+      },
+      {
+        "q": "When is my CIPC annual return due?",
+        "a": "Companies must file within 30 business days after the anniversary of their date of incorporation. Close corporations file within the anniversary month of incorporation and the two months following. The fee is based on turnover, and it is separate from your SARS income tax return — the two are often confused."
+      },
+      {
+        "q": "What is a beneficial ownership declaration?",
+        "a": "South African companies and close corporations must file information about the natural persons who ultimately own or effectively control the entity. It is filed with CIPC alongside the annual return, and non-compliance can block the annual return from being accepted."
+      },
+      {
+        "q": "Can you register a new company for me?",
+        "a": "Yes — company registration at CIPC, income tax registration at SARS, and UIF registration at the Department of Employment and Labour. See our checklist for what is involved."
+      }
+    ]
+  },
+  {
+    "slug": "areas-we-serve",
+    "file": "areas.html",
+    "type": "page",
+    "breadcrumb": "Areas We Serve",
+    "breadcrumbs": [],
+    "eyebrow": "Nelson Mandela Bay & Beyond",
+    "title": "Accountant in Nelson Mandela Bay | Gqeberha & Kariega",
+    "description": "An accountant serving Gqeberha, Walmer, Newton Park, Summerstrand, Kariega, Despatch and the wider Eastern Cape. Locally in person, digitally everywhere.",
+    "h1": "An accountant for Nelson Mandela Bay",
+    "lead": "Based in {{suburb}}, {{city}}. Close enough to meet over coffee, set up to work with you wherever you are.",
+    "priority": "0.7",
+    "updated": "2026-08-03"
+  },
+  {
+    "slug": "contact",
+    "file": "contact.html",
+    "type": "page",
+    "breadcrumb": "Contact",
+    "breadcrumbs": [],
+    "eyebrow": "Get In Touch",
+    "title": "Contact Knoesen Accounting | Accountant in Gqeberha",
+    "description": "Call or WhatsApp +27 84 793 2990 for accounting, tax and payroll help in Gqeberha. The first conversation is free, with no obligation attached.",
+    "h1": "Let's talk about your numbers",
+    "lead": "A first conversation costs nothing and usually saves more than it costs. Tell {{principal_first}} what you need and he'll tell you straight whether he can help.",
+    "priority": "0.9",
+    "cta": false,
+    "updated": "2026-08-03"
+  },
+  {
+    "slug": "resources",
+    "file": "resources.html",
+    "type": "page",
+    "breadcrumb": "Resources",
+    "breadcrumbs": [],
+    "eyebrow": "Free Guides",
+    "title": "Free SA Tax & Payroll Guides for Small Business | Knoesen",
+    "description": "Plain-English South African tax guides for business owners: deadline calendars, 2026/27 rates, VAT thresholds, payroll compliance and company registration.",
+    "h1": "Guides for South African business owners",
+    "lead": "No sign-up, no email wall. Every figure on these pages is checked against SARS and National Treasury publications, and each guide carries the date it was last reviewed.",
+    "priority": "0.8",
+    "changefreq": "weekly",
+    "updated": "2026-08-03"
+  },
+  {
+    "slug": "resources/tax-deadlines-calendar",
+    "file": "guide-deadlines.html",
+    "type": "article",
+    "breadcrumb": "Tax Deadline Calendar",
+    "breadcrumbs": [
+      {
+        "name": "Resources",
+        "slug": "resources"
+      }
+    ],
+    "eyebrow": "Compliance Calendar",
+    "title": "South African Tax Deadlines 2026/27 | SARS & CIPC Calendar",
+    "description": "Every recurring SARS and CIPC deadline a South African business needs: EMP201, VAT201, EMP501, provisional tax, filing season and CIPC annual returns.",
+    "h1": "The South African tax deadline calendar",
+    "lead": "Every recurring SARS, Department of Employment and Labour, and CIPC deadline that applies to a South African business, in one place.",
+    "priority": "0.8",
+    "changefreq": "monthly",
+    "published": "2026-08-03",
+    "updated": "2026-08-03"
+  },
+  {
+    "slug": "resources/sars-filing-season-2026",
+    "file": "guide-filing-season.html",
+    "type": "article",
+    "breadcrumb": "Filing Season 2026",
+    "breadcrumbs": [
+      {
+        "name": "Resources",
+        "slug": "resources"
+      }
+    ],
+    "eyebrow": "Filing Season",
+    "title": "SARS Filing Season 2026: Dates, Deadlines & Auto-Assessments",
+    "description": "SARS Filing Season 2026: non-provisional taxpayers file by 23 October 2026, provisional taxpayers and trusts by 22 January 2027. Auto-assessments explained.",
+    "h1": "SARS Filing Season 2026",
+    "lead": "The dates that matter, who they apply to, and what to do if SARS auto-assessed you.",
+    "priority": "0.9",
+    "changefreq": "weekly",
+    "published": "2026-08-03",
+    "updated": "2026-08-03",
+    "faq": [
+      {
+        "q": "When does Filing Season 2026 close?",
+        "a": "Non-provisional individual taxpayers have until 23 October 2026. Provisional taxpayers and trusts have until 22 January 2027."
+      },
+      {
+        "q": "What is an auto-assessment?",
+        "a": "SARS issues an auto-assessment using third-party data it already holds from employers, banks, medical schemes and retirement funds. Auto-assessment notices for 2026 were issued from 1 to 12 July 2026. If the assessment is correct and complete, no further action is needed."
+      },
+      {
+        "q": "Should I accept my auto-assessment?",
+        "a": "Only if it captures everything. SARS does not know about deductions it has no third-party record of, such as home office expenses, business travel against a travel allowance, or out-of-pocket medical costs. If any of those apply, file a return rather than accepting the auto-assessment."
+      }
+    ]
+  },
+  {
+    "slug": "resources/tax-rates-2026-2027",
+    "file": "guide-rates.html",
+    "type": "article",
+    "breadcrumb": "Tax Rates 2026/27",
+    "breadcrumbs": [
+      {
+        "name": "Resources",
+        "slug": "resources"
+      }
+    ],
+    "eyebrow": "Rate Tables",
+    "title": "South African Tax Rates & Brackets 2026/27 | Full Tables",
+    "description": "Verified 2026/27 South African tax tables: income tax brackets, rebates, thresholds, company and SBC rates, turnover tax, VAT, CGT and dividends tax.",
+    "h1": "South African tax rates 2026/27",
+    "lead": "The full rate tables for the {{tax_year}} tax year ({{tax_period}}), taken directly from National Treasury's Budget 2026 Tax Guide.",
+    "priority": "0.8",
+    "changefreq": "monthly",
+    "published": "2026-08-03",
+    "updated": "2026-08-03"
+  },
+  {
+    "slug": "resources/vat-registration-threshold",
+    "file": "guide-vat.html",
+    "type": "article",
+    "breadcrumb": "VAT Registration Threshold",
+    "breadcrumbs": [
+      {
+        "name": "Resources",
+        "slug": "resources"
+      }
+    ],
+    "eyebrow": "VAT",
+    "title": "VAT Registration Threshold South Africa: Now R2.3 Million",
+    "description": "From 1 April 2026 the compulsory VAT registration threshold rose from R1 million to R2.3 million. What changed, who it affects, and whether to deregister.",
+    "h1": "The VAT registration threshold is now R2.3 million",
+    "lead": "On 1 April 2026 the compulsory VAT registration threshold more than doubled. If your turnover sits between R1 million and R2.3 million, this directly affects you.",
+    "priority": "0.9",
+    "changefreq": "monthly",
+    "published": "2026-08-03",
+    "updated": "2026-08-03",
+    "faq": [
+      {
+        "q": "What is the VAT registration threshold in South Africa?",
+        "a": "A vendor that makes taxable supplies of more than R2.3 million per annum must register for VAT. This threshold increased from R1 million with effect from 1 April 2026."
+      },
+      {
+        "q": "Can I register for VAT voluntarily?",
+        "a": "Yes. A business making taxable supplies of more than R120 000 but not more than R2.3 million per annum may apply for voluntary VAT registration."
+      },
+      {
+        "q": "Is the South African VAT rate still 15%?",
+        "a": "Yes. VAT is levied at the standard rate of 15% on the supply of goods and services by registered vendors. The increases proposed in 2025 were reversed and the rate was left unchanged in Budget 2026."
+      },
+      {
+        "q": "Should I deregister for VAT now that the threshold has increased?",
+        "a": "It depends on who your customers are. If you sell mainly to other VAT-registered businesses, they reclaim the VAT you charge, and staying registered lets you keep claiming input VAT on your own costs. If you sell mainly to consumers, deregistering can make you effectively cheaper. There are also exit consequences, including output VAT on assets held at deregistration, so it is worth modelling before deciding."
+      }
+    ]
+  },
+  {
+    "slug": "resources/small-business-tax-guide",
+    "file": "guide-small-business.html",
+    "type": "article",
+    "breadcrumb": "Small Business Tax",
+    "breadcrumbs": [
+      {
+        "name": "Resources",
+        "slug": "resources"
+      }
+    ],
+    "eyebrow": "Small Business",
+    "title": "Small Business Tax South Africa 2026/27 | SBC vs Turnover Tax",
+    "description": "How South African small businesses are taxed in 2026/27: 27% company tax, Small Business Corporation rates from 0%, and turnover tax under R2.3 million.",
+    "h1": "How small businesses are taxed in South Africa",
+    "lead": "There are three different ways a small South African business can be taxed, and the gap between them is worth real money. Here is how to tell which one applies to you.",
+    "priority": "0.8",
+    "changefreq": "monthly",
+    "published": "2026-08-03",
+    "updated": "2026-08-03",
+    "faq": [
+      {
+        "q": "What is the company tax rate in South Africa?",
+        "a": "The standard corporate income tax rate is 27% of taxable income, applying to years of assessment ending on any date from 1 April 2026 to 31 March 2027."
+      },
+      {
+        "q": "What is a Small Business Corporation?",
+        "a": "A Small Business Corporation is a company, close corporation or co-operative that meets specific requirements in section 12E of the Income Tax Act, including a gross income limit, shareholders who are natural persons holding no other company shares, and a limit on income from personal or professional services. Qualifying entities are taxed on a graduated scale starting at 0% rather than a flat 27%."
+      },
+      {
+        "q": "Who qualifies for turnover tax?",
+        "a": "Micro businesses with a qualifying annual turnover of R2.3 million or less may elect turnover tax. It replaces income tax, VAT, provisional tax, capital gains tax and dividends tax with a single simplified calculation on turnover rather than profit."
+      },
+      {
+        "q": "Is turnover tax always cheaper?",
+        "a": "No. Turnover tax is calculated on turnover, not profit, so a business with thin margins or a loss-making year can pay turnover tax while owing no income tax at all. It suits high-margin, low-cost businesses with simple affairs. It is a calculation worth doing rather than a rule of thumb."
+      }
+    ]
+  },
+  {
+    "slug": "resources/payroll-compliance-guide",
+    "file": "guide-payroll.html",
+    "type": "article",
+    "breadcrumb": "Payroll Compliance",
+    "breadcrumbs": [
+      {
+        "name": "Resources",
+        "slug": "resources"
+      }
+    ],
+    "eyebrow": "Payroll",
+    "title": "Payroll Compliance South Africa | PAYE, UIF, SDL & EMP501",
+    "description": "What South African employers owe: registering for PAYE, UIF and SDL, monthly EMP201 deadlines, EMP501 reconciliations, IRP5s and the cost of getting it wrong.",
+    "h1": "Payroll compliance for South African employers",
+    "lead": "The moment you hire your first employee, a set of monthly and bi-annual obligations starts. Here is the complete picture.",
+    "priority": "0.8",
+    "changefreq": "monthly",
+    "published": "2026-08-03",
+    "updated": "2026-08-03"
+  },
+  {
+    "slug": "resources/starting-a-business-in-south-africa",
+    "file": "guide-startup.html",
+    "type": "article",
+    "breadcrumb": "Starting a Business",
+    "breadcrumbs": [
+      {
+        "name": "Resources",
+        "slug": "resources"
+      }
+    ],
+    "eyebrow": "Getting Started",
+    "title": "Registering a Business in South Africa | CIPC & SARS Checklist",
+    "description": "A step-by-step checklist for starting a business in South Africa: choosing a structure, CIPC registration, income tax and PAYE, VAT, and what follows.",
+    "h1": "Starting a business in South Africa: the checklist",
+    "lead": "Every registration a new South African business needs, in the order you actually need them, and the ongoing obligations each one creates.",
+    "priority": "0.7",
+    "published": "2026-08-03",
+    "updated": "2026-08-03"
+  },
+  {
+    "slug": "privacy-policy",
+    "file": "privacy-policy.html",
+    "type": "page",
+    "breadcrumb": "Privacy Policy",
+    "breadcrumbs": [],
+    "title": "Privacy Policy (POPIA) | Knoesen Accounting, Tax & Payroll",
+    "description": "How Knoesen Accounting, Tax & Payroll collects, uses, protects and retains personal information, in line with the Protection of Personal Information Act.",
+    "h1": "Privacy Policy",
+    "lead": "How we collect, use, protect and retain personal information, in line with the Protection of Personal Information Act (POPIA).",
+    "eyebrow": "Legal",
+    "priority": "0.3",
+    "changefreq": "yearly",
+    "cta": false,
+    "updated": "2026-08-03"
+  },
+  {
+    "slug": "disclaimer",
+    "file": "disclaimer.html",
+    "type": "page",
+    "breadcrumb": "Disclaimer",
+    "breadcrumbs": [],
+    "title": "Disclaimer & Terms of Use | Knoesen Accounting",
+    "description": "The guides on this site are general information about South African tax and are not advice for your specific circumstances. How to use them, and their limits.",
+    "h1": "Disclaimer & terms of use",
+    "lead": "The guides on this site are general information, carefully sourced and dated — but general information is not the same thing as advice about your situation.",
+    "eyebrow": "Legal",
+    "priority": "0.3",
+    "changefreq": "yearly",
+    "cta": false,
+    "updated": "2026-08-03"
+  },
+  {
+    "slug": "404",
+    "file": "not-found.html",
+    "type": "page",
+    "breadcrumb": "Page not found",
+    "title": "Page not found | Knoesen Accounting, Tax & Payroll",
+    "description": "That page could not be found. Here is where everything else on the Knoesen Accounting site lives, including services, guides and contact details.",
+    "h1": "That page isn't in the ledger",
+    "eyebrow": "Error 404",
+    "lead": "The page you were looking for has been moved, renamed, or never existed. Either way, nothing is missing from your books.",
+    "noindex": true,
+    "robots": "noindex, follow",
+    "cta": false,
+    "updated": "2026-08-03"
+  }
+]

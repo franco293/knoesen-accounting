@@ -1,0 +1,195 @@
+<section class="section section--paper">
+  <div class="container">
+    <div class="contact-grid reveal">
+      <div class="contact-card">
+        <div class="contact-rows">
+          <div class="contact-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+            <div>
+              <span class="label">Call</span>
+              <a class="value" href="tel:{{tel}}">{{phone}}</a>
+            </div>
+          </div>
+          <div class="contact-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/></svg>
+            <div>
+              <span class="label">WhatsApp</span>
+              <a class="value" href="{{whatsapp}}" target="_blank" rel="noopener noreferrer">{{phone}}</a>
+            </div>
+          </div>
+          <div class="contact-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+            <div>
+              <span class="label">Email</span>
+              <a class="value" href="mailto:{{email}}">{{email}}</a>
+            </div>
+          </div>
+          <div class="contact-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            <div>
+              <span class="label">Based in</span>
+              <span class="value">{{suburb}}, {{city}} ({{city_alt}}), {{region}}</span>
+            </div>
+          </div>
+          <div class="contact-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M14 21v-8h3l1-4h-4V7c0-1.1.9-2 2-2h2V1h-3a5 5 0 0 0-5 5v3H7v4h3v8z"/></svg>
+            <div>
+              <span class="label">Facebook</span>
+              <a class="value" href="https://www.facebook.com/Knoesenaccountingtaxandpayroll/" target="_blank" rel="noopener noreferrer">Knoesen Accounting Tax &amp; Payroll</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="prose prose--tight">
+          <h2>What to expect</h2>
+          <p>
+            The first conversation is free and there is no obligation attached
+            to it. Tell {{principal_first}} what your business does, where it is
+            currently sitting with SARS and CIPC, and what is worrying you.
+          </p>
+          <p>
+            You will get a straight answer about whether this practice is the
+            right fit, roughly what the work involves, and what it is likely to
+            cost — before anyone signs anything.
+          </p>
+          <h3>Useful things to have to hand</h3>
+          <ul>
+            <li>What type of entity it is — company, close corporation, sole proprietor, trust or NPO</li>
+            <li>Roughly what your annual turnover is</li>
+            <li>Whether you have employees on a payroll</li>
+            <li>Whether you are registered for VAT</li>
+            <li>Which returns, if any, are currently outstanding</li>
+          </ul>
+          <p class="small-print">
+            None of this is essential — call anyway. It just makes the first
+            conversation more useful.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==== CONTACT FORM ====
+         Activate this by creating a free access key at https://web3forms.com
+         and putting it into site.json under forms.web3forms_key, then running
+         `python build.py`. Until a key is present the form shows a friendly
+         notice with the phone and email instead of silently losing enquiries. -->
+    <div class="contact-form-card reveal">
+      <span class="eyebrow">Prefer To Write?</span>
+      <h2>Send a message</h2>
+      <p>
+        Fill this in and {{principal_first}} will come back to you directly. For
+        anything urgent, calling or WhatsApp is faster.
+      </p>
+
+      <form class="contact-form" id="contact-form" action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="{{WEB3FORMS_KEY}}" />
+        <input type="hidden" name="subject" value="New enquiry from knoesen-accounting.co.za" />
+        <input type="hidden" name="from_name" value="Knoesen Accounting website" />
+        <!-- Honeypot: bots fill every field they can find; people never see this one. -->
+        <div class="form-hp" aria-hidden="true">
+          <label for="hp-website">Leave this field blank</label>
+          <input type="text" id="hp-website" name="website" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div class="form-field">
+          <label for="cf-name">Name</label>
+          <input type="text" id="cf-name" name="name" autocomplete="name" required />
+        </div>
+        <div class="form-field">
+          <label for="cf-email">Email</label>
+          <input type="email" id="cf-email" name="email" autocomplete="email" required />
+        </div>
+        <div class="form-field">
+          <label for="cf-phone">Phone (optional)</label>
+          <input type="tel" id="cf-phone" name="phone" autocomplete="tel" />
+        </div>
+        <div class="form-field">
+          <label for="cf-topic">What do you need help with?</label>
+          <select id="cf-topic" name="topic">
+            <option value="">Select one…</option>
+            <option>Accounting &amp; financial statements</option>
+            <option>Tax returns &amp; SARS</option>
+            <option>VAT</option>
+            <option>Payroll</option>
+            <option>CIPC &amp; company secretarial</option>
+            <option>Registering a new business</option>
+            <option>Overdue returns / catching up</option>
+            <option>Something else</option>
+          </select>
+        </div>
+        <div class="form-field form-field--full">
+          <label for="cf-message">Message</label>
+          <textarea id="cf-message" name="message" required></textarea>
+        </div>
+
+        <label class="form-consent">
+          <input type="checkbox" id="cf-consent" name="consent" required />
+          <span>
+            I consent to {{brand}} processing the information above, in line
+            with POPIA, solely to respond to this enquiry. See the
+            <a href="/privacy-policy">Privacy Policy</a>. Please don't include
+            your ID number, tax number or banking details in this form.
+          </span>
+        </label>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">
+            Send Message<span class="btn-arrow" aria-hidden="true">&rarr;</span>
+          </button>
+        </div>
+        <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="section section--raised ruled">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Before You Call</span>
+      <h2>Common first questions</h2>
+    </div>
+    <div class="faq-list reveal">
+      <details class="faq-item" open>
+        <summary>How much does an accountant cost?</summary>
+        <p>
+          It depends almost entirely on volume and complexity — how many
+          transactions a month, whether you run a payroll, whether you are
+          VAT-registered, and how far behind the records are. Rather than
+          publish a headline number that would be wrong for most people, we
+          scope the work first and quote against it, so the fee you are quoted
+          is the fee for your business.
+        </p>
+      </details>
+      <details class="faq-item">
+        <summary>Can I switch accountants mid-year?</summary>
+        <p>
+          Yes, at any point. Your existing accountant is expected to hand over
+          your records, and there is a standard professional courtesy letter
+          between practices to make that orderly. Mid-year switches are common
+          and rarely as disruptive as people fear.
+        </p>
+      </details>
+      <details class="faq-item">
+        <summary>Do I need to come into an office?</summary>
+        <p>
+          Not unless you want to. Documents can be sent electronically, SARS
+          eFiling and CIPC are both online, and most clients handle everything
+          by email and WhatsApp. In-person meetings are available across Nelson
+          Mandela Bay by arrangement.
+        </p>
+      </details>
+      <details class="faq-item">
+        <summary>Is what I tell you confidential?</summary>
+        <p>
+          Yes. Client information is confidential as a matter of professional
+          obligation and is processed in line with POPIA. Our
+          <a href="/privacy-policy">Privacy Policy</a> sets out exactly what is
+          collected, why, who it is shared with and how long it is kept.
+        </p>
+      </details>
+    </div>
+  </div>
+</section>

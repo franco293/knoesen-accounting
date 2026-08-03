@@ -1,4 +1,23 @@
-# Force the apex domain to redirect to the canonical www host.
-# Remove or edit this if you'd rather use the apex domain as canonical instead
-# (in that case, also update the canonical/OG URLs in index.html and sitemap.xml).
-# https://knoesenacc.co.za/*  https://www.knoesenacc.co.za/:splat  301!
+# Cloudflare redirects. One canonical host: the apex, knoesen-accounting.co.za.
+# Every alias below 301s into it, so link equity lands in one place and Google
+# never has to choose between two copies of the same page.
+
+https://www.knoesen-accounting.co.za/*  https://knoesen-accounting.co.za/:splat  301
+http://www.knoesen-accounting.co.za/*   https://knoesen-accounting.co.za/:splat  301
+
+# This site used to be a single page with anchor navigation. Those anchors are
+# now real pages, so anyone arriving on an old bookmark or an indexed anchor
+# link lands somewhere sensible instead of on the home page with no context.
+/index.html            /                                     301
+/owner                 /about                                301
+/team                  /about                                301
+/areas                 /areas-we-serve                       301
+/blog                  /resources                            301
+/blog/*                /resources                            301
+/tax-rates             /resources/tax-rates-2026-2027        301
+/tax-deadlines         /resources/tax-deadlines-calendar     301
+/vat                   /resources/vat-registration-threshold 301
+/accounting            /services/accounting                  301
+/tax                   /services/tax                         301
+/payroll               /services/payroll                     301
+/cipc                  /services/company-secretarial         301

@@ -3,6 +3,8 @@ node_modules/
 .git/
 .gitignore
 README.md
+SEO-PLAYBOOK.md
+TODO-BEFORE-LAUNCH.md
 package.json
 package-lock.json
 bun.lockb
@@ -11,3 +13,9 @@ wrangler.jsonc
 serve.bat
 serve.ps1
 LICENSE
+
+# Build inputs. These generate the HTML that ships; they are not part of the
+# site itself and must never be publicly served.
+build.py
+site.json
+content/

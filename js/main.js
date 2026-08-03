@@ -59,10 +59,10 @@
   }
 
   /* Contact form: honeypot spam check + Web3Forms submission.
-     If the access_key still holds the placeholder, this is a fresh
-     unconfigured copy of the site — fail visibly and helpfully instead
-     of silently posting a doomed request. See the HTML comment above
-     the form in index.html for the one-step activation instructions. */
+     build.py writes the literal "UNCONFIGURED" into access_key whenever
+     site.json has no forms.web3forms_key, so an un-set-up copy of the site
+     fails visibly and helpfully instead of silently posting a doomed
+     request. See TODO-BEFORE-LAUNCH.md for the one-step activation. */
   var form = document.getElementById("contact-form");
   var status = document.getElementById("form-status");
 
@@ -86,7 +86,7 @@
 
       var accessKeyField = form.querySelector('input[name="access_key"]');
       var accessKey = accessKeyField ? accessKeyField.value : "";
-      if (!accessKey || accessKey.indexOf("REPLACE_WITH") === 0) {
+      if (!accessKey || accessKey === "UNCONFIGURED") {
         showStatus(
           "This form isn't switched on yet — please call, WhatsApp or email us directly using the details alongside.",
           "info"

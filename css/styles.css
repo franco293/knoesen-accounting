@@ -439,18 +439,34 @@ textarea {
   transform: translateY(-7px) rotate(-45deg);
 }
 
+/* This used to animate with the grid-template-rows 0fr -> 1fr trick, which
+   expands the panel to its full content height. That was fine when the menu
+   had five items. It is not fine now: with five sections plus eleven
+   sub-items the panel is ~920px tall, taller than a 812px phone screen, and
+   it lives inside a `position: sticky` header — so the overflowing items sit
+   off-screen and scrolling the page cannot reach them.
+
+   max-height plus overflow-y caps the panel at 78% of the viewport and lets
+   it scroll internally, so every item stays reachable on any screen size. */
 .mobile-panel {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.3s var(--ease);
+  overflow: hidden;
+  max-height: 0;
+  visibility: hidden;
   background: var(--green-900);
-  border-bottom: 1px solid rgba(176, 138, 70, 0.25);
+  border-bottom: 0 solid rgba(176, 138, 70, 0.25);
+  transition:
+    max-height 0.32s var(--ease),
+    visibility 0s linear 0.32s;
 }
 .mobile-panel.is-open {
-  grid-template-rows: 1fr;
-}
-.mobile-panel-inner {
-  overflow: hidden;
+  max-height: min(78vh, 44rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  visibility: visible;
+  border-bottom-width: 1px;
+  transition:
+    max-height 0.32s var(--ease),
+    visibility 0s linear 0s;
 }
 .mobile-panel ul {
   padding: 0.5rem var(--gutter) 1.5rem;
@@ -1056,6 +1072,15 @@ textarea {
   opacity: 1;
   transform: translateY(0);
 }
+/* .reveal starts at opacity 0 and is only un-hidden by main.js. If scripting
+   is unavailable, that would hide most of the page's content — so opt out of
+   the effect entirely rather than risk a blank-looking site. */
+@media (scripting: none) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
 
 /* ---- 404 page ------------------------------------------------------------------------ */
 .error-page {
@@ -1399,5 +1424,934 @@ textarea {
   .policy-toc ol {
     columns: 2;
     column-gap: 2rem;
+  }
+}
+
+/* ==========================================================================
+   MULTI-PAGE COMPONENTS
+   Added when the site grew from a single page to ~20. Everything below
+   extends the existing "Ledger" language rather than introducing a second
+   visual system: same tokens, same rules, same brass-on-paper palette.
+   ========================================================================== */
+
+/* ---- Navigation: dropdown submenus --------------------------------------
+   Opens on hover AND on focus-within, so the whole menu is reachable by
+   keyboard with no JavaScript. On mobile the panel lists every item flat,
+   with children indented, so there is no nested disclosure to get stuck in. */
+/* Direct-child selectors matter here: `.nav-links ul` would also match the
+   dropdown, and it out-specifies `.submenu`, which laid the dropdown out as a
+   wide flex row and pushed the whole page into horizontal overflow. */
+.nav-links > ul {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+}
+.nav-links > ul > li {
+  position: relative;
+}
+.nav-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+}
+.nav-links a[aria-current="page"] {
+  color: var(--brass-light);
+  border-color: var(--brass-light);
+}
+.caret {
+  font-size: 0.6em;
+  opacity: 0.7;
+  transition: transform 0.2s var(--ease);
+}
+.has-submenu:hover .caret,
+.has-submenu:focus-within .caret {
+  transform: translateY(1px);
+}
+.submenu {
+  position: absolute;
+  top: 100%;
+  left: -1rem;
+  min-width: 17rem;
+  padding: 0.5rem 0;
+  margin-top: 0.55rem;
+  background: var(--green-900);
+  border: 1px solid rgba(176, 138, 70, 0.28);
+  border-radius: var(--radius);
+  box-shadow: 0 18px 40px rgba(11, 20, 15, 0.35);
+  display: block;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition:
+    opacity 0.2s var(--ease),
+    transform 0.2s var(--ease),
+    visibility 0.2s;
+  z-index: 120;
+}
+.has-submenu:hover > .submenu,
+.has-submenu:focus-within > .submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.submenu li {
+  display: block;
+}
+.submenu a {
+  display: block;
+  padding: 0.6rem 1.1rem;
+  font-size: 0.78rem;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  border-bottom: 0;
+  white-space: nowrap;
+}
+.submenu a:hover,
+.submenu a:focus-visible {
+  background: rgba(176, 138, 70, 0.14);
+  color: var(--brass-light);
+}
+.mobile-panel .mobile-sub a {
+  padding-left: 1.25rem;
+  font-size: 0.85rem;
+  color: rgba(245, 241, 230, 0.72);
+}
+.mobile-panel .mobile-sub a::before {
+  content: "\2014\00a0";
+  color: var(--brass);
+}
+
+/* ---- Breadcrumbs ---------------------------------------------------------- */
+.breadcrumbs {
+  background: var(--paper-raised);
+  border-bottom: 1px solid var(--paper-rule);
+  padding-block: 0.7rem;
+}
+.breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-faint);
+}
+.breadcrumbs li + li::before {
+  content: "/";
+  margin-right: 0.55rem;
+  color: var(--paper-rule);
+}
+.breadcrumbs a {
+  color: var(--ink-soft);
+  border-bottom: 1px solid transparent;
+}
+.breadcrumbs a:hover {
+  color: var(--green-700);
+  border-color: var(--brass-dim);
+}
+.breadcrumbs [aria-current="page"] {
+  color: var(--brass-text);
+}
+
+/* ---- Inner-page header ---------------------------------------------------- */
+.page-hero {
+  background: var(--green-900);
+  background-image:
+    radial-gradient(900px 380px at 88% -20%, rgba(43, 81, 66, 0.6), transparent 62%),
+    linear-gradient(180deg, var(--green-800), var(--green-900) 82%);
+  color: var(--paper);
+  position: relative;
+  overflow: hidden;
+}
+.page-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 31px,
+    rgba(217, 185, 121, 0.08) 31px,
+    rgba(217, 185, 121, 0.08) 32px
+  );
+  pointer-events: none;
+}
+.page-hero .container {
+  position: relative;
+  padding-block: clamp(2.75rem, 5vw, 4.5rem);
+}
+.page-hero .eyebrow {
+  color: var(--brass-light);
+}
+.page-hero h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.9rem, 1.5rem + 1.9vw, 3.15rem);
+  line-height: 1.08;
+  margin-top: 0.75rem;
+  letter-spacing: -0.01em;
+  max-width: 22ch;
+}
+.page-hero .double-rule {
+  color: var(--brass);
+  margin-block: 1.2rem;
+}
+.page-lead {
+  font-size: var(--fs-lead);
+  color: rgba(245, 241, 230, 0.86);
+  max-width: 44rem;
+}
+.page-stamp {
+  margin-top: 1.1rem;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.03em;
+  color: rgba(217, 185, 121, 0.85);
+}
+
+/* ---- Timely notice band ---------------------------------------------------- */
+.notice-band {
+  background: var(--brass-light);
+  color: var(--green-900);
+}
+.notice-band-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem 1.25rem;
+  padding-block: 0.95rem;
+}
+.notice-tag {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius);
+  background: var(--green-900);
+  color: var(--brass-light);
+}
+.notice-band p {
+  font-size: 0.95rem;
+  margin: 0;
+}
+.notice-band a {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(22, 36, 28, 0.35);
+  white-space: nowrap;
+}
+.notice-band a:hover {
+  border-color: var(--green-900);
+}
+
+/* ---- Prose ----------------------------------------------------------------- */
+.prose {
+  max-width: 46rem;
+}
+.prose--tight {
+  max-width: 40rem;
+}
+.prose h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.4rem, 1.2rem + 0.7vw, 1.85rem);
+  line-height: 1.18;
+  margin-top: 2.6rem;
+}
+.prose > h2:first-child {
+  margin-top: 0;
+}
+.prose h3 {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1.08rem;
+  margin-top: 1.8rem;
+  color: var(--ink);
+}
+.prose p {
+  margin-top: 0.95rem;
+  color: var(--ink-soft);
+}
+.prose ul,
+.prose ol {
+  margin-top: 1rem;
+  padding-left: 1.35rem;
+  color: var(--ink-soft);
+}
+.prose ul {
+  list-style: disc;
+}
+.prose ol {
+  list-style: decimal;
+}
+.prose li + li {
+  margin-top: 0.55rem;
+}
+.prose strong {
+  color: var(--ink);
+}
+.prose a:not(.btn):not(.text-link) {
+  color: var(--green-700);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.prose a:not(.btn):not(.text-link):hover {
+  color: var(--green-600);
+}
+.lead-note {
+  font-size: var(--fs-lead);
+  color: var(--ink-soft);
+  padding-left: 1rem;
+  border-left: 2px solid var(--brass-dim);
+}
+
+/* ---- Inline link + small notes ---------------------------------------------- */
+.text-link {
+  color: var(--green-700);
+  font-weight: 600;
+  border-bottom: 1px solid var(--brass-dim);
+  transition:
+    color 0.2s var(--ease),
+    border-color 0.2s var(--ease);
+}
+.text-link:hover {
+  color: var(--green-600);
+  border-color: var(--brass);
+}
+.note-line {
+  margin-top: 1.75rem;
+  font-size: 0.94rem;
+  color: var(--ink-soft);
+  max-width: 46rem;
+}
+.source-note {
+  margin-top: 1.75rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--paper-rule);
+  font-size: 0.84rem;
+  color: var(--ink-faint);
+  max-width: 46rem;
+}
+.source-note a {
+  color: var(--green-700);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.small-print {
+  font-size: 0.86rem;
+  color: var(--ink-faint);
+}
+
+/* ---- Callout --------------------------------------------------------------- */
+.callout {
+  margin-top: 2rem;
+  padding: 1.4rem clamp(1.25rem, 3vw, 1.85rem);
+  background: var(--paper-raised);
+  border: 1px solid var(--paper-rule);
+  border-left: 3px solid var(--brass);
+  border-radius: var(--radius);
+}
+.callout h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.15rem;
+  margin-top: 0;
+  color: var(--ink);
+}
+.callout p,
+.callout ul,
+.callout ol {
+  margin-top: 0.8rem;
+  color: var(--ink-soft);
+}
+.callout ul,
+.callout ol {
+  padding-left: 1.35rem;
+}
+.callout ul {
+  list-style: disc;
+}
+.callout ol {
+  list-style: decimal;
+}
+.callout li + li {
+  margin-top: 0.45rem;
+}
+.callout a {
+  color: var(--green-700);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.callout--warn {
+  border-left-color: #a3392f;
+  background: rgba(163, 57, 47, 0.05);
+}
+
+/* ---- Card grids ------------------------------------------------------------- */
+.card-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+.link-card {
+  position: relative;
+  background: var(--paper);
+  border: 1px solid var(--paper-rule);
+  border-radius: var(--radius);
+  padding: 1.5rem clamp(1.25rem, 2.5vw, 1.75rem);
+  box-shadow: 0 8px 24px rgba(22, 36, 28, 0.04);
+  transition:
+    transform 0.25s var(--ease),
+    border-color 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
+}
+.link-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--brass-dim);
+  box-shadow: 0 14px 34px rgba(22, 36, 28, 0.08);
+}
+.link-card h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-h3);
+  margin-top: 0.5rem;
+  line-height: 1.2;
+}
+.link-card h3 a {
+  color: var(--ink);
+}
+/* Stretch the heading link over the whole card so the card is clickable,
+   without nesting interactive elements inside one another. */
+.link-card h3 a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+.link-card h3 a:hover {
+  color: var(--green-700);
+}
+.link-card p {
+  margin-top: 0.65rem;
+  color: var(--ink-soft);
+  font-size: 0.97rem;
+}
+.link-card-cta {
+  display: inline-block;
+  margin-top: 1.1rem;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--brass-text);
+}
+.link-card--compact {
+  padding: 1.25rem 1.35rem;
+}
+.link-card--compact h3 {
+  font-size: 1.12rem;
+}
+.link-card--compact p {
+  font-size: 0.92rem;
+}
+.link-card--feature {
+  border-left: 3px solid var(--brass);
+}
+.link-card--muted {
+  background: transparent;
+  border-style: dashed;
+  box-shadow: none;
+}
+@media (min-width: 700px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1000px) {
+  .card-grid--three {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ---- Check grid (service inclusions) ----------------------------------------- */
+.check-grid {
+  display: grid;
+  gap: 1px;
+  background: var(--paper-rule);
+  border: 1px solid var(--paper-rule);
+  border-radius: var(--radius);
+  overflow: hidden;
+  grid-template-columns: 1fr;
+}
+.check-item {
+  background: var(--paper-raised);
+  padding: 1.15rem 1.3rem;
+}
+.check-item h3 {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--fs-h4);
+  color: var(--ink);
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.check-item h3::before {
+  content: "\2713";
+  color: var(--brass-text);
+  font-size: 0.85em;
+  flex-shrink: 0;
+}
+.check-item p {
+  margin-top: 0.35rem;
+  font-size: 0.93rem;
+  color: var(--ink-soft);
+}
+@media (min-width: 640px) {
+  .check-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1000px) {
+  .check-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ---- Pills -------------------------------------------------------------------- */
+.pill-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+.pill {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--paper-rule);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink-soft);
+}
+
+/* ---- Tables --------------------------------------------------------------------
+   Wide tables scroll inside their own container so the page body never
+   scrolls sideways on a phone. */
+.table-wrap {
+  margin-top: 1.5rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--paper-rule);
+  border-radius: var(--radius);
+  background: var(--paper-raised);
+}
+.table-title {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brass-text);
+  margin-top: 2.25rem;
+}
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.94rem;
+  min-width: 32rem;
+}
+.data-table caption {
+  text-align: left;
+}
+.data-table th,
+.data-table td {
+  padding: 0.85rem 1.1rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--paper-rule);
+}
+.data-table thead th {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--brass-text);
+  background: var(--paper);
+  border-bottom: 2px solid var(--ink);
+  white-space: nowrap;
+}
+.data-table tbody tr:last-child th,
+.data-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+.data-table tbody tr:nth-child(even) {
+  background: rgba(220, 208, 172, 0.16);
+}
+.data-table td {
+  color: var(--ink-soft);
+}
+.data-table strong {
+  color: var(--ink);
+}
+.data-table a {
+  color: var(--green-700);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.data-table--numeric td:last-child,
+.data-table--numeric th:last-child {
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+}
+.data-table .due {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.data-table .figure {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+/* ---- Two-column table pairs ------------------------------------------------- */
+.two-col {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: 1fr;
+}
+.two-col .data-table {
+  min-width: 0;
+}
+@media (min-width: 820px) {
+  .two-col {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+/* ---- Stat row ----------------------------------------------------------------- */
+.stat-row {
+  display: grid;
+  gap: 1px;
+  background: var(--paper-rule);
+  border: 1px solid var(--paper-rule);
+  border-radius: var(--radius);
+  overflow: hidden;
+  grid-template-columns: 1fr;
+}
+.stat {
+  background: var(--paper-raised);
+  padding: 1.5rem 1.4rem;
+  text-align: center;
+}
+.stat-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brass-text);
+}
+.stat-value {
+  display: block;
+  margin-top: 0.5rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 1.6rem + 1.6vw, 2.9rem);
+  line-height: 1;
+  color: var(--green-800);
+}
+.stat-note {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.84rem;
+  color: var(--ink-faint);
+}
+@media (min-width: 700px) {
+  .stat-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ---- Deadline cards ------------------------------------------------------------ */
+.deadline-cards {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+.deadline-card {
+  background: var(--paper-raised);
+  border: 1px solid var(--paper-rule);
+  border-top: 3px solid var(--brass-dim);
+  border-radius: var(--radius);
+  padding: 1.4rem 1.5rem;
+}
+.deadline-card--urgent {
+  border-top-color: #a3392f;
+}
+.deadline-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brass-text);
+}
+.deadline-date {
+  display: block;
+  margin-top: 0.5rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.35rem, 1.15rem + 0.8vw, 1.8rem);
+  line-height: 1.1;
+  color: var(--green-800);
+}
+.deadline-card p {
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+@media (min-width: 760px) {
+  .deadline-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ---- Numbered step list --------------------------------------------------------- */
+.step-list {
+  display: grid;
+  gap: 1rem;
+}
+.step-item {
+  display: flex;
+  gap: 1.1rem;
+  background: var(--paper);
+  border: 1px solid var(--paper-rule);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.4rem;
+}
+.step-number {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 999px;
+  background: rgba(176, 138, 70, 0.16);
+  color: var(--green-700);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+.step-item h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.16rem;
+  color: var(--ink);
+}
+.step-item p {
+  margin-top: 0.5rem;
+  color: var(--ink-soft);
+  font-size: 0.96rem;
+}
+.step-item a {
+  color: var(--green-700);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ---- Mini definition list (inside callouts) ------------------------------------- */
+.mini-dl {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1rem;
+}
+.mini-dl dt {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brass-text);
+}
+.mini-dl dd {
+  margin: 0.25rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+/* ---- Areas page ------------------------------------------------------------------ */
+.areas-columns {
+  display: grid;
+  gap: clamp(1.75rem, 4vw, 3rem);
+  grid-template-columns: 1fr;
+}
+.areas-col h3 {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brass-text);
+  padding-bottom: 0.7rem;
+  border-bottom: 2px solid var(--ink);
+  margin-top: 2rem;
+}
+.areas-col h3:first-child {
+  margin-top: 0;
+}
+.areas-list {
+  margin-top: 0.5rem;
+}
+.areas-list li {
+  padding-block: 0.5rem;
+  border-bottom: 1px dashed var(--paper-rule);
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+}
+.areas-note {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+}
+.areas-col .btn {
+  margin-top: 1.25rem;
+}
+@media (min-width: 860px) {
+  .areas-columns {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ---- About / owner tweaks ----------------------------------------------------------- */
+.about-h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-h2);
+  line-height: 1.14;
+  margin-block: 0.6rem 1.2rem;
+}
+.owner-name {
+  font-size: clamp(1.5rem, 1.3rem + 0.8vw, 2rem);
+}
+
+/* ---- Service block headings (now links) ---------------------------------------------- */
+.service-block h2 {
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  margin-top: 0.55rem;
+}
+.service-block h2 a:hover {
+  color: var(--green-700);
+}
+.service-block h3 {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--fs-h4);
+  color: var(--ink);
+}
+.service-block .text-link {
+  display: inline-block;
+  margin-top: 1.25rem;
+  font-size: 0.9rem;
+}
+
+/* ---- Footer credentials --------------------------------------------------------------- */
+.footer-creds {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: rgba(217, 185, 121, 0.8);
+}
+
+/* ---- 404 page links ---------------------------------------------------------------------- */
+.notfound-links {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--paper-rule);
+  max-width: 30rem;
+}
+.notfound-links li {
+  padding-block: 0.5rem;
+  border-bottom: 1px dashed var(--paper-rule);
+}
+.notfound-links a {
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+.notfound-links a:hover {
+  color: var(--green-700);
+}
+
+/* ---- Sticky mobile contact bar ------------------------------------------------------------
+   On a phone, an accounting enquiry is usually a phone call. This keeps Call
+   and WhatsApp one thumb-reach away at all times, and disappears entirely on
+   desktop where the header CTA already does that job. */
+.sticky-contact {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 90;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: var(--green-900);
+  border-top: 1px solid rgba(176, 138, 70, 0.3);
+  box-shadow: 0 -8px 24px rgba(11, 20, 15, 0.25);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.sticky-contact-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.7rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--paper);
+  border-right: 1px solid rgba(176, 138, 70, 0.2);
+}
+.sticky-contact-btn:last-child {
+  border-right: 0;
+}
+.sticky-contact-btn svg {
+  width: 19px;
+  height: 19px;
+  color: var(--brass-light);
+}
+.sticky-contact-btn--primary {
+  background: var(--brass-light);
+  color: var(--green-900);
+  font-weight: 700;
+}
+body {
+  padding-bottom: 3.9rem;
+}
+@media (min-width: 860px) {
+  .sticky-contact {
+    display: none;
+  }
+  body {
+    padding-bottom: 0;
   }
 }
