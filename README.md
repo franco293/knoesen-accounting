@@ -186,10 +186,22 @@ git commit -m "Rebuild site: multi-page architecture, verified tax content, cano
 git push
 ```
 
-`_headers` (security headers, caching) and `_redirects` (canonical host, legacy
-URLs) are Cloudflare features and do not apply on GitHub Pages. `.assetsignore`
-keeps build inputs — `build.py`, `site.json`, `content/` — out of the deployed
-output.
+`_headers` (security headers, caching) and `_redirects` (legacy URLs) are
+Cloudflare features and do not apply on GitHub Pages. `.assetsignore` keeps
+build inputs — `build.py`, `site.json`, `content/` — out of the deployed output.
+
+**This deploys as a Worker, not as Pages.** That distinction matters for
+`_redirects`: Workers Assets accepts only *relative* URLs there. Absolute
+cross-host rules are valid Pages syntax but fail the entire deploy with
+`Invalid _redirects configuration ... [code: 100324]` — and they fail at the
+API after the assets have already uploaded, so the build log looks like a
+success right up until the last line. `python build.py --check` validates
+`_redirects` for exactly this and will fail locally first.
+
+Because of that, the `www` → apex redirect cannot live in this repo. Either
+don't attach `www` to the Worker as a custom domain, or add a Cloudflare
+Redirect Rule (Rules → Redirect Rules); both are covered in
+[TODO-BEFORE-LAUNCH.md](TODO-BEFORE-LAUNCH.md).
 
 ## Licence / content
 

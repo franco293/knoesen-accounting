@@ -50,6 +50,27 @@ What is still worth deciding:
 
 ---
 
+## 1b. Point `www` at the apex (2 minutes, in the Cloudflare dashboard)
+
+The site deploys as a Cloudflare **Worker**, and Workers Assets only accepts
+relative URLs in `_redirects` — so unlike Cloudflare Pages, the `www` → apex
+redirect cannot be committed to this repo. An absolute rule there fails the
+whole deploy.
+
+Pick one:
+
+- **Easiest:** don't attach `www.knoesen-accounting.co.za` to the Worker as a
+  custom domain at all. It then never serves the site, so there is no duplicate
+  to worry about. Every canonical tag already points at the apex.
+- **Better if `www` already resolves:** Cloudflare dashboard → **Rules** →
+  **Redirect Rules** → **Create rule**
+  - When: `http.host eq "www.knoesen-accounting.co.za"`
+  - Then: dynamic redirect, **301**, expression
+    `concat("https://knoesen-accounting.co.za", http.request.uri.path)`
+  - Tick *preserve query string*
+
+Redirect Rules are free on every Cloudflare plan.
+
 ## 2. Register your Information Officer (POPIA — legally required)
 
 Every responsible party in South Africa must register an Information Officer

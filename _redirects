@@ -1,9 +1,24 @@
-# Cloudflare redirects. One canonical host: the apex, knoesen-accounting.co.za.
-# Every alias below 301s into it, so link equity lands in one place and Google
-# never has to choose between two copies of the same page.
-
-https://www.knoesen-accounting.co.za/*  https://knoesen-accounting.co.za/:splat  301
-http://www.knoesen-accounting.co.za/*   https://knoesen-accounting.co.za/:splat  301
+# Cloudflare redirects.
+#
+# IMPORTANT: this site deploys as a Cloudflare **Worker** (`wrangler deploy`
+# with an [assets] directory), not as Cloudflare Pages. Workers Assets accepts
+# ONLY RELATIVE URLs here — every source and destination must start with "/".
+#
+# An absolute cross-host rule such as
+#     https://www.example.co.za/*  https://example.co.za/:splat  301
+# is valid on Pages but is rejected by Workers with:
+#     Invalid _redirects configuration: Only relative URLs are allowed. [100324]
+# and it fails the whole deploy, not just that line.
+#
+# Host-level canonicalisation (www -> apex) therefore cannot live in this file.
+# Do it in the Cloudflare dashboard instead: Rules -> Redirect Rules -> Create,
+# matching `http.host eq "www.knoesen-accounting.co.za"` with a 301 to
+# `concat("https://knoesen-accounting.co.za", http.request.uri.path)`.
+# Redirect Rules are free on every plan. Simpler still: just don't attach the
+# www hostname to the Worker as a custom domain, and it never resolves at all.
+#
+# `python build.py --check` validates this file and will fail on an absolute
+# URL before it ever reaches Cloudflare.
 
 # This site used to be a single page with anchor navigation. Those anchors are
 # now real pages, so anyone arriving on an old bookmark or an indexed anchor

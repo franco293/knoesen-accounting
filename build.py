@@ -748,6 +748,49 @@ def write_robots() -> None:
     )
 
 
+def check_redirects() -> list[str]:
+    """Validate _redirects against what Cloudflare Workers Assets accepts.
+
+    This site deploys as a Worker, not as Pages, and Workers only allows
+    RELATIVE URLs in _redirects. An absolute cross-host rule is valid Pages
+    syntax but fails the entire Worker deploy with error 100324 — and it fails
+    at the API, after the assets have already uploaded, so nothing local
+    catches it. Hence this check.
+    """
+    path = ROOT / "_redirects"
+    if not path.exists():
+        return []
+
+    problems = []
+    valid_status = {"200", "301", "302", "303", "307", "308", "404", "410"}
+
+    for lineno, raw in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+
+        parts = line.split()
+        if len(parts) < 2:
+            problems.append(f"  line {lineno}: needs at least a source and a destination — {line!r}")
+            continue
+
+        source, destination = parts[0], parts[1]
+        for label, value in (("source", source), ("destination", destination)):
+            if "://" in value or value.startswith("//"):
+                problems.append(
+                    f"  line {lineno}: absolute URL in {label} ({value}). "
+                    "Workers Assets allows only relative URLs — use a Cloudflare "
+                    "Redirect Rule for host-level redirects."
+                )
+            elif not value.startswith("/"):
+                problems.append(f"  line {lineno}: {label} must start with '/' — {value!r}")
+
+        if len(parts) > 2 and parts[2] not in valid_status:
+            problems.append(f"  line {lineno}: unexpected status code {parts[2]!r}")
+
+    return problems
+
+
 LINK_RE = re.compile(r'href="(/[^"#?]*)"')
 
 
@@ -803,12 +846,25 @@ def main() -> int:
             print(f"  · {item}")
 
     if "--check" in sys.argv:
+        failed = False
+
         problems = check_links(written)
         if problems:
             print("\nBroken internal links:")
             print("\n".join(problems))
-            return 1
-        print("\nLink check passed — no broken internal links.")
+            failed = True
+        else:
+            print("\nLink check passed — no broken internal links.")
+
+        redirect_problems = check_redirects()
+        if redirect_problems:
+            print("\nInvalid _redirects (Cloudflare Workers would reject this):")
+            print("\n".join(redirect_problems))
+            failed = True
+        else:
+            print("_redirects check passed — all rules are relative URLs.")
+
+        return 1 if failed else 0
     return 0
 
 
