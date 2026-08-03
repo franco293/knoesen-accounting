@@ -57,6 +57,18 @@ python build.py           # rebuild everything
 python build.py --check   # rebuild, then fail on broken internal links
 ```
 
+**Always rebuild after editing `css/styles.css` or `js/main.js`.** `_headers`
+serves those with `max-age=31536000, immutable`, so browsers are told never to
+revalidate them for a year. `build.py` therefore stamps a content hash onto the
+URLs (`/css/styles.css?v=e65d0c17`) so the URL changes whenever the bytes do.
+Edit the CSS without rebuilding and the HTML keeps pointing at the old hash,
+and returning visitors keep the stale file.
+
+This is not hypothetical: the single-page-to-multi-page rebuild changed the CSS
+structure without changing the URL, so anyone who had visited before got new
+HTML with a year-old stylesheet — the nav dropdowns lost their positioning
+rules and stacked down the page over the hero.
+
 Python 3.8+, standard library only. `build.py` prints a list of everything it
 omitted for lack of a verified value, so you always know what is outstanding.
 

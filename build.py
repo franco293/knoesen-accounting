@@ -48,6 +48,34 @@ TAXYEAR = SITE["tax_year"]
 BUILD_DATE = date.today().isoformat()
 
 
+def asset_version(relative_path: str) -> str:
+    """Short content hash used to cache-bust /css and /js.
+
+    `_headers` serves these with `max-age=31536000, immutable`, which tells the
+    browser never to revalidate for a year. At a filename that never changes,
+    that is a trap: the HTML is served `max-age=0` and so is always fresh, but
+    a returning visitor keeps the stylesheet they cached on a previous visit.
+    New HTML plus an old stylesheet renders as an unstyled mess — the nav
+    dropdowns lose their positioning rules and stack down the page over the
+    hero. That is exactly what happened after the single-page-to-multi-page
+    rebuild changed the CSS structure.
+
+    Appending a content hash makes the URL change whenever the bytes change,
+    so `immutable` becomes correct instead of dangerous: old visitors request
+    a URL they have never cached and get the matching file immediately.
+    """
+    path = ROOT / relative_path
+    if not path.exists():
+        return BUILD_DATE
+    import hashlib
+
+    return hashlib.sha256(path.read_bytes()).hexdigest()[:10]
+
+
+CSS_VERSION = asset_version("css/styles.css")
+JS_VERSION = asset_version("js/main.js")
+
+
 # --------------------------------------------------------------------------
 # Small helpers
 # --------------------------------------------------------------------------
@@ -453,7 +481,7 @@ def head_for(page: dict) -> str:
       href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,700;1,300;1,500&family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/styles.css?v={CSS_VERSION}" />
 
     {jsonld_for(page)}"""
 
@@ -750,7 +778,7 @@ def render(page: dict) -> str:
 
     {footer_markup()}
 
-    <script src="/js/main.js"></script>
+    <script src="/js/main.js?v={JS_VERSION}"></script>
   </body>
 </html>
 """
