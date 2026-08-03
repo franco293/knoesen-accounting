@@ -1,0 +1,123 @@
+(function () {
+  "use strict";
+
+  /* Mobile navigation toggle */
+  var toggle = document.querySelector(".nav-toggle");
+  var panel = document.querySelector(".mobile-panel");
+
+  if (toggle && panel) {
+    toggle.addEventListener("click", function () {
+      var isOpen = panel.classList.toggle("is-open");
+      toggle.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    panel.querySelectorAll("a").forEach(function (link) {
+      link.addEventListener("click", function () {
+        panel.classList.remove("is-open");
+        toggle.setAttribute("aria-expanded", "false");
+      });
+    });
+  }
+
+  /* Scroll-reveal for elements marked .reveal */
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var revealEls = document.querySelectorAll(".reveal");
+
+  if (reduceMotion || !("IntersectionObserver" in window)) {
+    revealEls.forEach(function (el) { el.classList.add("is-visible"); });
+  } else {
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+    );
+    revealEls.forEach(function (el) { observer.observe(el); });
+  }
+
+  /* Footer year */
+  var yearEl = document.getElementById("year");
+  if (yearEl) { yearEl.textContent = new Date().getFullYear(); }
+
+  /* Map: only talk to Google once the visitor asks for the map. */
+  var mapFrame = document.getElementById("map-frame");
+  var mapBtn = document.getElementById("map-load-btn");
+  if (mapFrame && mapBtn) {
+    mapBtn.addEventListener("click", function () {
+      var iframe = mapFrame.querySelector("iframe[data-src]");
+      if (iframe) {
+        iframe.src = iframe.getAttribute("data-src");
+        iframe.removeAttribute("data-src");
+      }
+      mapFrame.classList.add("is-loaded");
+    });
+  }
+
+  /* Contact form: honeypot spam check + Web3Forms submission.
+     If the access_key still holds the placeholder, this is a fresh
+     unconfigured copy of the site — fail visibly and helpfully instead
+     of silently posting a doomed request. See the HTML comment above
+     the form in index.html for the one-step activation instructions. */
+  var form = document.getElementById("contact-form");
+  var status = document.getElementById("form-status");
+
+  function showStatus(message, kind) {
+    if (!status) return;
+    status.textContent = message;
+    status.className = "form-status is-visible is-" + kind;
+  }
+
+  if (form && status) {
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      var honeypot = form.querySelector('input[name="website"]');
+      if (honeypot && honeypot.value) {
+        /* Bot filled the trap field. Pretend success; do not submit. */
+        showStatus("Thanks — we'll be in touch shortly.", "success");
+        form.reset();
+        return;
+      }
+
+      var accessKeyField = form.querySelector('input[name="access_key"]');
+      var accessKey = accessKeyField ? accessKeyField.value : "";
+      if (!accessKey || accessKey.indexOf("REPLACE_WITH") === 0) {
+        showStatus(
+          "This form isn't switched on yet — please call, WhatsApp or email us directly using the details alongside.",
+          "info"
+        );
+        return;
+      }
+
+      var submitBtn = form.querySelector('button[type="submit"]');
+      if (submitBtn) { submitBtn.disabled = true; }
+      showStatus("Sending…", "info");
+
+      fetch(form.action, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: new FormData(form),
+      })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data && data.success) {
+            showStatus("Thanks — your message is on its way. We'll reply soon.", "success");
+            form.reset();
+          } else {
+            showStatus("Something went wrong sending that. Please try calling, WhatsApp or email instead.", "error");
+          }
+        })
+        .catch(function () {
+          showStatus("Something went wrong sending that. Please try calling, WhatsApp or email instead.", "error");
+        })
+        .finally(function () {
+          if (submitBtn) { submitBtn.disabled = false; }
+        });
+    });
+  }
+})();

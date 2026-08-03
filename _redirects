@@ -1,0 +1,4 @@
+# Force the apex domain to redirect to the canonical www host.
+# Remove or edit this if you'd rather use the apex domain as canonical instead
+# (in that case, also update the canonical/OG URLs in index.html and sitemap.xml).
+https://knoesenacc.co.za/*  https://www.knoesenacc.co.za/:splat  301!
