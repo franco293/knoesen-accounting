@@ -668,7 +668,7 @@ def footer_markup() -> str:
       </div>
     </footer>
 
-    <div class="sticky-contact" aria-label="Quick contact">
+    <nav class="sticky-contact" aria-label="Quick contact">
       <a href="tel:{CONTACT['phone_e164']}" class="sticky-contact-btn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
         Call
@@ -678,15 +678,57 @@ def footer_markup() -> str:
         WhatsApp
       </a>
       <a href="/contact" class="sticky-contact-btn sticky-contact-btn--primary">Enquire</a>
-    </div>"""
+    </nav>"""
 
 
 # --------------------------------------------------------------------------
 # Page assembly
 # --------------------------------------------------------------------------
 
+TABLE_WRAP_RE = re.compile(r'<div class="(table-wrap[^"]*)">(.*?)</div>', re.S)
+CAPTION_RE = re.compile(r"<caption[^>]*>(.*?)</caption>", re.S)
+TABLE_TITLE_RE = re.compile(r'<h3 class="table-title">(.*?)</h3>', re.S)
+
+
+def enhance_tables(body: str) -> str:
+    """Make the rate tables usable on a phone and reachable by keyboard.
+
+    A horizontally scrolling container is a WCAG 2.1.1 problem: a mouse or
+    finger can pan it, but a keyboard cannot reach it at all unless it is
+    focusable. Adding tabindex="0" plus a role and an accessible name turns
+    each one into a proper scrollable region. The visible hint matters too —
+    a table clipped at the viewport edge reads as truncated data rather than
+    as something you can scroll, which for a rate table is worse than useless.
+
+    Applied here rather than in the content fragments so authors just write a
+    plain table and get the behaviour for free on all 17 of them.
+    """
+
+    def repl(match: re.Match) -> str:
+        classes, inner = match.group(1), match.group(2)
+        if "<table" not in inner:
+            return match.group(0)
+
+        name = ""
+        for pattern in (CAPTION_RE, TABLE_TITLE_RE):
+            found = pattern.search(inner)
+            if found:
+                name = re.sub(r"<[^>]+>", "", found.group(1)).strip()
+                break
+        label = esc(name) if name else "Data table"
+
+        return (
+            f'<div class="{classes}" role="region" aria-label="{label}, scrollable" tabindex="0">'
+            f"{inner}</div>"
+            '<p class="table-scroll-hint" aria-hidden="true">Scroll the table sideways to see every column &rarr;</p>'
+        )
+
+    return TABLE_WRAP_RE.sub(repl, body)
+
+
 def render(page: dict) -> str:
     body = detokenise((CONTENT / page["file"]).read_text(encoding="utf-8")).strip()
+    body = enhance_tables(body)
     cta = cta_band() if page.get("cta", True) else ""
 
     return f"""<!doctype html>

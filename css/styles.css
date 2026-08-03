@@ -13,7 +13,11 @@
   --paper-rule: #dcd0ac;
   --ink: #202b22;
   --ink-soft: #4b5744;
-  --ink-faint: #7a8571;
+  /* Was #7a8571, which measured 3.43:1 on --paper and failed WCAG AA (4.5:1)
+     for normal-size text. It is used for source citations, breadcrumbs and
+     small print — exactly the text that has to be legible for the tax figures
+     to be credible. Darkened to 4.7:1. */
+  --ink-faint: #656e5d;
 
   --green-900: #16241c;
   --green-800: #1e3b2f;
@@ -574,7 +578,7 @@ textarea {
 }
 .hero-meta dt {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.74rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--brass-light);
@@ -624,7 +628,7 @@ textarea {
 }
 .ledger-rows dt {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.76rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink-soft);
@@ -855,7 +859,7 @@ textarea {
 }
 .owner-tag {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.76rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 0.4rem 0.7rem;
@@ -944,7 +948,7 @@ textarea {
 }
 .contact-row .label {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.74rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--brass-light);
@@ -1020,7 +1024,7 @@ textarea {
 }
 .footer-label {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.74rem;
   font-weight: 400;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -1044,13 +1048,13 @@ textarea {
   justify-content: space-between;
   padding-top: 1.5rem;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.76rem;
   letter-spacing: 0.04em;
   color: rgba(245, 241, 230, 0.5);
 }
 .back-to-top {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.76rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(245, 241, 230, 0.6);
@@ -1061,23 +1065,38 @@ textarea {
 }
 
 /* ---- Reveal-on-scroll --------------------------------------------------------------- */
+/* ---- Entrance animation -----------------------------------------------------
+   This used to be `opacity: 0` in CSS, undone by an IntersectionObserver in
+   main.js adding .is-visible. That makes JavaScript load-bearing for whether
+   the page has any visible content: if the script is blocked, slow, errors, or
+   the observer simply doesn't fire, most of the page stays blank — and on an
+   accounting site the blank parts included the source citations and rate
+   tables. Measured on the built pages, that was 13 of 13 blocks on the home
+   page and 28 of 28 on the tax-rates page.
+
+   Now the resting state IS the visible state, and the animation is pure CSS
+   that ends where the element already sits. If animations never run, for any
+   reason, nothing is hidden — the worst case is no animation, not no content. */
 .reveal {
-  opacity: 0;
-  transform: translateY(16px);
-  transition:
-    opacity 0.7s var(--ease),
-    transform 0.7s var(--ease);
-}
-.reveal.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
-/* .reveal starts at opacity 0 and is only un-hidden by main.js. If scripting
-   is unavailable, that would hide most of the page's content — so opt out of
-   the effect entirely rather than risk a blank-looking site. */
-@media (scripting: none) {
+/* The animation deliberately does NOT touch opacity. Fading in from 0 strands
+   the content invisible whenever the animation fails to progress — a frozen
+   or throttled animation with `fill-mode: both` sits on its from-state
+   forever, which is the identical failure the JavaScript version had. Moving
+   only `transform` means the worst possible outcome is content sitting 14px
+   lower than intended, still perfectly readable. Text is never hidden. */
+@media (prefers-reduced-motion: no-preference) {
   .reveal {
-    opacity: 1;
+    animation: reveal-rise 0.55s var(--ease) both;
+  }
+}
+@keyframes reveal-rise {
+  from {
+    transform: translateY(14px);
+  }
+  to {
     transform: none;
   }
 }
@@ -1193,7 +1212,7 @@ textarea {
 }
 .form-field label {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.76rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ink-soft);
@@ -1384,7 +1403,7 @@ textarea {
 }
 .policy-card dt {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.76rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ink-faint);
@@ -1402,7 +1421,7 @@ textarea {
 }
 .policy-toc p {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.76rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--brass-text);
@@ -1536,7 +1555,7 @@ textarea {
   padding: 0;
   list-style: none;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.76rem;
   letter-spacing: 0.04em;
   color: var(--ink-faint);
 }
@@ -1627,7 +1646,7 @@ textarea {
 }
 .notice-tag {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.74rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -1980,7 +1999,7 @@ textarea {
 }
 .data-table thead th {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.76rem;
   font-weight: 500;
   letter-spacing: 0.11em;
   text-transform: uppercase;
@@ -2059,7 +2078,7 @@ textarea {
 .stat-label {
   display: block;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.74rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--brass-text);
@@ -2104,7 +2123,7 @@ textarea {
 .deadline-label {
   display: block;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.74rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--brass-text);
@@ -2276,7 +2295,7 @@ textarea {
   flex-wrap: wrap;
   gap: 0.5rem 1.25rem;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.76rem;
   letter-spacing: 0.04em;
   color: rgba(217, 185, 121, 0.8);
 }
@@ -2325,7 +2344,7 @@ textarea {
   gap: 0.25rem;
   padding: 0.7rem 0.5rem;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.74rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--paper);
@@ -2354,4 +2373,270 @@ body {
   body {
     padding-bottom: 0;
   }
+}
+
+/* ==========================================================================
+   UX / ACCESSIBILITY PASS
+   Fixes found by auditing the built pages rather than by eye: hit areas below
+   the WCAG 2.2 minimum, focus rings that disappeared against brass, and a few
+   places where the design read as decorative rather than tappable.
+   ========================================================================== */
+
+/* ---- Hit areas ------------------------------------------------------------
+   WCAG 2.2 SC 2.5.8 sets a 24x24 CSS-pixel minimum. Links that sit inside a
+   sentence are exempt, but several of ours are standalone controls that just
+   happened to be laid out as text: "Back to top", the footer "Sitemap" link,
+   the notice-band call to action and the standalone .text-link chevrons all
+   measured 19-23px tall.
+
+   Vertical padding on an inline element expands its hit box without changing
+   line height, so these grow to a comfortable target without moving anything
+   on the page. */
+.text-link {
+  padding-block: 0.3rem;
+}
+.notice-band a,
+.footer-bottom a,
+.back-to-top,
+.map-fallback,
+.owner-connect a,
+.link-card-cta {
+  padding-block: 0.35rem;
+}
+.footer-col a {
+  /* already 0.4rem block padding; nudge to clear 24px including line-height */
+  padding-block: 0.45rem;
+}
+.breadcrumbs a {
+  padding-block: 0.3rem;
+}
+
+/* ---- Focus visibility -----------------------------------------------------
+   The global focus ring is --brass-text, which is nearly invisible sitting on
+   a brass-filled primary button. Give filled brass controls a dark ring, and
+   add an offset halo so the ring reads against any background it lands on. */
+.btn-primary:focus-visible,
+.sticky-contact-btn--primary:focus-visible,
+.notice-band a:focus-visible,
+.skip-link:focus-visible {
+  outline: 3px solid var(--green-900);
+  outline-offset: 2px;
+}
+.sticky-contact-btn:focus-visible {
+  outline: 3px solid var(--brass-light);
+  outline-offset: -3px;
+}
+
+/* ---- Cards: make the whole card look interactive --------------------------
+   The heading link already stretches over the card via ::after, so the entire
+   card is clickable. Nothing signalled that, so the cursor and the hover state
+   now agree with the hit area. */
+.link-card {
+  cursor: pointer;
+}
+.link-card:focus-within {
+  border-color: var(--brass);
+  box-shadow: 0 0 0 3px rgba(176, 138, 70, 0.28);
+}
+.link-card h3 a:focus-visible {
+  outline: none; /* the ring is drawn on the card via :focus-within above */
+}
+
+/* ---- Details/summary affordance -------------------------------------------
+   FAQ rows are <details>. Without a marker they read as static headings, so
+   people do not know there is an answer underneath. Add a chevron that rotates
+   on open, and a hover state that says "this does something". */
+.faq-item summary {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.15rem;
+}
+.faq-item summary::after {
+  content: "";
+  flex: 0 0 auto;
+  width: 0.6em;
+  height: 0.6em;
+  margin-top: 0.35em;
+  border-right: 2px solid var(--brass-text);
+  border-bottom: 2px solid var(--brass-text);
+  transform: rotate(45deg);
+  transition: transform 0.25s var(--ease);
+}
+.faq-item[open] summary::after {
+  transform: rotate(-135deg);
+}
+.faq-item summary:hover {
+  color: var(--green-700);
+}
+.faq-item:hover {
+  border-color: var(--brass-dim);
+}
+
+/* ---- Tables: make it obvious they scroll on small screens -----------------
+   A rate table clipped at the viewport edge looks like a truncated table, not
+   a scrollable one. A soft fade on the right edge signals there is more, and
+   the container is focusable so it can be scrolled by keyboard. */
+.table-wrap {
+  position: relative;
+  scrollbar-width: thin;
+}
+.table-wrap:focus-visible {
+  outline: 2px solid var(--brass-text);
+  outline-offset: 2px;
+}
+@media (max-width: 700px) {
+  .table-wrap::after {
+    content: "";
+    position: sticky;
+    top: 0;
+    right: 0;
+    float: right;
+    width: 2.5rem;
+    height: 100%;
+    margin-left: -2.5rem;
+    pointer-events: none;
+    background: linear-gradient(to right, rgba(251, 248, 240, 0), rgba(251, 248, 240, 0.95));
+  }
+  .table-scroll-hint {
+    display: block;
+  }
+}
+.table-scroll-hint {
+  display: none;
+  margin-top: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.05em;
+  color: var(--ink-faint);
+}
+
+/* ---- Sticky mobile bar: keep it clear of content -------------------------- */
+.sticky-contact-btn {
+  min-height: 3.25rem;
+}
+
+/* ---- Selection + scroll anchoring ----------------------------------------- */
+::selection {
+  background: rgba(176, 138, 70, 0.28);
+  color: var(--ink);
+}
+/* The header is sticky and ~66px tall; without this, jumping to an in-page
+   anchor puts the heading underneath it. */
+:target {
+  scroll-margin-top: 5.5rem;
+}
+
+/* ---- Print ----------------------------------------------------------------
+   Deadline calendars and rate tables are the pages people actually print or
+   save to PDF. Strip the furniture, keep the data, and surface link targets. */
+@media print {
+  .site-header,
+  .sticky-contact,
+  .notice-band,
+  .cta-band,
+  .breadcrumbs,
+  .map-frame,
+  .map-fallback,
+  .contact-form-card,
+  .skip-link {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    color: #000;
+    padding-bottom: 0;
+    font-size: 11pt;
+  }
+  .page-hero {
+    background: none !important;
+    color: #000;
+    padding-block: 0;
+  }
+  .page-hero h1,
+  .page-lead,
+  .page-hero .eyebrow,
+  .page-stamp {
+    color: #000 !important;
+  }
+  .section {
+    padding-block: 1rem;
+  }
+  .table-wrap {
+    overflow: visible;
+    border: 1px solid #999;
+  }
+  .data-table {
+    min-width: 0;
+    font-size: 9.5pt;
+  }
+  .data-table thead {
+    display: table-header-group; /* repeat headers across printed pages */
+  }
+  .data-table tr,
+  .callout,
+  .faq-item {
+    break-inside: avoid;
+  }
+  .faq-item p {
+    display: block !important; /* print answers even when collapsed */
+  }
+  .prose a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 8.5pt;
+    color: #444;
+    word-break: break-all;
+  }
+  .site-footer {
+    background: none;
+    color: #000;
+    border-top: 1px solid #999;
+  }
+  .site-footer a,
+  .footer-col span,
+  .footer-brand p {
+    color: #000 !important;
+  }
+  .reveal {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/* ---- Remaining hit areas, found by measuring the built pages --------------
+   These are the ones that matter most: the contact rows are the primary
+   conversion path on /contact, and a 17px consent checkbox is genuinely hard
+   to hit on a phone. WCAG 2.2 SC 2.5.8 sets 24x24 as the floor. */
+.contact-row .value {
+  display: inline-block;
+  padding-block: 0.3rem;
+}
+.form-consent input[type="checkbox"] {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-top: 0.05rem;
+}
+.footer-bottom a,
+.footer-bottom .back-to-top {
+  padding-block: 0.5rem;
+}
+.policy-toc a {
+  display: inline-block;
+  padding-block: 0.25rem;
+}
+.areas-list li a,
+.notfound-links a {
+  display: inline-block;
+  padding-block: 0.25rem;
+}
+
+/* Inline links inside sentences are exempt from the 24px minimum, but vertical
+   padding on an inline element grows the hit box without shifting the line, so
+   there is no reason not to. */
+.form-consent a,
+.legal-note a,
+.policy-body a,
+.source-note a {
+  padding-block: 0.2rem;
 }
