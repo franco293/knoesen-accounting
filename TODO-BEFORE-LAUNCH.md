@@ -129,9 +129,13 @@ Two things are time-sensitive and will actively hurt you if left to rot:
   `<!-- TIMELY NOTICE -->` block in `content/home.html`.
 - **All tax figures are for the 2026/27 tax year.** After the next Budget,
   recheck every number against National Treasury's new Tax Guide and update
-  `site.json` → `tax_year` plus the tables in `content/guide-rates.html`.
-  The review date shown on each guide is a promise to your readers — keep it
-  honest.
+  `site.json` → `tax_year`, the tables in `content/guide-rates.html`, **and the
+  constants at the top of `js/income-tax-calculator.js`**. The calculator holds
+  the brackets, rebates, medical credits and retirement cap as data, and
+  nothing checks it against the published table — so a Budget update that
+  misses it leaves the calculator quietly disagreeing with the page that
+  documents it. The review date shown on each guide is a promise to your
+  readers — keep it honest.
 
 ## 7. Optional: HSTS preload
 

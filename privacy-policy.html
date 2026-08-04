@@ -34,13 +34,10 @@
     <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.json" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,700;1,300;1,500&family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/css/styles.css?v=e65d0c1737" />
+    <link rel="preload" href="/assets/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/assets/fonts/fraunces-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/assets/fonts/ibm-plex-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/css/styles.css?v=58e72a36fa" />
 
     <script type="application/ld+json">
 {
@@ -214,7 +211,7 @@
         </a>
 
         <nav class="nav-links" aria-label="Primary">
-          <ul><li><a href="/about">About</a></li><li class="has-submenu"><a href="/services">Services<span class="caret" aria-hidden="true">&#9662;</span></a><ul class="submenu"><li><a href="/services/accounting">Accounting &amp; Financial Statements</a></li><li><a href="/services/tax">Tax &amp; SARS</a></li><li><a href="/services/payroll">Payroll</a></li><li><a href="/services/company-secretarial">Company Secretarial &amp; CIPC</a></li></ul></li><li class="has-submenu"><a href="/resources">Resources<span class="caret" aria-hidden="true">&#9662;</span></a><ul class="submenu"><li><a href="/resources/tax-deadlines-calendar">Tax Deadline Calendar</a></li><li><a href="/resources/sars-filing-season-2026">Filing Season 2026</a></li><li><a href="/resources/tax-rates-2026-2027">Tax Rates 2026/27</a></li><li><a href="/resources/vat-registration-threshold">VAT Registration Threshold</a></li><li><a href="/resources/small-business-tax-guide">Small Business Tax</a></li><li><a href="/resources/payroll-compliance-guide">Payroll Compliance</a></li><li><a href="/resources/starting-a-business-in-south-africa">Starting a Business</a></li></ul></li><li><a href="/areas-we-serve">Areas We Serve</a></li><li><a href="/contact">Contact</a></li></ul>
+          <ul><li><a href="/about">About</a></li><li class="has-submenu"><a href="/services">Services<span class="caret" aria-hidden="true">&#9662;</span></a><ul class="submenu"><li><a href="/services/accounting">Accounting &amp; Financial Statements</a></li><li><a href="/services/tax">Tax &amp; SARS</a></li><li><a href="/services/payroll">Payroll</a></li><li><a href="/services/company-secretarial">Company Secretarial &amp; CIPC</a></li></ul></li><li class="has-submenu"><a href="/resources">Resources<span class="caret" aria-hidden="true">&#9662;</span></a><ul class="submenu"><li><a href="/resources/tax-deadlines-calendar">Tax Deadline Calendar</a></li><li><a href="/resources/sars-filing-season-2026">Filing Season 2026</a></li><li><a href="/resources/tax-rates-2026-2027">Tax Rates 2026/27</a></li><li><a href="/resources/vat-registration-threshold">VAT Registration Threshold</a></li><li><a href="/resources/small-business-tax-guide">Small Business Tax</a></li><li><a href="/resources/payroll-compliance-guide">Payroll Compliance</a></li><li><a href="/resources/independent-contractor-or-employee">Contractor or Employee?</a></li><li><a href="/resources/starting-a-business-in-south-africa">Starting a Business</a></li></ul></li><li class="has-submenu"><a href="/tools">Calculators<span class="caret" aria-hidden="true">&#9662;</span></a><ul class="submenu"><li><a href="/tools/income-tax-calculator">Income Tax &amp; PAYE Calculator</a></li><li><a href="/tools/vat-calculator">VAT Calculator</a></li></ul></li><li><a href="/areas-we-serve">Areas We Serve</a></li><li><a href="/contact">Contact</a></li></ul>
         </nav>
 
         <div class="nav-cta">
@@ -229,14 +226,14 @@
         </button>
       </div>
 
-      <div class="mobile-panel" id="mobile-panel">
+      <nav class="mobile-panel" id="mobile-panel" aria-label="Mobile">
         <div class="mobile-panel-inner">
-          <ul><li><a href="/about">About</a></li><li><a href="/services">Services</a></li><li class="mobile-sub"><a href="/services/accounting">Accounting &amp; Financial Statements</a></li><li class="mobile-sub"><a href="/services/tax">Tax &amp; SARS</a></li><li class="mobile-sub"><a href="/services/payroll">Payroll</a></li><li class="mobile-sub"><a href="/services/company-secretarial">Company Secretarial &amp; CIPC</a></li><li><a href="/resources">Resources</a></li><li class="mobile-sub"><a href="/resources/tax-deadlines-calendar">Tax Deadline Calendar</a></li><li class="mobile-sub"><a href="/resources/sars-filing-season-2026">Filing Season 2026</a></li><li class="mobile-sub"><a href="/resources/tax-rates-2026-2027">Tax Rates 2026/27</a></li><li class="mobile-sub"><a href="/resources/vat-registration-threshold">VAT Registration Threshold</a></li><li class="mobile-sub"><a href="/resources/small-business-tax-guide">Small Business Tax</a></li><li class="mobile-sub"><a href="/resources/payroll-compliance-guide">Payroll Compliance</a></li><li class="mobile-sub"><a href="/resources/starting-a-business-in-south-africa">Starting a Business</a></li><li><a href="/areas-we-serve">Areas We Serve</a></li><li><a href="/contact">Contact</a></li></ul>
+          <ul><li><a href="/about">About</a></li><li><a href="/services">Services</a></li><li class="mobile-sub"><a href="/services/accounting">Accounting &amp; Financial Statements</a></li><li class="mobile-sub"><a href="/services/tax">Tax &amp; SARS</a></li><li class="mobile-sub"><a href="/services/payroll">Payroll</a></li><li class="mobile-sub"><a href="/services/company-secretarial">Company Secretarial &amp; CIPC</a></li><li><a href="/resources">Resources</a></li><li class="mobile-sub"><a href="/resources/tax-deadlines-calendar">Tax Deadline Calendar</a></li><li class="mobile-sub"><a href="/resources/sars-filing-season-2026">Filing Season 2026</a></li><li class="mobile-sub"><a href="/resources/tax-rates-2026-2027">Tax Rates 2026/27</a></li><li class="mobile-sub"><a href="/resources/vat-registration-threshold">VAT Registration Threshold</a></li><li class="mobile-sub"><a href="/resources/small-business-tax-guide">Small Business Tax</a></li><li class="mobile-sub"><a href="/resources/payroll-compliance-guide">Payroll Compliance</a></li><li class="mobile-sub"><a href="/resources/independent-contractor-or-employee">Contractor or Employee?</a></li><li class="mobile-sub"><a href="/resources/starting-a-business-in-south-africa">Starting a Business</a></li><li><a href="/tools">Calculators</a></li><li class="mobile-sub"><a href="/tools/income-tax-calculator">Income Tax &amp; PAYE Calculator</a></li><li class="mobile-sub"><a href="/tools/vat-calculator">VAT Calculator</a></li><li><a href="/areas-we-serve">Areas We Serve</a></li><li><a href="/contact">Contact</a></li></ul>
           <div class="container">
             <a class="nav-phone" href="tel:+27847932990">Call / WhatsApp — +27 (0)84 793 2990</a>
           </div>
         </div>
-      </div>
+      </nav>
     </header>
     
 
@@ -397,7 +394,6 @@
               <ul>
                 <li><strong>Regulators and revenue authorities</strong> — SARS, CIPC and the Department of Labour, as required to deliver tax, statutory and payroll services;</li>
                 <li><strong>Software used to deliver our services</strong> — accounting and payroll platforms used to prepare your records, statements and payslips;</li>
-                <li><strong>Google Fonts</strong> (fonts.googleapis.com / fonts.gstatic.com) — loads the typefaces used on this site. Google may process your IP address to serve these fonts;</li>
                 <li><strong>Google Maps</strong> — only if you click "Load Map" in the Contact section, at which point Google receives your IP address and standard device/browser information to display the embed; and</li>
                 <li><strong>Web3Forms</strong> — if the contact form is active, your submission is relayed through Web3Forms' service to deliver it to our inbox. If you'd rather avoid this, use the phone, WhatsApp or email links instead.</li>
               </ul>
@@ -414,10 +410,12 @@
               <h2 id="cookies">7. Cookies &amp; this website</h2>
               <p>
                 This website does not set its own tracking or advertising
-                cookies. Google Fonts and, if you load it, Google Maps, may
-                set cookies or receive requests as part of how those
-                third-party services work — this is standard behaviour for
-                embedding their services and outside our direct control. You
+                cookies. Fonts, styles and images are all served from this
+                domain, so simply reading the site contacts nobody but us. The
+                one exception is Google Maps: if you choose to load it, Google
+                may set cookies or receive requests as part of how that
+                embed works — this is standard behaviour for embedding their
+                service and outside our direct control. You
                 can block these using your browser's privacy settings without
                 affecting your ability to read the site (the map and web
                 fonts will simply fail to load gracefully).
@@ -558,7 +556,7 @@
             </div>
             <div class="footer-col">
               <h3 class="footer-label">Free Resources</h3>
-              <a href="/resources/tax-deadlines-calendar">Tax Deadline Calendar</a><a href="/resources/sars-filing-season-2026">Filing Season 2026</a><a href="/resources/tax-rates-2026-2027">Tax Rates 2026/27</a><a href="/resources/vat-registration-threshold">VAT Registration Threshold</a><a href="/resources/small-business-tax-guide">Small Business Tax</a><a href="/resources/payroll-compliance-guide">Payroll Compliance</a><a href="/resources/starting-a-business-in-south-africa">Starting a Business</a>
+              <a href="/resources/tax-deadlines-calendar">Tax Deadline Calendar</a><a href="/resources/sars-filing-season-2026">Filing Season 2026</a><a href="/resources/tax-rates-2026-2027">Tax Rates 2026/27</a><a href="/resources/vat-registration-threshold">VAT Registration Threshold</a><a href="/resources/small-business-tax-guide">Small Business Tax</a><a href="/resources/payroll-compliance-guide">Payroll Compliance</a><a href="/resources/independent-contractor-or-employee">Contractor or Employee?</a><a href="/resources/starting-a-business-in-south-africa">Starting a Business</a>
             </div>
             <div class="footer-col">
               <h3 class="footer-label">Practice</h3>
@@ -602,6 +600,6 @@
       <a href="/contact" class="sticky-contact-btn sticky-contact-btn--primary">Enquire</a>
     </nav>
 
-    <script src="/js/main.js?v=2730caf884"></script>
+    <script src="/js/main.js?v=6f706ac8cb"></script>
   </body>
 </html>

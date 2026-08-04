@@ -1,22 +1,60 @@
 (function () {
   "use strict";
 
-  /* Mobile navigation toggle */
+  /* Mobile navigation toggle.
+
+     The panel is hidden with `visibility: hidden` rather than height alone, so
+     its links are already out of the tab order and the accessibility tree when
+     closed — nothing here needs to manage that. What this does manage is
+     getting *out* of the menu: Escape, a tap outside it, following a link, or
+     the viewport growing past the desktop breakpoint. Each of those used to
+     leave the menu stuck open, and Escape not working is the one that strands
+     a keyboard user with no obvious way back. */
   var toggle = document.querySelector(".nav-toggle");
   var panel = document.querySelector(".mobile-panel");
 
   if (toggle && panel) {
+    var setOpen = function (open, returnFocus) {
+      panel.classList.toggle("is-open", open);
+      toggle.setAttribute("aria-expanded", String(open));
+      /* Only pull focus back to the burger when the menu was dismissed by an
+         action that isn't itself a navigation — otherwise we would yank focus
+         off the link the visitor just followed. */
+      if (!open && returnFocus) { toggle.focus(); }
+    };
+
     toggle.addEventListener("click", function () {
-      var isOpen = panel.classList.toggle("is-open");
-      toggle.setAttribute("aria-expanded", String(isOpen));
+      setOpen(!panel.classList.contains("is-open"), false);
     });
 
     panel.querySelectorAll("a").forEach(function (link) {
-      link.addEventListener("click", function () {
-        panel.classList.remove("is-open");
-        toggle.setAttribute("aria-expanded", "false");
-      });
+      link.addEventListener("click", function () { setOpen(false, false); });
     });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && panel.classList.contains("is-open")) {
+        setOpen(false, true);
+      }
+    });
+
+    document.addEventListener("click", function (event) {
+      if (!panel.classList.contains("is-open")) return;
+      if (panel.contains(event.target) || toggle.contains(event.target)) return;
+      setOpen(false, false);
+    });
+
+    /* At >=860px the panel is `display: none`, so an open menu becomes
+       invisible while aria-expanded stays "true" — a screen reader would keep
+       announcing an expanded menu that isn't there. */
+    var desktop = window.matchMedia("(min-width: 860px)");
+    var syncToViewport = function (mq) {
+      if (mq.matches) { setOpen(false, false); }
+    };
+    if (desktop.addEventListener) {
+      desktop.addEventListener("change", syncToViewport);
+    } else if (desktop.addListener) {
+      desktop.addListener(syncToViewport);      /* Safari < 14 */
+    }
   }
 
   /* The .reveal entrance animation used to live here as an

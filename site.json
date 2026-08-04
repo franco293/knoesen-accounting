@@ -107,7 +107,16 @@
         { "label": "VAT Registration Threshold", "href": "/resources/vat-registration-threshold" },
         { "label": "Small Business Tax", "href": "/resources/small-business-tax-guide" },
         { "label": "Payroll Compliance", "href": "/resources/payroll-compliance-guide" },
+        { "label": "Contractor or Employee?", "href": "/resources/independent-contractor-or-employee" },
         { "label": "Starting a Business", "href": "/resources/starting-a-business-in-south-africa" }
+      ]
+    },
+    {
+      "label": "Calculators",
+      "href": "/tools",
+      "children": [
+        { "label": "Income Tax & PAYE Calculator", "href": "/tools/income-tax-calculator" },
+        { "label": "VAT Calculator", "href": "/tools/vat-calculator" }
       ]
     },
     { "label": "Areas We Serve", "href": "/areas-we-serve" },

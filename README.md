@@ -40,10 +40,15 @@ services/*.html
 resources/*.html
 ...
 
-css/styles.css         Hand-maintained. "The Ledger" design system.
-js/main.js             Hand-maintained. Mobile nav, scroll reveal, map
-                       consent gate, contact form.
+css/styles.css         Hand-maintained. "The Ledger" design system, and the
+                       @font-face block for the self-hosted fonts.
+js/main.js             Hand-maintained. Mobile nav, map consent gate,
+                       contact form. Loaded on every page.
+js/*-calculator.js     Per-page only. Listed in pages.json under `scripts`,
+                       so the 22 pages without a calculator never fetch them.
 assets/                Icons and the Open Graph image.
+assets/fonts/          Self-hosted woff2. See the note at the top of
+                       styles.css before replacing any of them.
 ```
 
 **The generated HTML is what ships.** Cloudflare runs no build command, and
@@ -109,7 +114,54 @@ of `css/styles.css` under `:root`.
 
 ---
 
-## What was done in this pass
+## What was done in the latest pass
+
+### Calculators
+
+Two free tools, at `/tools/income-tax-calculator` and `/tools/vat-calculator`,
+built on the same verified figures as the rate tables. They are plain
+dependency-free JavaScript, they run entirely in the visitor's browser, and
+they ask for nothing — no email, no sign-up. Every bracket, rebate, threshold
+and credit was re-checked against the Budget 2026 Tax Guide PDF, and each
+cumulative bracket amount reconciles exactly against the bracket below it.
+
+The income tax calculator was verified against seven worked cases spanning the
+threshold boundary, each age band, the R430 000 retirement cap and the top
+bracket. The bracket-by-bracket breakdown it renders sums exactly to the tax
+before rebates, which is the property that catches a transcription error in any
+of the seven `base` amounts.
+
+**If a Budget changes the rates, `js/income-tax-calculator.js` and
+`content/guide-rates.html` must both be updated.** They hold the same numbers
+in two places by design — the calculator needs them as data, the guide needs
+them as a readable table — but nothing enforces agreement between them.
+
+### Fonts are now self-hosted
+
+The site loaded three font families from `fonts.googleapis.com` on every page,
+which sat badly beside the Google Maps consent gate: the map is held back
+specifically so a visitor's IP is not sent to Google unasked, and then the
+fonts sent it anyway. They now come from `/assets/fonts` — no third-party
+request is made by any page, and `style-src`/`font-src` in the CSP are back to
+`'self'`. The privacy policy no longer lists Google Fonts as a recipient,
+because it no longer is one.
+
+Fraunces and IBM Plex Sans are variable fonts, so one file per style covers
+every weight; that plus preloading the three `latin` faces removes two DNS/TLS
+handshakes from the critical path.
+
+### New guide
+
+`/resources/independent-contractor-or-employee` — the statutory and common-law
+tests from SARS Interpretation Note 17, read directly rather than summarised
+from elsewhere. Worth noting because the widely-repeated version of these tests
+is wrong: the "paid at regular intervals" rule is a common-law *indicator*, not
+a statutory test, and the first statutory test needs *both* the premises limb
+and the control limb before it bites.
+
+---
+
+## What was done in the first rebuild pass
 
 ### Fixed: the site could not rank
 

@@ -76,6 +76,30 @@ CSS_VERSION = asset_version("css/styles.css")
 JS_VERSION = asset_version("js/main.js")
 
 
+# The three faces that are needed to paint the top of every page: body text,
+# headings, and the mono used for the eyebrow labels and the header phone
+# number. @font-face lives inside styles.css, so without these the browser
+# cannot even discover the font URLs until the stylesheet has parsed — one
+# extra round trip on the critical path. `crossorigin` is required even though
+# these are same-origin: fonts are always fetched in CORS mode, and a preload
+# whose mode does not match the real request is simply downloaded twice.
+#
+# Only the `latin` subsets are preloaded. `latin-ext` is declared in the CSS
+# but this site's copy never reaches for it, so preloading it would be pure
+# waste.
+PRELOAD_FONTS = [
+    "ibm-plex-sans-latin.woff2",
+    "fraunces-normal-latin.woff2",
+    "ibm-plex-mono-400-latin.woff2",
+]
+
+FONT_PRELOADS = "\n    ".join(
+    f'<link rel="preload" href="/assets/fonts/{name}" as="font" '
+    'type="font/woff2" crossorigin />'
+    for name in PRELOAD_FONTS
+)
+
+
 # --------------------------------------------------------------------------
 # Small helpers
 # --------------------------------------------------------------------------
@@ -392,6 +416,31 @@ def page_node(page: dict) -> dict:
             "audience": {"@type": "BusinessAudience", "name": "Small and medium-sized businesses"},
         }
 
+    if kind == "tool":
+        # A calculator is a WebApplication, not an Article. The distinction is
+        # not cosmetic: it is what makes the page eligible to be described as a
+        # free tool rather than a piece of writing, and `isAccessibleForFree`
+        # plus a zero-price Offer is what stops it being read as a paywalled or
+        # trial product.
+        return {
+            "@type": ["WebApplication", "WebPage"],
+            "@id": url + "#webapp",
+            "name": page["h1"],
+            "url": url,
+            "description": page["description"],
+            "applicationCategory": "FinanceApplication",
+            "applicationSubCategory": "Tax calculator",
+            "operatingSystem": "Any modern web browser",
+            "browserRequirements": "Requires JavaScript",
+            "inLanguage": SITE["locale"],
+            "isAccessibleForFree": True,
+            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "ZAR"},
+            "creator": {"@id": f"{DOMAIN}/#organization"},
+            "publisher": {"@id": f"{DOMAIN}/#organization"},
+            "isPartOf": {"@id": f"{DOMAIN}/#website"},
+            "dateModified": updated,
+        }
+
     if kind == "article":
         return {
             "@type": "Article",
@@ -475,12 +524,7 @@ def head_for(page: dict) -> str:
     <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.json" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,700;1,300;1,500&family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    {FONT_PRELOADS}
     <link rel="stylesheet" href="/css/styles.css?v={CSS_VERSION}" />
 
     {jsonld_for(page)}"""
@@ -547,14 +591,14 @@ def header_for(page: dict) -> str:
         </button>
       </div>
 
-      <div class="mobile-panel" id="mobile-panel">
+      <nav class="mobile-panel" id="mobile-panel" aria-label="Mobile">
         <div class="mobile-panel-inner">
           <ul>{mobile_nav_markup()}</ul>
           <div class="container">
             <a class="nav-phone" href="tel:{CONTACT['phone_e164']}">Call / WhatsApp — {esc(CONTACT['phone_display'])}</a>
           </div>
         </div>
-      </div>
+      </nav>
     </header>"""
 
 
@@ -754,6 +798,23 @@ def enhance_tables(body: str) -> str:
     return TABLE_WRAP_RE.sub(repl, body)
 
 
+def page_scripts(page: dict) -> str:
+    """Extra JS for the handful of pages that need it.
+
+    The calculators are several kilobytes of arithmetic that 18 of the 20 pages
+    have no use for, so they do not go in main.js. Listed per page in
+    pages.json as `"scripts": ["tax-calculator.js"]`, and content-hashed for
+    the same reason main.js is — /js/* is served `immutable` for a year.
+    """
+    names = page.get("scripts") or []
+    if not names:
+        return ""
+    return "".join(
+        f'    <script src="/js/{name}?v={asset_version("js/" + name)}"></script>\n'
+        for name in names
+    )
+
+
 def render(page: dict) -> str:
     body = detokenise((CONTENT / page["file"]).read_text(encoding="utf-8")).strip()
     body = enhance_tables(body)
@@ -779,7 +840,7 @@ def render(page: dict) -> str:
     {footer_markup()}
 
     <script src="/js/main.js?v={JS_VERSION}"></script>
-  </body>
+{page_scripts(page)}  </body>
 </html>
 """
 
@@ -861,19 +922,125 @@ def check_redirects() -> list[str]:
     return problems
 
 
+def check_tax_constants() -> list[str]:
+    """Keep the calculator's rate data honest against the published tables.
+
+    The brackets exist twice by necessity: `js/income-tax-calculator.js` needs
+    them as data, `content/guide-rates.html` needs them as a table a person can
+    read. Nothing stops a Budget update touching one and not the other, and the
+    failure is silent — the calculator keeps returning confident, wrong numbers
+    that disagree with the page documenting them.
+
+    Two things are checked:
+
+    1.  Every bracket's cumulative `base` equals the tax due at the top of the
+        bracket below it. This is what catches a mistyped digit: the tables are
+        self-proving, because 245 100 x 18% must be 44 118, and if it isn't,
+        one of the two numbers is wrong.
+    2.  The bracket bounds, rates and cumulative amounts in the JS match the
+        ones in the guide, row for row.
+    """
+    js_path = ROOT / "js" / "income-tax-calculator.js"
+    guide_path = CONTENT / "guide-rates.html"
+    if not js_path.exists() or not guide_path.exists():
+        return []
+
+    problems = []
+
+    js = js_path.read_text(encoding="utf-8")
+    block = re.search(r"var BRACKETS = \[(.*?)\];", js, re.S)
+    if not block:
+        return ["  could not find the BRACKETS array in js/income-tax-calculator.js"]
+
+    js_rows = []
+    for line in re.findall(r"\{([^}]*)\}", block.group(1)):
+        fields = dict(
+            (m.group(1), m.group(2))
+            for m in re.finditer(r"(\w+):\s*([\d.]+|Infinity)", line)
+        )
+        js_rows.append({
+            "from": float(fields["from"]),
+            "to": float("inf") if fields["to"] == "Infinity" else float(fields["to"]),
+            "base": float(fields["base"]),
+            "rate": float(fields["rate"]),
+        })
+
+    # 1. Internal consistency of the cumulative amounts.
+    for i in range(1, len(js_rows)):
+        prev, row = js_rows[i - 1], js_rows[i]
+        expected = prev["base"] + (prev["to"] - prev["from"]) * prev["rate"]
+        if abs(expected - row["base"]) > 0.5:
+            problems.append(
+                f"  bracket {i + 1}: base is {row['base']:,.0f} but the tax at the top of "
+                f"bracket {i} works out to {expected:,.0f}"
+            )
+
+    # 2. Agreement with the visible table in the guide.
+    guide = guide_path.read_text(encoding="utf-8")
+    table = re.search(
+        r'caption[^>]*>South African individual income tax brackets.*?</table>',
+        guide, re.S,
+    )
+    if not table:
+        return problems + ["  could not find the individual bracket table in guide-rates.html"]
+
+    def number(text: str) -> float:
+        return float(text.replace(" ", "").replace(" ", "").replace(",", ""))
+
+    guide_rows = []
+    for cells in re.findall(r"<tr><td>(.*?)</td><td>(.*?)</td></tr>", table.group(0)):
+        band, rule = cells
+        lower = number(re.match(r"\s*([\d\s ]+)", band).group(1))
+        upper_match = re.search(r"[–-]\s*([\d\s ]+)", band)
+        upper = number(upper_match.group(1)) if upper_match else float("inf")
+        rate = float(re.search(r"([\d.]+)%", rule).group(1)) / 100
+        base_match = re.match(r"\s*([\d\s ]+)\s*\+", rule)
+        base = number(base_match.group(1)) if base_match else 0.0
+        # The table's lower bound is the first taxable rand (e.g. "245 101");
+        # the JS stores the exclusive floor it is measured from (245 100).
+        guide_rows.append({"from": lower - 1 if lower else 0.0,
+                           "to": upper, "base": base, "rate": rate})
+
+    if len(guide_rows) != len(js_rows):
+        problems.append(
+            f"  guide-rates.html has {len(guide_rows)} brackets, "
+            f"income-tax-calculator.js has {len(js_rows)}"
+        )
+        return problems
+
+    for i, (g, j) in enumerate(zip(guide_rows, js_rows), start=1):
+        for key in ("from", "to", "base", "rate"):
+            if g[key] != j[key]:
+                problems.append(
+                    f"  bracket {i}: guide says {key}={g[key]:,} but the calculator "
+                    f"says {key}={j[key]:,}"
+                )
+
+    return problems
+
+
 LINK_RE = re.compile(r'href="(/[^"#?]*)"')
 
 
 def check_links(written: dict[str, str]) -> list[str]:
-    """Catch internal links that point at pages which do not exist."""
+    """Catch internal links that point at pages or files which do not exist."""
     known = {path_for(p["slug"]) for p in PAGES}
-    known |= {
-        "/", "/sitemap.xml", "/robots.txt", "/manifest.json",
-        "/css/styles.css", "/js/main.js",
-        "/assets/favicon.svg", "/assets/favicon.ico",
-        "/assets/apple-touch-icon.png", "/assets/og-image.png",
-        "/assets/icon-192.png", "/assets/icon-512.png",
-    }
+    known |= {"/", "/sitemap.xml", "/robots.txt", "/manifest.json"}
+
+    # Every real file under /assets, /css and /js counts as a valid target.
+    # This used to be a hand-maintained list of a dozen filenames, which meant
+    # adding an asset required remembering to add it here too — and the failure
+    # mode was a build error on a link that was actually fine. Reading the
+    # directories keeps the check honest in both directions: a typo'd asset URL
+    # still fails, and a new asset needs no bookkeeping.
+    for folder in ("assets", "css", "js"):
+        base = ROOT / folder
+        if not base.exists():
+            continue
+        for item in base.rglob("*"):
+            if item.is_file():
+                known.add("/" + item.relative_to(ROOT).as_posix())
+
     problems = []
     for slug, markup in written.items():
         for href in set(LINK_RE.findall(markup)):
@@ -933,6 +1100,14 @@ def main() -> int:
             failed = True
         else:
             print("_redirects check passed — all rules are relative URLs.")
+
+        tax_problems = check_tax_constants()
+        if tax_problems:
+            print("\nCalculator rates disagree with the published tables:")
+            print("\n".join(tax_problems))
+            failed = True
+        else:
+            print("Tax constants check passed — calculator matches guide-rates.html.")
 
         return 1 if failed else 0
     return 0

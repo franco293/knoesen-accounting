@@ -454,6 +454,151 @@
     "updated": "2026-08-03"
   },
   {
+    "slug": "resources/independent-contractor-or-employee",
+    "file": "guide-contractor-vs-employee.html",
+    "type": "article",
+    "breadcrumb": "Contractor or Employee?",
+    "breadcrumbs": [
+      {
+        "name": "Resources",
+        "slug": "resources"
+      }
+    ],
+    "eyebrow": "Payroll & PAYE",
+    "title": "Independent Contractor or Employee? The SARS Tests | South Africa",
+    "description": "SARS's tests for contractor vs employee: the three-employee rule, the dominant impression test, and why unpaid PAYE lands on the employer.",
+    "h1": "Independent contractor or employee? What SARS actually tests",
+    "lead": "A signed contract calling someone a contractor decides nothing. These are the tests SARS applies &mdash; and the PAYE risk sits with you, not them.",
+    "priority": "0.8",
+    "changefreq": "yearly",
+    "published": "2026-08-04",
+    "updated": "2026-08-04",
+    "faq": [
+      {
+        "q": "Who is liable if SARS decides my contractor was really an employee?",
+        "a": "The employer. SARS Interpretation Note 17 places the duty to determine whether payments are subject to employees' tax on the employer, because the employer is best placed to evaluate the actual working relationship. If PAYE should have been withheld and was not, the employer becomes liable for that tax plus penalties and interest, regardless of what the contract says or that the worker invoiced you."
+      },
+      {
+        "q": "Does employing three people make me an independent contractor?",
+        "a": "Yes, for PAYE purposes. A person who employs three or more full-time employees who are not connected persons, and who are engaged in the business throughout the year of assessment, is deemed to be carrying on a trade independently. This is the overriding statutory test: it takes precedence over the other statutory test and over the common-law position. Family members and connected trusts do not count."
+      },
+      {
+        "q": "Can I get a letter from SARS confirming someone is an independent contractor?",
+        "a": "No. SARS branch offices previously issued “Letters of Independence”, but that practice has stopped and the ability to reject such applications is now codified in the Tax Administration Act. You must make and document the determination yourself."
+      },
+      {
+        "q": "What is the dominant impression test?",
+        "a": "Where neither statutory test settles the question, SARS weighs about 20 indicators of the working relationship, grouped as near-conclusive (control of manner, payment regime, who must render the service, client base, risk and profit), persuasive (supervision, reports, training, control of hours) and resonant (whose tools and premises, integration into the business). No single indicator decides it, and SARS is explicit that the grid is a guide rather than a scorecard."
+      },
+      {
+        "q": "Do I have to withhold PAYE when paying a labour broker?",
+        "a": "Yes, unless the labour broker holds a valid IRP30 exemption certificate. SARS treats this as an anti-avoidance measure that must be applied strictly, so ask for the certificate before paying rather than after."
+      }
+    ]
+  },
+  {
+    "slug": "tools",
+    "file": "tools.html",
+    "type": "page",
+    "breadcrumb": "Calculators",
+    "eyebrow": "Free Tools",
+    "title": "Free South African Tax Calculators 2026/27 | Knoesen Accounting",
+    "description": "Free SA tax calculators for 2026/27: income tax and PAYE, and VAT at 15%. Official Budget 2026 figures, no sign-up, and nothing you type leaves your browser.",
+    "h1": "South African tax calculators",
+    "lead": "Free, accurate and private. Built on the {{tax_year}} figures, and the arithmetic runs on your device rather than our server.",
+    "priority": "0.8",
+    "changefreq": "monthly",
+    "updated": "2026-08-04"
+  },
+  {
+    "slug": "tools/income-tax-calculator",
+    "file": "tool-income-tax.html",
+    "type": "tool",
+    "breadcrumb": "Income Tax Calculator",
+    "breadcrumbs": [
+      {
+        "name": "Calculators",
+        "slug": "tools"
+      }
+    ],
+    "eyebrow": "Calculator",
+    "scripts": [
+      "income-tax-calculator.js"
+    ],
+    "title": "SARS Income Tax & PAYE Calculator 2026/27 | South Africa",
+    "description": "Free 2026/27 South African income tax calculator. Work out your monthly PAYE and take-home pay, with age rebates and medical tax credits.",
+    "h1": "South African income tax calculator 2026/27",
+    "lead": "Enter what you earn and see your PAYE, your take-home pay, and exactly how the figure was reached &mdash; bracket by bracket.",
+    "priority": "0.9",
+    "changefreq": "monthly",
+    "published": "2026-08-04",
+    "updated": "2026-08-04",
+    "faq": [
+      {
+        "q": "How much tax do I pay on my salary in South Africa in 2026/27?",
+        "a": "It depends on your taxable income and your age. The first R99 000 a year is effectively tax free for someone under 65, because the R17 820 primary rebate cancels the tax on it. Above that, income is taxed in bands from 18% up to 45% on income over R1 878 600. Only the portion of income inside each band is taxed at that band's rate, so moving into a higher bracket never reduces your take-home pay."
+      },
+      {
+        "q": "What is the tax threshold for 2026/27?",
+        "a": "R99 000 a year if you are under 65, R153 250 if you are 65 to 74, and R171 300 if you are 75 or older. Below the threshold for your age no income tax is payable, though you may still need to submit a return."
+      },
+      {
+        "q": "How is PAYE different from income tax?",
+        "a": "PAYE is not a separate tax. It is your income tax collected in monthly instalments by your employer and paid over to SARS on your behalf. At the end of the tax year SARS compares the PAYE withheld against the tax actually due on your assessment, which is why you can end up with a refund or a shortfall."
+      },
+      {
+        "q": "How much of my retirement annuity is tax deductible?",
+        "a": "Contributions to pension, provident and retirement annuity funds are deductible up to 27.5% of the greater of your remuneration or your taxable income, capped at R430 000 a year. Anything above the limit is not lost &mdash; it carries forward to the next tax year."
+      },
+      {
+        "q": "Is this calculator accurate for my situation?",
+        "a": "It is accurate for a salaried employee on steady pay, and uses the official Budget 2026 rates. It does not account for a travel allowance or company car, the additional medical expenses tax credit, commission or freelance income, lump sums, or capital gains. If any of those apply, treat the result as a starting point and speak to an accountant."
+      }
+    ]
+  },
+  {
+    "slug": "tools/vat-calculator",
+    "file": "tool-vat.html",
+    "type": "tool",
+    "breadcrumb": "VAT Calculator",
+    "breadcrumbs": [
+      {
+        "name": "Calculators",
+        "slug": "tools"
+      }
+    ],
+    "eyebrow": "Calculator",
+    "scripts": [
+      "vat-calculator.js"
+    ],
+    "title": "VAT Calculator South Africa 2026 | Add or Remove 15% VAT",
+    "description": "Free South African VAT calculator. Add 15% VAT to a price, or work out the VAT inside a VAT-inclusive amount using the 15/115 fraction.",
+    "h1": "VAT calculator (South Africa, 15%)",
+    "lead": "Add VAT to a price, or take it back out of one. The second is where most VAT returns go wrong.",
+    "priority": "0.9",
+    "changefreq": "monthly",
+    "published": "2026-08-04",
+    "updated": "2026-08-04",
+    "faq": [
+      {
+        "q": "How do I calculate 15% VAT in South Africa?",
+        "a": "To add VAT to a price that excludes it, multiply by 1.15. To find the VAT inside a VAT-inclusive amount, multiply by 15 and divide by 115. On R1 150 including VAT, the VAT is R150 and the VAT-exclusive value is R1 000."
+      },
+      {
+        "q": "How do I remove VAT from a total?",
+        "a": "Divide the VAT-inclusive amount by 1.15, or equivalently multiply it by 15/115. Do not simply take 15% off the inclusive amount &mdash; that is the most common VAT error and it understates the VAT every time."
+      },
+      {
+        "q": "When must I register for VAT in South Africa?",
+        "a": "Registration is compulsory once your taxable supplies exceed R2.3 million in any twelve consecutive months. You may register voluntarily once taxable supplies exceed R120 000. The compulsory threshold rose from R1 million in Budget 2026."
+      },
+      {
+        "q": "What is the VAT rate in South Africa?",
+        "a": "The standard rate is 15%. Certain supplies are zero-rated (such as most basic foodstuffs and exports) or exempt (such as residential rent and most financial services)."
+      }
+    ]
+  },
+  {
     "slug": "privacy-policy",
     "file": "privacy-policy.html",
     "type": "page",
