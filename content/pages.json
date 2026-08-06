@@ -688,6 +688,53 @@
     ]
   },
   {
+    "slug": "tools/provisional-tax-calculator",
+    "file": "tool-provisional-tax.html",
+    "type": "tool",
+    "breadcrumb": "Provisional Tax Calculator",
+    "breadcrumbs": [
+      {
+        "name": "Calculators",
+        "slug": "tools"
+      }
+    ],
+    "title": "Provisional Tax Calculator South Africa | IRP6 2026/27",
+    "description": "Work out both IRP6 provisional tax payments for 2026/27 or 2025/26, with the basic amount and the 20% under-estimation penalty. Free, no sign-up.",
+    "h1": "Provisional tax (IRP6) calculator",
+    "eyebrow": "Free Calculator",
+    "lead": "Both IRP6 payments for an individual provisional taxpayer, with the basic amount and the under-estimation penalty worked out — including the rule that changes above R1 million.",
+    "changefreq": "monthly",
+    "priority": "0.9",
+    "updated": "2026-08-06",
+    "scripts": [
+      "tax-rates.js",
+      "sa-tax-core.js",
+      "provisional-tax-calculator.js"
+    ],
+    "faq": [
+      {
+        "q": "How is the first provisional tax payment calculated?",
+        "a": "Work out the normal tax for the full year on your estimated taxable income, take off the age rebates and the medical scheme fees tax credit, then halve what is left. From that, subtract any PAYE deducted during the first six months. The order matters: the halving happens after the rebates and credits, not before, and halving first overstates the payment."
+      },
+      {
+        "q": "What is the basic amount for provisional tax?",
+        "a": "It is the taxable income on your most recent assessment issued at least 14 days before the estimate is due, excluding any taxable capital gain, retirement lump sum or severance benefit. If your estimate is made more than 18 months after the end of that assessed year, the basic amount is increased by 8%. Your estimate may not fall below it without justification."
+      },
+      {
+        "q": "When does the 20% under-estimation penalty apply?",
+        "a": "If your actual taxable income is R1 million or less, the penalty applies only when your final estimate is below both 90% of your actual taxable income and your basic amount. If your actual taxable income is above R1 million, the basic amount gives no protection at all and your estimate must reach 80% of your actual taxable income."
+      },
+      {
+        "q": "When are provisional tax payments due?",
+        "a": "For a February year-end, the first payment is due by 31 August, the second by the last day of February, and an optional third top-up payment by 30 September after year-end. The third payment is voluntary and exists to stop section 89quat interest running on an underpayment."
+      },
+      {
+        "q": "Who has to pay provisional tax in South Africa?",
+        "a": "Anyone who earns income that is not taxed through a payroll — sole proprietors, freelancers, landlords and company directors drawing income outside PAYE. Someone not carrying on a business is excluded if their taxable income is below the tax threshold, or if their interest, dividends, rental and untaxed remuneration together come to R30 000 or less."
+      }
+    ]
+  },
+  {
     "slug": "privacy-policy",
     "file": "privacy-policy.html",
     "type": "page",

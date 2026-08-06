@@ -3,6 +3,8 @@
 
   "_updating": "After a Budget: add the new year, move `current`, then run `python build.py --check`. The check proves every cumulative `base` equals the tax at the top of the bracket below it, and that each threshold equals its rebate divided by the first bracket rate. A mistyped digit fails the build rather than silently shipping confident wrong answers.",
 
+  "_provisional_rules": "The provisional tax rules below do not change from year to year and so are not stored per year. Estimates may not fall below the BASIC AMOUNT — the taxable income per the latest assessment issued at least 14 days before the estimate is due, excluding taxable capital gains, retirement lump sums and severance benefits — increased by 8% if the estimate is made more than 18 months after the end of that assessed year. Under-estimation penalty (Fourth Schedule para 20) is 20%: where actual taxable income is R1 million or LESS it bites only if the final estimate is below BOTH 90% of actual AND the basic amount, and is charged on the lesser of the tax on 90% of actual and the tax on the basic amount, less employees' tax and provisional tax already paid; ABOVE R1 million the basic amount gives no protection at all and the estimate must reach 80% of actual. Source: SARS Guide for Provisional Tax GEN-PT-01-G01.",
+
   "_partial_years": "A year may carry only the sections a calculator needs. 2025/26 has `individual`, `payroll` and `vat` — every figure in it was checked against sars.gov.za and the Budget guide — and deliberately omits SBC, turnover tax, transfer duty, CGT, estate duty and the rest, because nothing on the site uses those for a past year and publishing unverified figures is worse than publishing none. Fill a section in only when you have read it off a primary source. build.py validates whatever is present and skips what is absent.",
 
   "current": "2026/27",
@@ -67,6 +69,13 @@
         "uif_monthly_ceiling": 17712,
         "sdl_rate": 0.01,
         "sdl_exemption_annual_remuneration": 500000
+      },
+
+      "provisional": {
+        "_comment": "Dates are for a 28/29 February year of assessment, which covers every individual and most small companies. A company with another financial year-end shifts all three. Source: SARS Guide for Provisional Tax (GEN-PT-01-G01), which works this exact year as its example.",
+        "first_period_due": "2025-08-31",
+        "second_period_due": "2026-02-28",
+        "third_period_due": "2026-09-30"
       },
 
       "vat": {
@@ -216,6 +225,13 @@
         "uif_monthly_ceiling": 17712,
         "sdl_rate": 0.01,
         "sdl_exemption_annual_remuneration": 500000
+      },
+
+      "provisional": {
+        "_comment": "Dates are for a 28/29 February year of assessment. Source: SARS Guide for Provisional Tax (GEN-PT-01-G01).",
+        "first_period_due": "2026-08-31",
+        "second_period_due": "2027-02-28",
+        "third_period_due": "2027-09-30"
       },
 
       "travel": {

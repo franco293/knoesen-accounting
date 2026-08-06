@@ -167,6 +167,10 @@
           "href": "/tools/net-to-gross-calculator"
         },
         {
+          "label": "Provisional Tax (IRP6)",
+          "href": "/tools/provisional-tax-calculator"
+        },
+        {
           "label": "VAT Calculator",
           "href": "/tools/vat-calculator"
         }

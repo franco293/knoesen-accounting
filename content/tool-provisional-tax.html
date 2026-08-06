@@ -1,0 +1,360 @@
+<section class="section section--paper">
+  <div class="container">
+    <div class="prose reveal">
+      <p class="lead-note">
+        Works out both IRP6 provisional tax payments for an <strong>individual</strong>
+        provisional taxpayer &mdash; a sole proprietor, freelancer, landlord or
+        anyone with income that is not taxed through a payroll. Rules from
+        <a href="https://www.sars.gov.za/wp-content/uploads/Ops/Guides/GEN-PT-01-G01-Guide-for-Provisional-Tax-External-Guide.pdf" target="_blank" rel="noopener noreferrer">SARS's Guide for Provisional Tax</a>,
+        rates from the Budget 2026 Tax Guide. Nothing you type leaves your
+        browser. Reviewed {{verified_on}}.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section section--raised ruled">
+  <div class="container">
+    <div class="calc-layout">
+      <form class="calc-form" id="prov-calc" novalidate>
+        <h2 class="calc-heading">Your estimate</h2>
+
+        <fieldset class="calc-fieldset">
+          <legend>Tax year</legend>
+          <div class="form-field">
+            <label for="pv-year" class="visually-hidden">Which tax year</label>
+            <select id="pv-year">
+              {{rates:year_options}}
+            </select>
+            <p class="calc-hint" id="pv-year-note"></p>
+          </div>
+        </fieldset>
+
+        <fieldset class="calc-fieldset">
+          <legend>Estimated taxable income</legend>
+          <div class="form-field">
+            <label for="pv-estimate">Taxable income for the whole year</label>
+            <input type="text" inputmode="decimal" id="pv-estimate" autocomplete="off" placeholder="e.g. 600000" />
+            <p class="calc-hint">
+              Income after deductible expenses, for the full year &mdash; not
+              just the six months. Include the taxable portion of any capital
+              gain.
+            </p>
+          </div>
+        </fieldset>
+
+        <fieldset class="calc-fieldset">
+          <legend>Age at the end of the tax year</legend>
+          <div class="calc-radios calc-radios--stack">
+            <label class="calc-radio">
+              <input type="radio" name="pv-age" value="under65" checked />
+              <span>Under 65</span>
+            </label>
+            <label class="calc-radio">
+              <input type="radio" name="pv-age" value="65" />
+              <span>65 to 74</span>
+            </label>
+            <label class="calc-radio">
+              <input type="radio" name="pv-age" value="75" />
+              <span>75 and older</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="calc-fieldset">
+          <legend>Credits and tax already paid</legend>
+
+          <div class="form-field">
+            <label for="pv-medical">People on your medical scheme</label>
+            <select id="pv-medical">
+              <option value="0" selected>No medical scheme</option>
+              <option value="1">1 (just me)</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="pv-paye-first">
+              PAYE deducted in the first six months <span class="calc-optional">(optional)</span>
+            </label>
+            <input type="text" inputmode="decimal" id="pv-paye-first" autocomplete="off" placeholder="0" />
+            <p class="calc-hint">
+              Only if you also draw a salary that is taxed through a payroll.
+            </p>
+          </div>
+
+          <div class="form-field">
+            <label for="pv-paye-year">
+              PAYE deducted for the whole year <span class="calc-optional">(optional)</span>
+            </label>
+            <input type="text" inputmode="decimal" id="pv-paye-year" autocomplete="off" placeholder="0" />
+          </div>
+        </fieldset>
+
+        <fieldset class="calc-fieldset">
+          <legend>Basic amount <span class="calc-optional">(optional, but important)</span></legend>
+
+          <div class="form-field">
+            <label for="pv-basic">Taxable income on your last assessment</label>
+            <input type="text" inputmode="decimal" id="pv-basic" autocomplete="off" placeholder="0" />
+            <p class="calc-hint">
+              From your most recent ITA34, excluding any taxable capital gain,
+              retirement lump sum or severance benefit. Your estimate is not
+              allowed to fall below this figure without justification.
+            </p>
+          </div>
+
+          <label class="form-consent calc-check">
+            <input type="checkbox" id="pv-basic-escalate" />
+            <span>
+              Increase it by 8% &mdash; tick this if your estimate is being made
+              more than 18 months after the end of that assessed year
+            </span>
+          </label>
+        </fieldset>
+
+        <fieldset class="calc-fieldset">
+          <legend>Penalty check <span class="calc-optional">(optional, after year-end)</span></legend>
+          <div class="form-field">
+            <label for="pv-actual">Actual taxable income, once you know it</label>
+            <input type="text" inputmode="decimal" id="pv-actual" autocomplete="off" placeholder="0" />
+            <p class="calc-hint">
+              Leave blank while estimating. Fill it in afterwards to see whether
+              your estimate exposed you to the 20% under-estimation penalty.
+            </p>
+          </div>
+        </fieldset>
+
+        <p class="calc-note">
+          Figures update as you type. Nothing is sent anywhere &mdash; the sums
+          run in your browser.
+        </p>
+      </form>
+
+      <div class="calc-output">
+        <h2 class="calc-heading">What you'd pay</h2>
+
+        <p class="calc-empty" id="pv-empty">
+          Enter your estimated taxable income for the year and both payments
+          appear here.
+        </p>
+
+        <div id="pv-results" hidden>
+          <div class="calc-headline">
+            <div class="calc-figure calc-figure--accent">
+              <span class="calc-figure-label">First payment</span>
+              <strong class="calc-figure-value" id="pv-out-first">R0.00</strong>
+              <span class="calc-figure-sub">due <span id="pv-out-first-due">&mdash;</span></span>
+            </div>
+            <div class="calc-figure">
+              <span class="calc-figure-label">Second payment</span>
+              <strong class="calc-figure-value" id="pv-out-second">R0.00</strong>
+              <span class="calc-figure-sub">due <span id="pv-out-second-due">&mdash;</span></span>
+            </div>
+          </div>
+
+          <h3 class="table-title">First payment &mdash; how it is worked out</h3>
+          <div class="table-wrap">
+            <table class="data-table data-table--numeric calc-table">
+              <caption class="visually-hidden">First period provisional tax calculation</caption>
+              <tbody>
+                <tr>
+                  <th scope="row">Tax for the year on your estimate, after rebates and credits</th>
+                  <td id="pv-out-total-tax">R0.00</td>
+                </tr>
+                <tr>
+                  <th scope="row">Half of that</th>
+                  <td id="pv-out-half">R0.00</td>
+                </tr>
+                <tr>
+                  <th scope="row">Less: PAYE in the first six months</th>
+                  <td id="pv-out-paye-first">R0.00</td>
+                </tr>
+                <tr class="calc-table-total">
+                  <th scope="row">First provisional payment</th>
+                  <td id="pv-out-first-2">R0.00</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="calc-hint">
+            Note the order: the tax is halved <em>after</em> the rebates and
+            medical credits come off, not before. Halving first overstates the
+            payment, and a good many spreadsheets do exactly that.
+          </p>
+
+          <h3 class="table-title">Second payment &mdash; how it is worked out</h3>
+          <div class="table-wrap">
+            <table class="data-table data-table--numeric calc-table">
+              <caption class="visually-hidden">Second period provisional tax calculation</caption>
+              <tbody>
+                <tr>
+                  <th scope="row">Tax for the year on your estimate</th>
+                  <td id="pv-out-total-tax-2">R0.00</td>
+                </tr>
+                <tr>
+                  <th scope="row">Less: PAYE for the whole year</th>
+                  <td id="pv-out-paye-year">R0.00</td>
+                </tr>
+                <tr>
+                  <th scope="row">Less: first payment</th>
+                  <td id="pv-out-first-paid">R0.00</td>
+                </tr>
+                <tr class="calc-table-total">
+                  <th scope="row">Second provisional payment</th>
+                  <td id="pv-out-second-2">R0.00</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="calc-hint">
+            A voluntary third or "top-up" payment can be made by
+            <strong id="pv-out-third-due">&mdash;</strong> to stop section
+            89<em>quat</em> interest running if the first two turn out to have
+            been short.
+          </p>
+
+          <div id="pv-basic-block" hidden>
+            <h3 class="table-title">Against your basic amount</h3>
+            <div class="table-wrap">
+              <table class="data-table data-table--numeric calc-table">
+                <tbody>
+                  <tr>
+                    <th scope="row">Basic amount</th>
+                    <td id="pv-out-basic">R0.00</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="calc-threshold" id="pv-note-below-basic" hidden>
+              Your estimate is <strong>below your basic amount</strong>. That is
+              allowed only if you can justify it. SARS may ask you to, and may
+              replace your estimate with a higher figure &mdash; and that
+              increase cannot be objected to or appealed.
+            </p>
+          </div>
+
+          <div id="pv-penalty-block" hidden>
+            <h3 class="table-title">Under-estimation penalty</h3>
+            <div class="table-wrap">
+              <table class="data-table data-table--numeric calc-table">
+                <tbody>
+                  <tr>
+                    <th scope="row"><span id="pv-out-safe-pct">90%</span> of your actual taxable income</th>
+                    <td id="pv-out-required">R0.00</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Estimate needed to stay clear</th>
+                    <td id="pv-out-safe">R0.00</td>
+                  </tr>
+                  <tr class="calc-table-total">
+                    <th scope="row">Penalty at 20%</th>
+                    <td id="pv-out-penalty">R0.00</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="calc-threshold" id="pv-penalty-triggered" hidden>
+              On these figures your estimate was low enough to trigger the
+              penalty. It is worth checking whether a top-up payment or a
+              request for remission is appropriate.
+            </p>
+            <p class="calc-hint" id="pv-penalty-clear" hidden>
+              On these figures your estimate is high enough to avoid the
+              under-estimation penalty.
+            </p>
+            <p class="calc-threshold" id="pv-note-above-1m" hidden>
+              Your actual taxable income is above <strong>R1 million</strong>,
+              and above that line the basic amount protects you no longer. The
+              estimate has to reach 80% of your actual taxable income, whatever
+              your last assessment said. This catches people out in the first
+              good year they have.
+            </p>
+          </div>
+        </div>
+
+        <p class="visually-hidden" id="pv-live" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <noscript>
+      <p class="calc-noscript">
+        This calculator needs JavaScript. The rate tables it uses are published
+        on <a class="text-link" href="/resources/tax-rates-2026-2027">our {{tax_year}} tax rates page</a>,
+        or <a class="text-link" href="/contact">ask us</a> and we'll work your
+        IRP6 out for you.
+      </p>
+    </noscript>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="container">
+    <div class="prose reveal">
+      <h2>The rule that catches people out</h2>
+      <p>
+        Most provisional taxpayers learn early that the <strong>basic
+        amount</strong> &mdash; the taxable income on your last assessment
+        &mdash; is a safe harbour. Estimate at least that much and the
+        under-estimation penalty cannot reach you.
+      </p>
+      <p>
+        That stops being true the moment your actual taxable income passes
+        <strong>R1 million</strong>. Above that line the basic amount counts for
+        nothing: your second estimate has to reach <strong>80% of your actual
+        taxable income</strong>, or SARS charges 20% of the shortfall in tax.
+      </p>
+      <p>
+        The people this hits hardest are the ones having their first
+        exceptional year &mdash; a big contract, a property sale, a business
+        that finally took off. They estimate on last year's figure exactly as
+        they always have, and discover the safe harbour disappeared behind
+        them. If you can see a year like that coming, that is the moment to
+        talk to someone, not February.
+      </p>
+
+      <h2>How the two payments fit together</h2>
+      <p>
+        Provisional tax is not an extra tax. It is the ordinary income tax
+        liability paid in advance, in instalments, because there is no employer
+        withholding it for you. The first payment covers half the year's
+        estimated tax; the second brings you up to the full estimate; and
+        anything still short after that can be settled with a voluntary third
+        payment to stop interest accruing.
+      </p>
+
+      <h2>What this calculator does and doesn't cover</h2>
+      <p>
+        It covers an individual provisional taxpayer: the brackets, the age
+        rebates, the medical scheme fees tax credit, PAYE already withheld, the
+        basic amount and the under-estimation penalty on both sides of the
+        R1 million line.
+      </p>
+      <p>It does <strong>not</strong> cover:</p>
+      <ul>
+        <li><strong>Companies and trusts.</strong> The mechanism is the same but the rates are not, and a company that qualifies as a Small Business Corporation is taxed on a different table entirely.</li>
+        <li>The <strong>additional medical expenses tax credit</strong> under section 6B, which depends on out-of-pocket spending this page does not ask for. If you have significant unrecovered medical costs your tax will be lower than shown.</li>
+        <li>The <strong>solar energy credit</strong>, foreign tax credits, or the section 11F retirement deduction &mdash; all of which reduce the figure.</li>
+        <li><strong>Section 89<em>quat</em> interest</strong>, which runs on any underpayment where taxable income exceeds R50 000, and <strong>paragraph 27</strong> penalties for paying late.</li>
+      </ul>
+      <p>
+        Provisional tax is the area where a wrong estimate costs real money
+        rather than just admin. If you are near the R1 million line, or your
+        income has moved sharply, that is worth a conversation &mdash;
+        <a class="text-link" href="/contact">get in touch</a> and we will work
+        the estimate out properly.
+      </p>
+      <p class="note-line">
+        Related: <a class="text-link" href="/tools/income-tax-calculator">income tax &amp; PAYE calculator</a> &middot;
+        <a class="text-link" href="/resources/tax-deadlines-calendar">tax deadline calendar</a> &middot;
+        <a class="text-link" href="/services/tax">how we help with tax</a>
+      </p>
+    </div>
+  </div>
+</section>
