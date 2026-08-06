@@ -1,15 +1,32 @@
-/* South African VAT calculator — standard rate 15%.
-   Loaded only by /tools/vat-calculator (see pages.json → scripts).
+/* South African VAT calculator.
+   Loaded only by /tools/vat-calculator (see pages.json → scripts), after
+   js/tax-rates.js, which it depends on.
 
-   Source: National Treasury, Budget 2026 Tax Guide — "VAT is levied at the
-   standard rate of 15%". */
+   The rate comes from data/tax-rates.json, the same source as the published
+   rate tables — not written here. South Africa came within days of a VAT
+   increase in 2025 before it was withdrawn, so treating the standard rate as
+   a constant that will never move is exactly the assumption that leaves a
+   calculator quietly wrong. */
 (function () {
   "use strict";
 
   var form = document.getElementById("vat-calc");
   if (!form) return;
 
-  var RATE = 0.15;
+  /* See the note in income-tax-calculator.js: failing silently leaves the
+     visitor typing into a panel that will never answer. */
+  var DATA = window.SA_TAX_RATES;
+  if (!DATA) {
+    var empty = document.getElementById("vat-empty");
+    if (empty) {
+      empty.textContent =
+        "The VAT rate could not be loaded, so this calculator cannot run. " +
+        "Please reload the page, or call us and we will work it out.";
+    }
+    return;
+  }
+
+  var RATE = DATA.years[DATA.current].vat.standard_rate;
 
   var el = function (id) { return document.getElementById(id); };
 

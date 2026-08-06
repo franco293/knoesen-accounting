@@ -1,0 +1,170 @@
+{
+  "_comment": "Single source of truth for every South African tax figure this site publishes. Before this file existed the brackets lived in TWO places — js/income-tax-calculator.js as data and content/guide-rates.html as a readable table — and nothing but a regex-scraping validator held them together. Every figure a calculator needs, and every figure the rate tables show, now comes from here. build.py renders the bracket tables from it and emits js/tax-rates.js for the browser. Add a new tax year as a new key under `years`, point `current` at it, and both the tables and the calculators follow.",
+
+  "_updating": "After a Budget: add the new year, move `current`, then run `python build.py --check`. The check proves every cumulative `base` equals the tax at the top of the bracket below it, and that each threshold equals its rebate divided by the first bracket rate. A mistyped digit fails the build rather than silently shipping confident wrong answers.",
+
+  "current": "2026/27",
+
+  "years": {
+    "2026/27": {
+      "label": "2026/27",
+      "assessment_year": "2027 year of assessment",
+      "period": "1 March 2026 – 28 February 2027",
+      "company_period": "years of assessment ending on any date from 1 April 2026 to 31 March 2027",
+      "verified_on": "2026-08-03",
+      "sources": [
+        {
+          "label": "National Treasury — Budget 2026 Tax Guide",
+          "url": "https://www.treasury.gov.za/documents/national%20budget/2026/sars/Budget%202026%20Tax%20guide.pdf"
+        },
+        {
+          "label": "SARS — Filing Season",
+          "url": "https://www.sars.gov.za/types-of-tax/personal-income-tax/filing-season/"
+        }
+      ],
+
+      "individual": {
+        "_comment": "`base` is cumulative: the tax due at the top of the bracket below. It is load-bearing — an error in one silently shifts every result above it instead of producing an obviously wrong answer. build.py --check proves each one.",
+        "brackets": [
+          { "from": 0,       "to": 245100,   "base": 0,      "rate": 0.18 },
+          { "from": 245100,  "to": 383100,   "base": 44118,  "rate": 0.26 },
+          { "from": 383100,  "to": 530200,   "base": 79998,  "rate": 0.31 },
+          { "from": 530200,  "to": 695800,   "base": 125599, "rate": 0.36 },
+          { "from": 695800,  "to": 887000,   "base": 185215, "rate": 0.39 },
+          { "from": 887000,  "to": 1878600,  "base": 259783, "rate": 0.41 },
+          { "from": 1878600, "to": null,     "base": 666339, "rate": 0.45 }
+        ],
+
+        "_rebates_comment": "Cumulative: a 76-year-old gets all three.",
+        "rebates": {
+          "primary": 17820,
+          "secondary": 9765,
+          "tertiary": 3249
+        },
+
+        "_thresholds_comment": "Derived, not independent: the threshold is the rebate divided by the first bracket rate. Stored explicitly because the guide publishes them, and checked against the rebates at build time.",
+        "thresholds": {
+          "under_65": 99000,
+          "age_65_to_74": 153250,
+          "age_75_plus": 171300
+        },
+
+        "interest_exemption": {
+          "under_65": 23800,
+          "age_65_plus": 34500
+        },
+
+        "_medical_comment": "Medical scheme fees tax credit, per month.",
+        "medical_credit": {
+          "first_two_each": 376,
+          "each_additional": 254
+        },
+
+        "_retirement_comment": "Deductible up to 27.5% of the greater of remuneration or taxable income, capped annually. The cap was raised from R350 000 — a figure many calculators still use.",
+        "retirement": {
+          "rate": 0.275,
+          "annual_cap": 430000
+        },
+
+        "tax_free_investment_annual": 46000,
+        "donations_deduction_rate": 0.10
+      },
+
+      "company": {
+        "rate": 0.27,
+
+        "_sbc_comment": "Small Business Corporation rates.",
+        "sbc_brackets": [
+          { "from": 0,      "to": 99000,  "base": 0,     "rate": 0.0 },
+          { "from": 99000,  "to": 365000, "base": 0,     "rate": 0.07 },
+          { "from": 365000, "to": 550000, "base": 18620, "rate": 0.21 },
+          { "from": 550000, "to": null,   "base": 57470, "rate": 0.27 }
+        ],
+
+        "_turnover_comment": "Turnover tax for micro businesses. The widely-syndicated version of this table has an error in the third bracket — these come from the Budget guide directly.",
+        "turnover_brackets": [
+          { "from": 0,       "to": 600000,  "base": 0,     "rate": 0.0 },
+          { "from": 600000,  "to": 950000,  "base": 0,     "rate": 0.01 },
+          { "from": 950000,  "to": 1400000, "base": 3500,  "rate": 0.02 },
+          { "from": 1400000, "to": null,    "base": 12500, "rate": 0.03 }
+        ]
+      },
+
+      "vat": {
+        "standard_rate": 0.15,
+        "compulsory_threshold": 2300000,
+        "voluntary_threshold": 120000,
+        "_threshold_comment": "The compulsory threshold rose from R1 million on 1 April 2026. A great deal of South African tax content online still quotes the old figure."
+      },
+
+      "cgt": {
+        "_comment": "Maximum effective rates.",
+        "max_effective": {
+          "individuals_and_special_trusts": 0.18,
+          "companies": 0.216,
+          "other_trusts": 0.36
+        },
+        "exclusions": {
+          "annual": 50000,
+          "year_of_death": 440000,
+          "primary_residence": 3000000,
+          "small_business": 2700000,
+          "_small_business_comment": "Age 55+, business market value up to R15m."
+        }
+      },
+
+      "dividends_tax_rate": 0.20,
+
+      "donations_tax": {
+        "rate_to_30m": 0.20,
+        "rate_above_30m": 0.25,
+        "cumulative_threshold": 30000000,
+        "annual_exemption_natural_person": 150000
+      },
+
+      "estate_duty": {
+        "rate_to_30m": 0.20,
+        "rate_above_30m": 0.25,
+        "dutiable_threshold": 30000000,
+        "abatement": 3500000
+      },
+
+      "transfer_duty": {
+        "_comment": "Payable on property transactions not subject to VAT.",
+        "brackets": [
+          { "from": 0,        "to": 1210000,  "base": 0,       "rate": 0.0 },
+          { "from": 1210000,  "to": 1663800,  "base": 0,       "rate": 0.03 },
+          { "from": 1663800,  "to": 2329300,  "base": 13614,   "rate": 0.06 },
+          { "from": 2329300,  "to": 2994800,  "base": 53544,   "rate": 0.08 },
+          { "from": 2994800,  "to": 13310000, "base": 106784,  "rate": 0.11 },
+          { "from": 13310000, "to": null,     "base": 1241456, "rate": 0.13 }
+        ]
+      },
+
+      "payroll": {
+        "uif_employer_rate": 0.01,
+        "uif_employee_rate": 0.01,
+        "_uif_ceiling_comment": "NOT in the Budget guide, which says only 'below a certain amount'. From SARS: R17 712 per month, unchanged since 1 June 2021. Capped MONTHLY, so annualising it is only correct for steady pay.",
+        "uif_monthly_ceiling": 17712,
+        "sdl_rate": 0.01,
+        "sdl_exemption_annual_remuneration": 500000
+      },
+
+      "travel": {
+        "reimbursive_per_km": 4.95,
+        "_reimbursive_comment": "Applies where no other travel allowance is received.",
+        "subsistence_meals_and_incidental_per_day": 595,
+        "subsistence_incidental_only_per_day": 184
+      },
+
+      "sars_interest": {
+        "late_or_underpayment": 0.1025,
+        "late_vat": 0.1025,
+        "refund_of_provisional_overpayment": 0.0625,
+        "_effective_comment": "The three above apply from 1 March 2026.",
+        "fringe_benefit_loan": 0.0775,
+        "_loan_comment": "Interest-free or low-interest loan fringe benefit, from 1 December 2025."
+      }
+    }
+  }
+}

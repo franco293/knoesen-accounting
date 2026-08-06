@@ -25,13 +25,7 @@
           <tr><th scope="col">Taxable income (R)</th><th scope="col">Rate of tax</th></tr>
         </thead>
         <tbody>
-          <tr><td>1 – 245 100</td><td>18% of taxable income</td></tr>
-          <tr><td>245 101 – 383 100</td><td>44 118 + 26% of taxable income above 245 100</td></tr>
-          <tr><td>383 101 – 530 200</td><td>79 998 + 31% of taxable income above 383 100</td></tr>
-          <tr><td>530 201 – 695 800</td><td>125 599 + 36% of taxable income above 530 200</td></tr>
-          <tr><td>695 801 – 887 000</td><td>185 215 + 39% of taxable income above 695 800</td></tr>
-          <tr><td>887 001 – 1 878 600</td><td>259 783 + 41% of taxable income above 887 000</td></tr>
-          <tr><td>1 878 601 and above</td><td>666 339 + 45% of taxable income above 1 878 600</td></tr>
+          {{rates:individual_brackets}}
         </tbody>
       </table>
     </div>
@@ -41,9 +35,7 @@
         <h3 class="table-title">Rebates</h3>
         <table class="data-table data-table--numeric">
           <tbody>
-            <tr><td>Primary</td><td>R17 820</td></tr>
-            <tr><td>Secondary (65 and older)</td><td>R9 765</td></tr>
-            <tr><td>Tertiary (75 and older)</td><td>R3 249</td></tr>
+            {{rates:rebates}}
           </tbody>
         </table>
       </div>
@@ -51,9 +43,7 @@
         <h3 class="table-title">Tax thresholds</h3>
         <table class="data-table data-table--numeric">
           <tbody>
-            <tr><td>Under 65</td><td>R99 000</td></tr>
-            <tr><td>65 to below 75</td><td>R153 250</td></tr>
-            <tr><td>75 and older</td><td>R171 300</td></tr>
+            {{rates:thresholds}}
           </tbody>
         </table>
       </div>
@@ -64,8 +54,7 @@
         <h3 class="table-title">Interest exemptions</h3>
         <table class="data-table data-table--numeric">
           <tbody>
-            <tr><td>Under 65</td><td>R23 800 per annum</td></tr>
-            <tr><td>65 and older</td><td>R34 500 per annum</td></tr>
+            {{rates:interest_exemptions}}
           </tbody>
         </table>
       </div>
@@ -73,8 +62,7 @@
         <h3 class="table-title">Medical scheme fees tax credit</h3>
         <table class="data-table data-table--numeric">
           <tbody>
-            <tr><td>First two members (each)</td><td>R376 per month</td></tr>
-            <tr><td>Each additional dependant</td><td>R254 per month</td></tr>
+            {{rates:medical_credit}}
           </tbody>
         </table>
       </div>
@@ -136,10 +124,7 @@
           <tr><th scope="col">Taxable income (R)</th><th scope="col">Rate of tax</th></tr>
         </thead>
         <tbody>
-          <tr><td>1 – 99 000</td><td>0% of taxable income</td></tr>
-          <tr><td>99 001 – 365 000</td><td>7% of taxable income above 99 000</td></tr>
-          <tr><td>365 001 – 550 000</td><td>18 620 + 21% of taxable income above 365 000</td></tr>
-          <tr><td>550 001 and above</td><td>57 470 + 27% of the amount above 550 000</td></tr>
+          {{rates:sbc_brackets}}
         </tbody>
       </table>
     </div>
@@ -152,10 +137,7 @@
           <tr><th scope="col">Taxable turnover (R)</th><th scope="col">Rate of tax</th></tr>
         </thead>
         <tbody>
-          <tr><td>1 – 600 000</td><td>0% of taxable turnover</td></tr>
-          <tr><td>600 001 – 950 000</td><td>1% of taxable turnover above 600 000</td></tr>
-          <tr><td>950 001 – 1 400 000</td><td>3 500 + 2% of taxable turnover above 950 000</td></tr>
-          <tr><td>1 400 001 and above</td><td>12 500 + 3% of taxable turnover above 1 400 000</td></tr>
+          {{rates:turnover_brackets}}
         </tbody>
       </table>
     </div>
@@ -245,12 +227,7 @@
           <tr><th scope="col">Value of property (R)</th><th scope="col">Rate</th></tr>
         </thead>
         <tbody>
-          <tr><td>1 – 1 210 000</td><td>0% of the value</td></tr>
-          <tr><td>1 210 001 – 1 663 800</td><td>3% of the value above R1 210 000</td></tr>
-          <tr><td>1 663 801 – 2 329 300</td><td>R13 614 + 6% of the value above R1 663 800</td></tr>
-          <tr><td>2 329 301 – 2 994 800</td><td>R53 544 + 8% of the value above R2 329 300</td></tr>
-          <tr><td>2 994 801 – 13 310 000</td><td>R106 784 + 11% of the value above R2 994 800</td></tr>
-          <tr><td>13 310 001 and above</td><td>R1 241 456 + 13% of the value above R13 310 000</td></tr>
+          {{rates:transfer_duty_brackets}}
         </tbody>
       </table>
     </div>

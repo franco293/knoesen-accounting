@@ -129,13 +129,12 @@ Two things are time-sensitive and will actively hurt you if left to rot:
   `<!-- TIMELY NOTICE -->` block in `content/home.html`.
 - **All tax figures are for the 2026/27 tax year.** After the next Budget,
   recheck every number against National Treasury's new Tax Guide and update
-  `site.json` → `tax_year`, the tables in `content/guide-rates.html`, **and the
-  constants at the top of `js/income-tax-calculator.js`**. The calculator holds
-  the brackets, rebates, medical credits and retirement cap as data, and
-  nothing checks it against the published table — so a Budget update that
-  misses it leaves the calculator quietly disagreeing with the page that
-  documents it. The review date shown on each guide is a promise to your
-  readers — keep it honest.
+  **`data/tax-rates.json`** — add the new year, point `current` at it, and
+  update `site.json` → `tax_year` to match. The rate tables and both
+  calculators are generated from that one file, so there is nothing else to
+  keep in step. Then run `python build.py --check`, which will refuse to build
+  if any bracket, band or threshold is inconsistent. The review date shown on
+  each guide is a promise to your readers — keep it honest.
 
 ## 7. Optional: HSTS preload
 

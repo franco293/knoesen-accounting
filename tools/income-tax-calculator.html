@@ -138,7 +138,21 @@
             }
           }
         ]
-      }
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "08:00",
+          "closes": "17:00"
+        }
+      ]
     },
     {
       "@type": "Person",
@@ -418,8 +432,9 @@
               <option value="8">8</option>
             </select>
             <p class="calc-hint">
-              Count yourself and every dependant you pay for. R376 a month each
-              for the first two, R254 for each one after that.
+              Count yourself and every dependant you pay for.
+              R376 a month each for the first two,
+              R254 for each one after that.
             </p>
           </div>
 
@@ -436,8 +451,8 @@
             />
             <p class="calc-hint">
               Your own contributions, in the same period as the income above.
-              Deductible up to 27.5% of your income, and no more than R430 000
-              a year.
+              Deductible up to 27.5% of your income, and no more
+              than R430 000 a year.
             </p>
           </div>
 
@@ -478,6 +493,15 @@
           <p class="calc-threshold" id="tc-threshold-note" hidden>
             That falls below the tax threshold for your age, so no income tax
             is payable. You may still need to file a return.
+          </p>
+
+          <p class="calc-threshold" id="tc-medical-nil-note" hidden>
+            Your medical scheme fees tax credit covers the whole liability, so
+            no income tax is payable. You are still above the tax threshold,
+            so a return is still required &mdash; and note that your employer
+            only applies this credit through PAYE if they pay the scheme on
+            your behalf. If you pay it yourself, expect PAYE to be deducted
+            and the credit to come back to you on assessment.
           </p>
 
           <h3 class="table-title">How that is worked out</h3>
@@ -609,8 +633,8 @@
     <div class="prose reveal">
       <p class="source-note">
         Rates from National Treasury, <em>Budget 2026 Tax Guide</em>, covering
-        1 March 2026 – 28 February 2027. UIF ceiling from SARS (R17 712 per month, unchanged
-        since 1 June 2021). Reviewed 2026-08-03. Rates change with every
+        1 March 2026 – 28 February 2027. UIF ceiling from SARS (R17 712 per
+        month, unchanged since 1 June 2021). Reviewed 2026-08-03. Rates change with every
         annual Budget &mdash; if you are reading this well after that date,
         check the current guide first. This is general information, not advice
         about your circumstances; see the
@@ -708,6 +732,7 @@
     </nav>
 
     <script src="/js/main.js?v=6f706ac8cb"></script>
-    <script src="/js/income-tax-calculator.js?v=279059a3fc"></script>
+    <script src="/js/tax-rates.js?v=25cc45fd80"></script>
+    <script src="/js/income-tax-calculator.js?v=d52fbf42f2"></script>
   </body>
 </html>

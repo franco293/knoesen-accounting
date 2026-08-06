@@ -230,8 +230,11 @@ Then watch, in this order of importance:
 5. **Actual enquiries.** Ask every new client how they found you. It is the only
    metric that pays.
 
-**Analytics:** the site currently has no tracking of any kind, which is why it
-needs no cookie banner and why the privacy notice is short and true. If you add
+**Analytics:** Cloudflare Web Analytics is on. It was enabled in the dashboard
+but blocked by the site's own Content-Security-Policy for its whole life, so it
+collected nothing — that is fixed, and data starts accumulating from the deploy
+that carries the fix. It is cookieless and holds no personal data, so it still
+needs no cookie banner. If you add
 Google Analytics later, you must update both `_headers` (the CSP `script-src`
 and `connect-src`) and `content/privacy-policy.html`. Consider a
 privacy-respecting alternative such as Plausible or Cloudflare Web Analytics —

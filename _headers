@@ -1,3 +1,14 @@
+# Cloudflare Web Analytics is enabled on this zone, so Cloudflare injects its
+# beacon from static.cloudflareinsights.com into every response. `script-src
+# 'self'` used to block it, which meant the console logged a CSP violation on
+# every page load and the practice collected no traffic data at all — the
+# analytics looked switched on in the dashboard and was silently dead.
+#
+# The beacon is cookieless and collects no personal information, which is why
+# it needs no cookie banner. It IS a third-party request, so it is disclosed in
+# content/privacy-policy.html. If you ever turn Web Analytics OFF in the
+# Cloudflare dashboard, narrow these two directives back to 'self' and remove
+# that disclosure — do not leave an origin allowed that nothing uses.
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
@@ -7,7 +18,7 @@
   Cross-Origin-Opener-Policy: same-origin
   Cross-Origin-Resource-Policy: same-origin
   X-Permitted-Cross-Domain-Policies: none
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.web3forms.com; frame-src https://www.google.com; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://api.web3forms.com; frame-ancestors 'self'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.web3forms.com https://cloudflareinsights.com; frame-src https://www.google.com; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://api.web3forms.com; frame-ancestors 'self'; upgrade-insecure-requests
 
 /assets/*
   Cache-Control: public, max-age=31536000, immutable

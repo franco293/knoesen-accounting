@@ -83,8 +83,9 @@
               <option value="8">8</option>
             </select>
             <p class="calc-hint">
-              Count yourself and every dependant you pay for. R376 a month each
-              for the first two, R254 for each one after that.
+              Count yourself and every dependant you pay for.
+              {{medical_first_two}} a month each for the first two,
+              {{medical_additional}} for each one after that.
             </p>
           </div>
 
@@ -101,14 +102,14 @@
             />
             <p class="calc-hint">
               Your own contributions, in the same period as the income above.
-              Deductible up to 27.5% of your income, and no more than R430 000
-              a year.
+              Deductible up to {{retirement_rate}} of your income, and no more
+              than {{retirement_cap}} a year.
             </p>
           </div>
 
           <label class="form-consent calc-check">
             <input type="checkbox" id="tc-uif" checked />
-            <span>Deduct UIF (1%, capped at R177.12 a month)</span>
+            <span>Deduct UIF ({{uif_rate}}, capped at {{uif_monthly_max}} a month)</span>
           </label>
         </fieldset>
 
@@ -143,6 +144,15 @@
           <p class="calc-threshold" id="tc-threshold-note" hidden>
             That falls below the tax threshold for your age, so no income tax
             is payable. You may still need to file a return.
+          </p>
+
+          <p class="calc-threshold" id="tc-medical-nil-note" hidden>
+            Your medical scheme fees tax credit covers the whole liability, so
+            no income tax is payable. You are still above the tax threshold,
+            so a return is still required &mdash; and note that your employer
+            only applies this credit through PAYE if they pay the scheme on
+            your behalf. If you pay it yourself, expect PAYE to be deducted
+            and the credit to come back to you on assessment.
           </p>
 
           <h3 class="table-title">How that is worked out</h3>
@@ -274,8 +284,8 @@
     <div class="prose reveal">
       <p class="source-note">
         Rates from National Treasury, <em>Budget 2026 Tax Guide</em>, covering
-        {{tax_period}}. UIF ceiling from SARS (R17 712 per month, unchanged
-        since 1 June 2021). Reviewed {{verified_on}}. Rates change with every
+        {{tax_period}}. UIF ceiling from SARS ({{uif_monthly_ceiling}} per
+        month, unchanged since 1 June 2021). Reviewed {{verified_on}}. Rates change with every
         annual Budget &mdash; if you are reading this well after that date,
         check the current guide first. This is general information, not advice
         about your circumstances; see the

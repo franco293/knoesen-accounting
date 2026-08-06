@@ -523,6 +523,7 @@
     ],
     "eyebrow": "Calculator",
     "scripts": [
+      "tax-rates.js",
       "income-tax-calculator.js"
     ],
     "title": "SARS Income Tax & PAYE Calculator 2026/27 | South Africa",
@@ -569,6 +570,7 @@
     ],
     "eyebrow": "Calculator",
     "scripts": [
+      "tax-rates.js",
       "vat-calculator.js"
     ],
     "title": "VAT Calculator South Africa 2026 | Add or Remove 15% VAT",

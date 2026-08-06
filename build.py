@@ -36,6 +36,10 @@ CONTENT = ROOT / "content"
 
 SITE = json.loads((ROOT / "site.json").read_text(encoding="utf-8"))
 PAGES = json.loads((CONTENT / "pages.json").read_text(encoding="utf-8"))
+RATES = json.loads((ROOT / "data" / "tax-rates.json").read_text(encoding="utf-8"))
+
+CURRENT_YEAR = RATES["current"]
+YEAR = RATES["years"][CURRENT_YEAR]
 
 DOMAIN = SITE["domain"].rstrip("/")
 BRAND = SITE["brand"]
@@ -87,17 +91,38 @@ JS_VERSION = asset_version("js/main.js")
 # Only the `latin` subsets are preloaded. `latin-ext` is declared in the CSS
 # but this site's copy never reaches for it, so preloading it would be pure
 # waste.
+#
+# IBM Plex Mono 500 and 700 are deliberately absent. They are real weights the
+# design uses, but only for table headings, step numbers and the notice tag —
+# all below the fold. Measured on the live site they arrive ~24ms after the
+# preloaded faces with cumulative layout shift of 0, so preloading them would
+# buy nothing and would compete for bandwidth with the three faces that do
+# paint the header.
 PRELOAD_FONTS = [
     "ibm-plex-sans-latin.woff2",
     "fraunces-normal-latin.woff2",
     "ibm-plex-mono-400-latin.woff2",
 ]
 
-FONT_PRELOADS = "\n    ".join(
-    f'<link rel="preload" href="/assets/fonts/{name}" as="font" '
-    'type="font/woff2" crossorigin />'
-    for name in PRELOAD_FONTS
-)
+# The home page's <h1> puts half of itself in italics — "Accountants in Gqeberha
+# <em>who actually answer the phone</em>" — so Fraunces Italic is part of the
+# largest above-the-fold text there, not a decorative afterthought. Unpreloaded
+# it is discovered only after the stylesheet parses and the browser reaches the
+# <em>, landing ~35ms behind the other three faces and repainting the headline.
+#
+# It is deliberately NOT in the site-wide list. Everywhere else <em> appears in
+# body prose well below the fold, where `font-display: swap` handles it and a
+# 45KB preload would only compete with the faces that paint the header.
+PRELOAD_FONTS_HOME = PRELOAD_FONTS + ["fraunces-italic-latin.woff2"]
+
+
+def font_preloads_for(page: dict) -> str:
+    names = PRELOAD_FONTS_HOME if page["slug"] == "" else PRELOAD_FONTS
+    return "\n    ".join(
+        f'<link rel="preload" href="/assets/fonts/{name}" as="font" '
+        'type="font/woff2" crossorigin />'
+        for name in names
+    )
 
 
 # --------------------------------------------------------------------------
@@ -181,10 +206,195 @@ TOKENS = {
 }
 
 
+def _register_rate_tokens() -> None:
+    """Figures that appear in ordinary prose, not in a table.
+
+    The calculator page explains its own inputs — "R376 a month each for the
+    first two", "no more than R430 000 a year", "capped at R177.12 a month".
+    Those are the same figures the calculator computes with, so left as literal
+    text they are exactly the drift the rate tables were just rescued from: a
+    Budget update moves the arithmetic and leaves the sentence beside it wrong.
+    """
+    year = YEAR
+    ind = year["individual"]
+    payroll = year["payroll"]
+    uif_monthly_max = payroll["uif_monthly_ceiling"] * payroll["uif_employee_rate"]
+
+    TOKENS.update({
+        "{{medical_first_two}}": money(ind["medical_credit"]["first_two_each"]),
+        "{{medical_additional}}": money(ind["medical_credit"]["each_additional"]),
+        "{{retirement_rate}}": pct(ind["retirement"]["rate"]),
+        "{{retirement_cap}}": money(ind["retirement"]["annual_cap"]),
+        "{{uif_rate}}": pct(payroll["uif_employee_rate"]),
+        "{{uif_monthly_max}}": "R" + f"{uif_monthly_max:,.2f}".replace(",", " "),
+        "{{uif_monthly_ceiling}}": money(payroll["uif_monthly_ceiling"]),
+        "{{vat_rate}}": pct(year["vat"]["standard_rate"]),
+    })
+
+
 def detokenise(markup: str) -> str:
     for token, value in TOKENS.items():
         markup = markup.replace(token, value)
     return markup
+
+
+# --------------------------------------------------------------------------
+# Rate tables, rendered from data/tax-rates.json
+#
+# The brackets used to exist twice: as data in js/income-tax-calculator.js and
+# as a readable table in content/guide-rates.html. Nothing but a regex-scraping
+# validator held the two together, and it only covered the individual income
+# tax table — the rebates, medical credits, retirement cap and every other
+# figure were unguarded. Both now render from one file.
+#
+# A content author writes `{{rates:individual_brackets}}` on its own line inside
+# a <tbody> and gets the rows. The surrounding table markup stays in the
+# fragment where it is visible and editable; only the figures are generated.
+# --------------------------------------------------------------------------
+
+def money_plain(value: float) -> str:
+    """245100 -> '245 100'. Space-separated, matching SARS and the rate tables."""
+    return f"{int(round(value)):,}".replace(",", " ")
+
+
+def money(value: float) -> str:
+    return "R" + money_plain(value)
+
+
+def pct(rate: float) -> str:
+    """0.18 -> '18%', 0.275 -> '27.5%'. Rounded before trimming, because
+    0.18 * 100 is 18.000000000000004 in binary floating point."""
+    text = f"{round(rate * 100, 6):f}".rstrip("0").rstrip(".")
+    return text + "%"
+
+
+def bracket_rows(brackets: list, unit: str, prefix: str = "") -> list[str]:
+    """Render a cumulative bracket table the way the Budget guide sets them out.
+
+    `unit` is what the rate applies to ("taxable income", "taxable turnover",
+    "the value"); `prefix` is "R" for the tables that carry the currency symbol
+    inline, which transfer duty does and the income tables do not.
+    """
+    rows = []
+    for b in brackets:
+        low, high = b["from"], b["to"]
+        band = (
+            f"{money_plain(low + 1)} – {money_plain(high)}"
+            if high is not None
+            else f"{money_plain(low + 1)} and above"
+        )
+        rule = ""
+        if b["base"]:
+            rule += f"{prefix}{money_plain(b['base'])} + "
+        rule += f"{pct(b['rate'])} of {unit}"
+        if low:
+            rule += f" above {prefix}{money_plain(low)}"
+        rows.append(f"<tr><td>{band}</td><td>{rule}</td></tr>")
+    return rows
+
+
+def resolve(path: str):
+    """Look up a dotted path inside the current tax year's data."""
+    node = YEAR
+    for key in path.split("."):
+        node = node[key]
+    return node
+
+
+FORMATTERS = {"money": money, "money_plain": money_plain, "pct": pct}
+
+
+def simple_rows(spec: list) -> list[str]:
+    """Render a plain label/value table from (label, path, formatter, suffix)."""
+    rows = []
+    for label, path, fmt, suffix in spec:
+        value = FORMATTERS[fmt](resolve(path))
+        rows.append(f"<tr><td>{label}</td><td>{value}{suffix}</td></tr>")
+    return rows
+
+
+def rate_table(name: str) -> list[str]:
+    ind = "individual"
+    if name == "individual_brackets":
+        return bracket_rows(resolve(f"{ind}.brackets"), "taxable income")
+    if name == "sbc_brackets":
+        return bracket_rows(resolve("company.sbc_brackets"), "taxable income")
+    if name == "turnover_brackets":
+        return bracket_rows(resolve("company.turnover_brackets"), "taxable turnover")
+    if name == "transfer_duty_brackets":
+        return bracket_rows(resolve("transfer_duty.brackets"), "the value", prefix="R")
+    if name == "rebates":
+        return simple_rows([
+            ("Primary", f"{ind}.rebates.primary", "money", ""),
+            ("Secondary (65 and older)", f"{ind}.rebates.secondary", "money", ""),
+            ("Tertiary (75 and older)", f"{ind}.rebates.tertiary", "money", ""),
+        ])
+    if name == "thresholds":
+        return simple_rows([
+            ("Under 65", f"{ind}.thresholds.under_65", "money", ""),
+            ("65 to below 75", f"{ind}.thresholds.age_65_to_74", "money", ""),
+            ("75 and older", f"{ind}.thresholds.age_75_plus", "money", ""),
+        ])
+    if name == "interest_exemptions":
+        return simple_rows([
+            ("Under 65", f"{ind}.interest_exemption.under_65", "money", " per annum"),
+            ("65 and older", f"{ind}.interest_exemption.age_65_plus", "money", " per annum"),
+        ])
+    if name == "medical_credit":
+        return simple_rows([
+            ("First two members (each)", f"{ind}.medical_credit.first_two_each", "money", " per month"),
+            ("Each additional dependant", f"{ind}.medical_credit.each_additional", "money", " per month"),
+        ])
+    raise KeyError(f"unknown rate table {name!r}")
+
+
+RATE_TOKEN_RE = re.compile(r"^([ \t]*)\{\{rates:(\w+)\}\}[ \t]*$", re.M)
+
+
+def expand_rate_tables(markup: str) -> str:
+    """Replace each `{{rates:name}}` line with its rows at the same indent."""
+    def repl(match: re.Match) -> str:
+        indent, name = match.group(1), match.group(2)
+        return indent + ("\n" + indent).join(rate_table(name))
+
+    return RATE_TOKEN_RE.sub(repl, markup)
+
+
+def write_tax_rates_js() -> None:
+    """Emit the rate data for the browser.
+
+    Calculators read `window.SA_TAX_RATES` rather than carrying their own copy
+    of the brackets, so adding a calculator adds no new place for a Budget
+    update to be missed. The whole `years` map ships, not just the current
+    year, so a year selector needs no further build work.
+    """
+    # The JSON is heavily commented, and `_`-prefixed keys are those comments.
+    # They are for whoever updates the file after the next Budget, not for the
+    # browser — shipping them would roughly double the payload.
+    def strip_comments(node):
+        if isinstance(node, dict):
+            return {k: strip_comments(v) for k, v in node.items() if not k.startswith("_")}
+        if isinstance(node, list):
+            return [strip_comments(item) for item in node]
+        return node
+
+    payload = json.dumps(
+        strip_comments({"current": RATES["current"], "years": RATES["years"]}),
+        separators=(",", ":"),
+        ensure_ascii=False,
+    )
+    (ROOT / "js" / "tax-rates.js").write_text(
+        "/* GENERATED by build.py from data/tax-rates.json — do not edit.\n"
+        "   Edit the JSON and rebuild; `python build.py --check` proves the\n"
+        "   brackets are internally consistent before they ship. */\n"
+        f"window.SA_TAX_RATES = {payload};\n",
+        encoding="utf-8",
+    )
+
+
+# Deferred to here because it formats with money() and pct(), which are defined
+# in this section, whereas TOKENS itself has to exist further up for detokenise.
+_register_rate_tokens()
 
 
 # --------------------------------------------------------------------------
@@ -524,7 +734,7 @@ def head_for(page: dict) -> str:
     <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.json" />
 
-    {FONT_PRELOADS}
+    {font_preloads_for(page)}
     <link rel="stylesheet" href="/css/styles.css?v={CSS_VERSION}" />
 
     {jsonld_for(page)}"""
@@ -816,7 +1026,11 @@ def page_scripts(page: dict) -> str:
 
 
 def render(page: dict) -> str:
-    body = detokenise((CONTENT / page["file"]).read_text(encoding="utf-8")).strip()
+    body = (CONTENT / page["file"]).read_text(encoding="utf-8")
+    # Rate tables first: they emit markup containing no tokens, but detokenise
+    # must still run over the surrounding prose.
+    body = expand_rate_tables(body)
+    body = detokenise(body).strip()
     body = enhance_tables(body)
     cta = cta_band() if page.get("cta", True) else ""
 
@@ -923,98 +1137,80 @@ def check_redirects() -> list[str]:
 
 
 def check_tax_constants() -> list[str]:
-    """Keep the calculator's rate data honest against the published tables.
+    """Prove the rate data is internally consistent before it ships.
 
-    The brackets exist twice by necessity: `js/income-tax-calculator.js` needs
-    them as data, `content/guide-rates.html` needs them as a table a person can
-    read. Nothing stops a Budget update touching one and not the other, and the
-    failure is silent — the calculator keeps returning confident, wrong numbers
-    that disagree with the page documenting them.
+    This used to scrape the brackets out of js/income-tax-calculator.js with a
+    regex and compare them against a table parsed out of guide-rates.html,
+    because the figures genuinely lived in both places. They now live in
+    data/tax-rates.json alone, so there is no longer a copy to disagree with —
+    what is left to check is whether the data itself makes sense.
 
-    Two things are checked:
+    Two properties, both of which catch a mistyped digit that would otherwise
+    ship as a confident wrong answer:
 
-    1.  Every bracket's cumulative `base` equals the tax due at the top of the
-        bracket below it. This is what catches a mistyped digit: the tables are
-        self-proving, because 245 100 x 18% must be 44 118, and if it isn't,
-        one of the two numbers is wrong.
-    2.  The bracket bounds, rates and cumulative amounts in the JS match the
-        ones in the guide, row for row.
+    1.  Every cumulative `base` equals the tax due at the top of the bracket
+        below it. The tables are self-proving: 245 100 x 18% must be 44 118,
+        and if it is not, one of those two numbers is wrong. Checked for every
+        bracket table, not just the individual one.
+    2.  Each tax threshold equals its rebate divided by the first bracket rate.
+        The threshold IS the rebate expressed as income, so a Budget update
+        that moves one without the other is an error by construction.
     """
-    js_path = ROOT / "js" / "income-tax-calculator.js"
-    guide_path = CONTENT / "guide-rates.html"
-    if not js_path.exists() or not guide_path.exists():
-        return []
-
     problems = []
 
-    js = js_path.read_text(encoding="utf-8")
-    block = re.search(r"var BRACKETS = \[(.*?)\];", js, re.S)
-    if not block:
-        return ["  could not find the BRACKETS array in js/income-tax-calculator.js"]
+    for year_label, year in RATES["years"].items():
+        tables = [
+            ("individual", year["individual"]["brackets"]),
+            ("SBC", year["company"]["sbc_brackets"]),
+            ("turnover tax", year["company"]["turnover_brackets"]),
+            ("transfer duty", year["transfer_duty"]["brackets"]),
+        ]
+        for name, brackets in tables:
+            for i in range(1, len(brackets)):
+                prev, row = brackets[i - 1], brackets[i]
+                expected = prev["base"] + (prev["to"] - prev["from"]) * prev["rate"]
+                if abs(expected - row["base"]) > 0.5:
+                    problems.append(
+                        f"  {year_label} {name} bracket {i + 1}: base is "
+                        f"{row['base']:,.0f} but the tax at the top of bracket {i} "
+                        f"works out to {expected:,.0f}"
+                    )
+            # A gap or overlap between bands leaves income that is taxed twice
+            # or not at all, which no amount of correct arithmetic recovers.
+            for i in range(1, len(brackets)):
+                if brackets[i]["from"] != brackets[i - 1]["to"]:
+                    problems.append(
+                        f"  {year_label} {name} bracket {i + 1} starts at "
+                        f"{brackets[i]['from']:,.0f} but bracket {i} ended at "
+                        f"{brackets[i - 1]['to']:,.0f}"
+                    )
+            if brackets[-1]["to"] is not None:
+                problems.append(f"  {year_label} {name}: the top bracket must have \"to\": null")
 
-    js_rows = []
-    for line in re.findall(r"\{([^}]*)\}", block.group(1)):
-        fields = dict(
-            (m.group(1), m.group(2))
-            for m in re.finditer(r"(\w+):\s*([\d.]+|Infinity)", line)
-        )
-        js_rows.append({
-            "from": float(fields["from"]),
-            "to": float("inf") if fields["to"] == "Infinity" else float(fields["to"]),
-            "base": float(fields["base"]),
-            "rate": float(fields["rate"]),
-        })
-
-    # 1. Internal consistency of the cumulative amounts.
-    for i in range(1, len(js_rows)):
-        prev, row = js_rows[i - 1], js_rows[i]
-        expected = prev["base"] + (prev["to"] - prev["from"]) * prev["rate"]
-        if abs(expected - row["base"]) > 0.5:
-            problems.append(
-                f"  bracket {i + 1}: base is {row['base']:,.0f} but the tax at the top of "
-                f"bracket {i} works out to {expected:,.0f}"
-            )
-
-    # 2. Agreement with the visible table in the guide.
-    guide = guide_path.read_text(encoding="utf-8")
-    table = re.search(
-        r'caption[^>]*>South African individual income tax brackets.*?</table>',
-        guide, re.S,
-    )
-    if not table:
-        return problems + ["  could not find the individual bracket table in guide-rates.html"]
-
-    def number(text: str) -> float:
-        return float(text.replace(" ", "").replace(" ", "").replace(",", ""))
-
-    guide_rows = []
-    for cells in re.findall(r"<tr><td>(.*?)</td><td>(.*?)</td></tr>", table.group(0)):
-        band, rule = cells
-        lower = number(re.match(r"\s*([\d\s ]+)", band).group(1))
-        upper_match = re.search(r"[–-]\s*([\d\s ]+)", band)
-        upper = number(upper_match.group(1)) if upper_match else float("inf")
-        rate = float(re.search(r"([\d.]+)%", rule).group(1)) / 100
-        base_match = re.match(r"\s*([\d\s ]+)\s*\+", rule)
-        base = number(base_match.group(1)) if base_match else 0.0
-        # The table's lower bound is the first taxable rand (e.g. "245 101");
-        # the JS stores the exclusive floor it is measured from (245 100).
-        guide_rows.append({"from": lower - 1 if lower else 0.0,
-                           "to": upper, "base": base, "rate": rate})
-
-    if len(guide_rows) != len(js_rows):
-        problems.append(
-            f"  guide-rates.html has {len(guide_rows)} brackets, "
-            f"income-tax-calculator.js has {len(js_rows)}"
-        )
-        return problems
-
-    for i, (g, j) in enumerate(zip(guide_rows, js_rows), start=1):
-        for key in ("from", "to", "base", "rate"):
-            if g[key] != j[key]:
+        ind = year["individual"]
+        first_rate = ind["brackets"][0]["rate"]
+        rebates = ind["rebates"]
+        for key, cumulative in (
+            ("under_65", rebates["primary"]),
+            ("age_65_to_74", rebates["primary"] + rebates["secondary"]),
+            ("age_75_plus", rebates["primary"] + rebates["secondary"] + rebates["tertiary"]),
+        ):
+            expected = cumulative / first_rate
+            actual = ind["thresholds"][key]
+            if abs(expected - actual) > 1:
                 problems.append(
-                    f"  bracket {i}: guide says {key}={g[key]:,} but the calculator "
-                    f"says {key}={j[key]:,}"
+                    f"  {year_label} threshold {key}: published as {actual:,.0f} but "
+                    f"rebates of {cumulative:,.0f} at {first_rate:.0%} give {expected:,.0f}"
                 )
+
+    # site.json names the tax year in prose ("2026/27") for page copy; the data
+    # file is what the figures come from. If they drift, the page says one year
+    # and shows another year's numbers.
+    if SITE["tax_year"]["label"] != RATES["current"]:
+        problems.append(
+            f"  site.json tax_year.label is {SITE['tax_year']['label']!r} but "
+            f"data/tax-rates.json current is {RATES['current']!r}"
+        )
 
     return problems
 
@@ -1050,6 +1246,12 @@ def check_links(written: dict[str, str]) -> list[str]:
 
 
 def main() -> int:
+    # Must run BEFORE the pages render: page_scripts() content-hashes every
+    # file it links, so js/tax-rates.js has to be on disk and current or the
+    # calculator pages ship a `?v=` for the previous build's data.
+    write_tax_rates_js()
+    print("  wrote js/tax-rates.js")
+
     written: dict[str, str] = {}
     for page in PAGES:
         markup = render(page)
@@ -1103,11 +1305,16 @@ def main() -> int:
 
         tax_problems = check_tax_constants()
         if tax_problems:
-            print("\nCalculator rates disagree with the published tables:")
+            print("\nTax rate data is inconsistent:")
             print("\n".join(tax_problems))
             failed = True
         else:
-            print("Tax constants check passed — calculator matches guide-rates.html.")
+            years = len(RATES["years"])
+            print(
+                f"Tax rate check passed — brackets, bands and thresholds are "
+                f"internally consistent for {years} tax year"
+                f"{'s' if years != 1 else ''}."
+            )
 
         return 1 if failed else 0
     return 0

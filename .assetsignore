@@ -16,6 +16,12 @@ LICENSE
 
 # Build inputs. These generate the HTML that ships; they are not part of the
 # site itself and must never be publicly served.
+#
+# data/ holds tax-rates.json, the source the rate tables and calculators are
+# generated FROM. What ships to the browser is js/tax-rates.js, which build.py
+# writes from it — serving the JSON too would put two copies of the same
+# figures on the site, which is the exact problem this file solved.
 build.py
 site.json
 content/
+data/

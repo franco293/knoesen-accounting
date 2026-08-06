@@ -53,7 +53,7 @@
 
   "hours": {
     "_comment": "confirmed:false means opening hours are NOT rendered and NOT put in LocalBusiness schema. Set the days, then flip confirmed to true.",
-    "confirmed": false,
+    "confirmed": true,
     "spec": [
       { "days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "08:00", "closes": "17:00" }
     ]

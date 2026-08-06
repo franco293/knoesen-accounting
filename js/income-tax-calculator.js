@@ -1,48 +1,71 @@
-/* South African income tax / PAYE calculator — 2026/27 tax year.
-   Loaded only by /tools/income-tax-calculator (see pages.json → scripts).
+/* South African income tax / PAYE calculator.
+   Loaded only by /tools/income-tax-calculator (see pages.json → scripts),
+   after js/tax-rates.js, which it depends on.
 
-   Every figure below is transcribed from National Treasury's Budget 2026 Tax
-   Guide, covering 1 March 2026 – 28 February 2027, with one exception noted at
-   UIF. The same numbers are published as visible tables on
-   /resources/tax-rates-2026-2027 — if a new Budget changes them, BOTH have to
-   move, or the calculator will quietly disagree with the page that documents
-   it. The cumulative "base" amounts are load-bearing: each one is the tax due
-   at the top of the previous bracket, so an error in one silently shifts every
-   result above it rather than producing an obviously wrong answer. */
+   No tax figure is written in this file. Every bracket, rebate, credit and cap
+   comes from data/tax-rates.json via `window.SA_TAX_RATES`, the same source
+   that renders the visible tables on /resources/tax-rates-2026-2027. Before
+   that existed the brackets lived here AND in the guide, and a Budget update
+   that touched only one left the calculator quietly disagreeing with the page
+   documenting it. `python build.py --check` proves the data is internally
+   consistent — every cumulative amount against the bracket below it, and every
+   threshold against its rebate — before any of it ships. */
 (function () {
   "use strict";
 
   var form = document.getElementById("tax-calc");
   if (!form) return;
 
-  var BRACKETS = [
-    { from: 0,       to: 245100,   base: 0,      rate: 0.18 },
-    { from: 245100,  to: 383100,   base: 44118,  rate: 0.26 },
-    { from: 383100,  to: 530200,   base: 79998,  rate: 0.31 },
-    { from: 530200,  to: 695800,   base: 125599, rate: 0.36 },
-    { from: 695800,  to: 887000,   base: 185215, rate: 0.39 },
-    { from: 887000,  to: 1878600,  base: 259783, rate: 0.41 },
-    { from: 1878600, to: Infinity, base: 666339, rate: 0.45 }
-  ];
+  /* If tax-rates.js did not load there are no brackets to calculate with.
+     Returning quietly would leave the panel showing "enter your income" for
+     ever, so the visitor keeps typing into something that will never answer.
+     Say so, and point at the pages that still work. */
+  var DATA = window.SA_TAX_RATES;
+  if (!DATA) {
+    var empty = document.getElementById("tc-empty");
+    if (empty) {
+      empty.textContent =
+        "The tax tables could not be loaded, so this calculator cannot run. " +
+        "Please reload the page — or see the published rate tables at " +
+        "/resources/tax-rates-2026-2027, or call us and we will work it out.";
+    }
+    return;
+  }
+
+  var YEAR = DATA.years[DATA.current];
+  var IND = YEAR.individual;
+
+  /* `to: null` marks the top bracket in the data, because JSON has no
+     Infinity. The arithmetic below compares against it, so convert once. */
+  var BRACKETS = IND.brackets.map(function (b) {
+    return {
+      from: b.from,
+      to: b.to === null ? Infinity : b.to,
+      base: b.base,
+      rate: b.rate
+    };
+  });
 
   /* Rebates are cumulative: a 76-year-old gets all three. */
-  var REBATES = { primary: 17820, secondary: 9765, tertiary: 3249 };
+  var REBATES = IND.rebates;
 
-  /* Medical scheme fees tax credit, per month. R376 for each of the first two
-     people covered, R254 for every dependant after that. */
-  var MEDICAL = { firstTwo: 376, additional: 254 };
+  /* Medical scheme fees tax credit, per month: one amount for each of the
+     first two people covered, a lower one for every dependant after that. */
+  var MEDICAL = IND.medical_credit;
 
-  /* Retirement fund contributions: deductible up to 27.5% of the greater of
-     remuneration or taxable income, and in any event no more than R430 000 a
-     year. Raised from R350 000 — a figure a lot of calculators still use. */
-  var RETIREMENT = { rate: 0.275, annualCap: 430000 };
+  /* Retirement fund contributions: deductible up to a percentage of the
+     greater of remuneration or taxable income, and never more than the annual
+     cap. */
+  var RETIREMENT = IND.retirement;
 
-  /* UIF is the one number NOT in the Budget guide, which says only "below a
-     certain amount". The ceiling comes from SARS: R17 712 per month
-     (R212 544 a year), unchanged since 1 June 2021. It is capped MONTHLY, so
-     annualising the ceiling is only correct for steady pay — which is exactly
+  /* UIF is the one figure NOT in the Budget guide, which says only "below a
+     certain amount" — the ceiling comes from SARS. It is capped MONTHLY, so
+     annualising the ceiling is only correct for steady pay, which is exactly
      what this calculator assumes. */
-  var UIF = { rate: 0.01, monthlyCeiling: 17712 };
+  var UIF = {
+    rate: YEAR.payroll.uif_employee_rate,
+    monthlyCeiling: YEAR.payroll.uif_monthly_ceiling
+  };
 
   var el = function (id) { return document.getElementById(id); };
 
@@ -86,8 +109,8 @@
 
   function medicalCreditFor(members) {
     if (members <= 0) return 0;
-    var first = Math.min(members, 2) * MEDICAL.firstTwo;
-    var rest = Math.max(members - 2, 0) * MEDICAL.additional;
+    var first = Math.min(members, 2) * MEDICAL.first_two_each;
+    var rest = Math.max(members - 2, 0) * MEDICAL.each_additional;
     return (first + rest) * 12;
   }
 
@@ -101,7 +124,7 @@
     var allowedRetirement = Math.min(
       input.annualRetirement,
       gross * RETIREMENT.rate,
-      RETIREMENT.annualCap
+      RETIREMENT.annual_cap
     );
 
     var taxableIncome = Math.max(gross - allowedRetirement, 0);
@@ -132,8 +155,22 @@
       uif: uif,
       takeHome: takeHome,
       effectiveRate: gross > 0 ? tax / gross : 0,
-      marginalRate: tax > 0 ? bracketFor(taxableIncome).rate : 0,
-      belowThreshold: tax === 0
+      /* Marginal rate is the rate the NEXT rand earned would attract.
+         `tax > 0` was the wrong test: someone whose liability is wiped out by
+         the medical credit is still in a bracket — earn one rand more and it
+         is taxed — but the page showed them "—". `beforeRebates > 0` is
+         equally wrong in the other direction: below the threshold the rebate
+         still absorbs that next rand, so there is genuinely no marginal rate
+         to report. What both cases turn on is whether anything survives the
+         rebates. */
+      marginalRate: afterRebates > 0 ? bracketFor(taxableIncome).rate : 0,
+      /* "Below the threshold" means the age rebates alone cover the tax — that
+         is what the threshold IS. Someone pushed to nil by the medical credit
+         is above the threshold and is still required to file, so telling them
+         they fall below it is actively misleading. Separate flags, separate
+         messages. */
+      belowThreshold: afterRebates === 0,
+      nilByMedical: afterRebates > 0 && tax === 0
     };
   }
 
@@ -212,7 +249,7 @@
     setText("tc-out-medical", "−" + money(r.medical));
     setText("tc-out-uif", money(r.uif));
     setText("tc-out-effective", percent(r.effectiveRate));
-    setText("tc-out-marginal", r.tax > 0 ? percent(r.marginalRate) : "—");
+    setText("tc-out-marginal", r.marginalRate > 0 ? percent(r.marginalRate) : "—");
 
     /* Retirement rows only earn their space when there is a contribution. */
     var retireRow = el("tc-row-retirement");
@@ -235,9 +272,12 @@
     var uifRow = el("tc-row-uif");
     if (uifRow) uifRow.hidden = !input.includeUif;
 
-    /* Below-threshold message. */
+    /* Below-threshold message, and its counterpart for a nil result reached
+       via the medical credit instead. */
     var note = el("tc-threshold-note");
     if (note) note.hidden = !r.belowThreshold;
+    var medNote = el("tc-medical-nil-note");
+    if (medNote) medNote.hidden = !r.nilByMedical;
 
     /* Bracket breakdown table. */
     var tbody = el("tc-brackets-body");

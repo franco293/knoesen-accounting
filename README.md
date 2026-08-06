@@ -25,6 +25,13 @@ site.json              Every repeated fact: domain, name, phone, email,
                        address, credentials, navigation, tax year. Change it
                        here and all 20 pages update.
 
+data/
+  tax-rates.json       Every tax FIGURE: brackets, rebates, thresholds,
+                       medical credits, retirement caps, VAT, SBC, turnover
+                       tax, transfer duty, CGT, payroll levies, SARS interest.
+                       The rate tables and the calculators are both generated
+                       from this, so a Budget update happens in one file.
+
 content/
   pages.json           Page manifest: slug, title, meta description, H1,
                        breadcrumb trail, schema type, FAQs, sitemap priority.
@@ -44,8 +51,11 @@ css/styles.css         Hand-maintained. "The Ledger" design system, and the
                        @font-face block for the self-hosted fonts.
 js/main.js             Hand-maintained. Mobile nav, map consent gate,
                        contact form. Loaded on every page.
+js/tax-rates.js        ← generated from data/tax-rates.json. Do not edit.
 js/*-calculator.js     Per-page only. Listed in pages.json under `scripts`,
                        so the 22 pages without a calculator never fetch them.
+                       They read their figures from js/tax-rates.js, which
+                       pages.json loads first, and hold no rates of their own.
 assets/                Icons and the Open Graph image.
 assets/fonts/          Self-hosted woff2. See the note at the top of
                        styles.css before replacing any of them.
@@ -131,10 +141,17 @@ bracket. The bracket-by-bracket breakdown it renders sums exactly to the tax
 before rebates, which is the property that catches a transcription error in any
 of the seven `base` amounts.
 
-**If a Budget changes the rates, `js/income-tax-calculator.js` and
-`content/guide-rates.html` must both be updated.** They hold the same numbers
-in two places by design — the calculator needs them as data, the guide needs
-them as a readable table — but nothing enforces agreement between them.
+**If a Budget changes the rates, edit `data/tax-rates.json` and rebuild.** That
+is the whole update. The figures used to live in two places by necessity — the
+calculator needed them as data, the guide needed them as a readable table — and
+nothing but a regex-scraping validator held the two together. Both are now
+generated from the one file, so they cannot disagree.
+
+`python build.py --check` proves the data before it ships: every cumulative
+bracket amount against the bracket below it, every band against its neighbours
+for gaps or overlaps, and every tax threshold against the rebate it is derived
+from. A transposed digit fails the build instead of shipping as a confident
+wrong answer.
 
 ### Fonts are now self-hosted
 
@@ -220,8 +237,9 @@ Cross-links between related services and guides throughout.
 
 CSP with no `unsafe-inline`, HSTS, COOP/CORP, and a tightened
 `Permissions-Policy`. The Google Maps embed stays behind a click-to-load gate
-so visitors' IP addresses are not handed to Google unprompted. No analytics, no
-tracking, no cookie banner needed. POPIA privacy notice linked from every page,
+so visitors' IP addresses are not handed to Google unprompted. Cloudflare Web
+Analytics is the only measurement on the site — cookieless, no personal data,
+no cookie banner needed. POPIA privacy notice linked from every page,
 now joined by a disclaimer page — necessary once a site publishes tax figures.
 
 ### Deliberately not done
