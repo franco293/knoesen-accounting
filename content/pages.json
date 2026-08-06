@@ -735,6 +735,53 @@
     ]
   },
   {
+    "slug": "tools/small-business-tax-calculator",
+    "file": "tool-small-business-tax.html",
+    "type": "tool",
+    "breadcrumb": "Small Business Tax Calculator",
+    "breadcrumbs": [
+      {
+        "name": "Calculators",
+        "slug": "tools"
+      }
+    ],
+    "title": "Small Business Tax Calculator SA | SBC vs Turnover Tax",
+    "description": "Compare company tax, Small Business Corporation rates, turnover tax and sole proprietor on the same profit, for 2026/27. Free, no sign-up.",
+    "h1": "Small business tax comparator",
+    "eyebrow": "Free Calculator",
+    "lead": "The same business, taxed four ways: standard company tax, Small Business Corporation rates, turnover tax and sole proprietor. On one profit the difference can be threefold.",
+    "changefreq": "monthly",
+    "priority": "0.9",
+    "updated": "2026-08-06",
+    "scripts": [
+      "tax-rates.js",
+      "sa-tax-core.js",
+      "small-business-tax-calculator.js"
+    ],
+    "faq": [
+      {
+        "q": "Is turnover tax cheaper than Small Business Corporation rates?",
+        "a": "It depends entirely on your margin, because turnover tax is charged on revenue and ignores your costs. A consultant turning over R900 000 with R500 000 of profit pays R3 000 in turnover tax against roughly R47 000 under SBC rates. A retailer turning over R2 000 000 with only R100 000 of profit pays R30 500 in turnover tax against R70 under SBC rates. High margins favour turnover tax; thin margins are punished by it."
+      },
+      {
+        "q": "Do I pay turnover tax if my business makes a loss?",
+        "a": "Yes. Turnover tax is charged on revenue, not profit, so it remains payable in a year where the business made no profit at all. This is the most important thing to understand before electing it, and the main reason it suits high-margin service businesses rather than thin-margin trading ones."
+      },
+      {
+        "q": "What are the requirements to qualify as a Small Business Corporation?",
+        "a": "All six section 12E tests must be met: the entity is a private company, close corporation or co-operative; every shareholder or member is a natural person throughout the year; no shareholder holds an interest in another company apart from permitted exceptions; gross income does not exceed R20 million; investment and personal-service income is 20% or less of total receipts; and the entity is not a personal service provider. The shareholding condition is where most businesses fall over, sometimes because of a dormant company an owner had forgotten about."
+      },
+      {
+        "q": "Is a company cheaper than being a sole proprietor?",
+        "a": "Often less than it first appears. Company tax is charged on the company, but taking the after-tax profit out as a dividend costs another 20% in dividends tax, which closes most of the gap. A company usually wins on tax only where profits stay in the business and are reinvested. Limited liability and credibility are frequently better reasons to incorporate than the tax itself."
+      },
+      {
+        "q": "What is the turnover tax threshold in South Africa?",
+        "a": "Qualifying annual turnover must be R2.3 million or less for a year of assessment ending between 1 March 2026 and 28 February 2027. Sole proprietors, partnerships, close corporations, companies and co-operatives may all register if they meet it."
+      }
+    ]
+  },
+  {
     "slug": "privacy-policy",
     "file": "privacy-policy.html",
     "type": "page",

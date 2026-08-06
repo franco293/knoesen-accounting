@@ -313,20 +313,25 @@ def simple_rows(spec: list) -> list[str]:
     return rows
 
 
-def year_options() -> list[str]:
+def year_options(requires: str | None = None) -> list[str]:
     """<option> for every tax year in the data, newest first, current selected.
 
     Generated rather than written into the fragment so that adding a year to
     data/tax-rates.json is genuinely a one-file change — the selector, the
     calculators and the tables all follow from it.
-    """
-    def sort_key(label: str) -> str:
-        return label
 
-    labels = sorted(RATES["years"], key=sort_key, reverse=True)
+    `requires` names a section a year must actually carry to be offered. Past
+    years are allowed to hold only what a calculator needs (see `_partial_years`
+    in the JSON), so a company-tax page must not list a year whose data has no
+    company rates in it — the picker would offer a year that silently fell back
+    to another one's figures.
+    """
+    labels = sorted(RATES["years"], reverse=True)
     out = []
     for label in labels:
         year = RATES["years"][label]
+        if requires and not year.get(requires):
+            continue
         selected = " selected" if label == RATES["current"] else ""
         current = " (current)" if label == RATES["current"] else ""
         out.append(
@@ -339,6 +344,8 @@ def year_options() -> list[str]:
 def rate_table(name: str) -> list[str]:
     if name == "year_options":
         return year_options()
+    if name == "year_options_company":
+        return year_options(requires="company")
     ind = "individual"
     if name == "individual_brackets":
         return bracket_rows(resolve(f"{ind}.brackets"), "taxable income")

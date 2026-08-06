@@ -2974,6 +2974,31 @@ body {
   border-top: 2px solid var(--paper-rule);
 }
 
+/* A regime the business cannot use — over a threshold, or a test not met.
+   Dimmed rather than removed, because "turnover tax is not available to you"
+   is itself the answer someone came for, and a row that silently vanished
+   would read as an omission. Contrast is kept above 4.5:1 rather than fading
+   to unreadable, and the reason is always stated in a note below the table
+   rather than left to the styling to imply. */
+.calc-table tr.is-unavailable th[scope="row"],
+.calc-table tr.is-unavailable td {
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+/* The section 12E tests, presented as a question for the reader rather than
+   something the calculator pretends to determine. */
+.calc-checklist {
+  margin: 0 0 1rem;
+  padding-left: 1.1rem;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.calc-checklist li {
+  margin-bottom: 0.35rem;
+}
+
 .calc-threshold {
   background: rgba(56, 107, 87, 0.1);
   border-left: 3px solid var(--green-600);

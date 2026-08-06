@@ -150,7 +150,8 @@
       "company": {
         "rate": 0.27,
 
-        "_sbc_comment": "Small Business Corporation rates.",
+        "_sbc_comment": "Small Business Corporation rates. The R20m gross income ceiling is only ONE of six section 12E tests — the others (all shareholders natural persons, no shareholder holding an interest in another company, not more than 20% investment or personal-service income, entity type, and not being a personal service provider) cannot be judged from turnover and profit alone, so no calculator should claim to determine SBC status from figures. Limit confirmed against SARS Interpretation Note 9.",
+        "sbc_gross_income_limit": 20000000,
         "sbc_brackets": [
           { "from": 0,      "to": 99000,  "base": 0,     "rate": 0.0 },
           { "from": 99000,  "to": 365000, "base": 0,     "rate": 0.07 },
@@ -158,7 +159,8 @@
           { "from": 550000, "to": null,   "base": 57470, "rate": 0.27 }
         ],
 
-        "_turnover_comment": "Turnover tax for micro businesses. The widely-syndicated version of this table has an error in the third bracket — these come from the Budget guide directly.",
+        "_turnover_comment": "Turnover tax for micro businesses. The widely-syndicated version of this table has an error in the third bracket — these come from the Budget guide directly. Unlike the SBC tests, the qualifying limit here IS a single checkable number, so a calculator can legitimately rule it in or out: R2.3 million of qualifying turnover, confirmed on sars.gov.za for a year of assessment ending between 1 March 2026 and 28 February 2027.",
+        "turnover_qualifying_limit": 2300000,
         "turnover_brackets": [
           { "from": 0,       "to": 600000,  "base": 0,     "rate": 0.0 },
           { "from": 600000,  "to": 950000,  "base": 0,     "rate": 0.01 },

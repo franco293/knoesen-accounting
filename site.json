@@ -171,6 +171,10 @@
           "href": "/tools/provisional-tax-calculator"
         },
         {
+          "label": "Small Business Tax",
+          "href": "/tools/small-business-tax-calculator"
+        },
+        {
           "label": "VAT Calculator",
           "href": "/tools/vat-calculator"
         }
