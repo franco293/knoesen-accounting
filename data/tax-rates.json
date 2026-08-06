@@ -7,6 +7,35 @@
 
   "_partial_years": "A year may carry only the sections a calculator needs. 2025/26 has `individual`, `payroll` and `vat` — every figure in it was checked against sars.gov.za and the Budget guide — and deliberately omits SBC, turnover tax, transfer duty, CGT, estate duty and the rest, because nothing on the site uses those for a past year and publishing unverified figures is worse than publishing none. Fill a section in only when you have read it off a primary source. build.py validates whatever is present and skips what is absent.",
 
+  "_cipc_comment": "CIPC annual return fees are set by regulation — table CR 2B of the Companies Regulations 2011 and Schedule 1 of the Close Corporation Administrative Regulations — and do not move with the tax year, so they sit outside `years`. Transcribed from CIPC's own Annual Returns FAQ (v5.0) and Information Guide (v1.4), which publish identical tables.",
+
+  "cipc": {
+    "_late_treatment": "The two Acts express lateness differently, and the difference is load-bearing. For COMPANIES the 2008 Act table gives two alternative totals — 'filing within 30 business days' vs 'filing more than 30 business days' — so the late figure REPLACES the standard fee. For CLOSE CORPORATIONS the second column is headed 'penalty for each late lodgment' and is R150 in BOTH turnover bands, including the band whose standard fee is R4 000. Read as a replacement that would make late filing cheaper than filing on time, which cannot be right, so for close corporations the R150 is ADDED to the standard fee. Stated here rather than buried in code because it is an interpretation, not a quotation.",
+
+    "reinstatement_fee": 200,
+    "_reinstatement_comment": "Form CoR40.5, payable where the entity has already been referred for deregistration. Outstanding annual returns still have to be filed on top of it.",
+
+    "company": {
+      "_comment": "Companies Act, 2008 table — applies to any annual return that fell due on or after 1 May 2011, which is every return anyone is filing today. `late` is the full replacement fee, not an add-on.",
+      "bands": [
+        { "from": 0,        "to": 1000000,  "standard": 100,  "late": 150 },
+        { "from": 1000000,  "to": 10000000, "standard": 450,  "late": 600 },
+        { "from": 10000000, "to": 25000000, "standard": 2000, "late": 2500 },
+        { "from": 25000000, "to": null,     "standard": 3000, "late": 4000 }
+      ]
+    },
+
+    "close_corporation": {
+      "_comment": "Close Corporations Act, 1984 table. `late_penalty` is charged for each late lodgment IN ADDITION to the standard fee — see _late_treatment above.",
+      "_boundary_note": "CIPC words these bands as 'Between 0 to R50 million' and 'R50 million and above', which overlap at exactly R50 000 000. Bands are applied here as 'below R50m' and 'R50m or more', matching how the company table words its own top band ('R25 million or more'). It only bites at a turnover of exactly R50 000 000.00.",
+      "late_penalty": 150,
+      "bands": [
+        { "from": 0,         "to": 50000000, "standard": 100 },
+        { "from": 50000000,  "to": null,     "standard": 4000 }
+      ]
+    }
+  },
+
   "current": "2026/27",
 
   "years": {

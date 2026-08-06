@@ -68,6 +68,22 @@
     return DATA ? Object.keys(DATA.years) : [];
   }
 
+  /* Statutory fees that are not tax and do not move with the tax year. */
+  function cipc() {
+    return DATA ? (DATA.cipc || null) : null;
+  }
+
+  /* Pick the band a value falls into, for any table of {from, to} bands where
+     `to: null` means open-ended. Used by the CIPC fee tables, which are flat
+     amounts per band rather than the cumulative brackets tax uses. */
+  function bandFor(value, bands) {
+    for (var i = 0; i < bands.length; i++) {
+      var top = bands[i].to === null ? Infinity : bands[i].to;
+      if (value < top) return bands[i];
+    }
+    return bands[bands.length - 1];
+  }
+
   function currentYear() {
     return DATA ? DATA.current : null;
   }
@@ -266,6 +282,8 @@
     ratesFor: ratesFor,
     years: years,
     currentYear: currentYear,
+    cipc: cipc,
+    bandFor: bandFor,
     yearToSlug: yearToSlug,
     slugToYear: slugToYear,
     money: money,

@@ -411,7 +411,13 @@ def write_tax_rates_js() -> None:
         return node
 
     payload = json.dumps(
-        strip_comments({"current": RATES["current"], "years": RATES["years"]}),
+        strip_comments({
+            "current": RATES["current"],
+            "years": RATES["years"],
+            # Statutory fees that are not tax and do not move with the tax
+            # year — CIPC annual returns — but which a calculator still needs.
+            "cipc": RATES.get("cipc", {}),
+        }),
         separators=(",", ":"),
         ensure_ascii=False,
     )

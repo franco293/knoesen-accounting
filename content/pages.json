@@ -782,6 +782,53 @@
     ]
   },
   {
+    "slug": "tools/cipc-annual-return-calculator",
+    "file": "tool-cipc-fee.html",
+    "type": "tool",
+    "breadcrumb": "CIPC Annual Return Fees",
+    "breadcrumbs": [
+      {
+        "name": "Calculators",
+        "slug": "tools"
+      }
+    ],
+    "title": "CIPC Annual Return Fee Calculator | Companies & CCs",
+    "description": "Work out CIPC annual return fees for a company or close corporation, including outstanding years, late fees and reinstatement. Free, no sign-up.",
+    "h1": "CIPC annual return fee calculator",
+    "eyebrow": "Free Calculator",
+    "lead": "What CIPC will charge for your annual returns — including the years you have missed, which is usually the number people actually need.",
+    "changefreq": "monthly",
+    "priority": "0.8",
+    "updated": "2026-08-06",
+    "scripts": [
+      "tax-rates.js",
+      "sa-tax-core.js",
+      "cipc-fee-calculator.js"
+    ],
+    "faq": [
+      {
+        "q": "How much is a CIPC annual return?",
+        "a": "For a company it depends on turnover: R100 under R1 million, R450 from R1 million to under R10 million, R2 000 from R10 million to under R25 million, and R3 000 at R25 million or more. For a close corporation it is R100 up to R50 million of turnover and R4 000 above that. A fee is payable for every year outstanding, not just the current one."
+      },
+      {
+        "q": "What happens if I file my CIPC annual return late?",
+        "a": "For a company the late fee replaces the standard one — R150 instead of R100, R600 instead of R450, R2 500 instead of R2 000, or R4 000 instead of R3 000. For a close corporation the standard fee stays and a flat R150 penalty is added for each late lodgment. More seriously, unfiled returns can lead CIPC to refer the entity for deregistration."
+      },
+      {
+        "q": "What happens if a company is deregistered by CIPC?",
+        "a": "It ceases to exist as a legal person. It cannot contract or trade, its bank accounts can be frozen, and its assets fall to the state as bona vacantia until it is reinstated. Reinstatement costs R200 in CIPC fees on Form CoR40.5, but it also requires evidence the entity was trading or held assets, and every outstanding annual return must still be filed and paid for."
+      },
+      {
+        "q": "When is my CIPC annual return due?",
+        "a": "A company must file within 30 business days of the anniversary of its registration date. A close corporation has from the start of its anniversary month until the end of the following month. Missing that window moves you onto the late fee."
+      },
+      {
+        "q": "Do dormant companies have to file annual returns?",
+        "a": "Yes. Every company and close corporation on the CIPC register must file annually regardless of whether it traded, and CIPC cannot exempt an entity from filing. A dormant company simply falls into the lowest turnover band at R100."
+      }
+    ]
+  },
+  {
     "slug": "privacy-policy",
     "file": "privacy-policy.html",
     "type": "page",
