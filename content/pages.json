@@ -524,6 +524,7 @@
     "eyebrow": "Calculator",
     "scripts": [
       "tax-rates.js",
+      "sa-tax-core.js",
       "income-tax-calculator.js"
     ],
     "title": "SARS Income Tax & PAYE Calculator 2026/27 & 2025/26 | SA",
@@ -597,6 +598,49 @@
       {
         "q": "What is the VAT rate in South Africa?",
         "a": "The standard rate is 15%. Certain supplies are zero-rated (such as most basic foodstuffs and exports) or exempt (such as residential rent and most financial services)."
+      }
+    ]
+  },
+  {
+    "slug": "tools/bonus-tax-calculator",
+    "file": "tool-bonus-tax.html",
+    "type": "tool",
+    "breadcrumb": "Bonus Tax Calculator",
+    "breadcrumbs": [
+      {
+        "name": "Calculators",
+        "slug": "tools"
+      }
+    ],
+    "title": "Bonus Tax Calculator South Africa 2026/27 | 13th Cheque",
+    "description": "Free South African bonus tax calculator for 2026/27 and 2025/26. Work out the tax on a 13th cheque or bonus and what you actually take home.",
+    "h1": "Bonus &amp; 13th cheque tax calculator",
+    "eyebrow": "Free Calculator",
+    "lead": "Work out the tax on a bonus or 13th cheque, and what actually reaches your account. No sign-up, and nothing you type leaves your browser.",
+    "changefreq": "monthly",
+    "priority": "0.9",
+    "updated": "2026-08-06",
+    "scripts": [
+      "tax-rates.js",
+      "sa-tax-core.js",
+      "bonus-tax-calculator.js"
+    ],
+    "faq": [
+      {
+        "q": "Are bonuses taxed at a higher rate in South Africa?",
+        "a": "No. There is no separate bonus tax rate. A bonus is remuneration, so it is added to your income for the year and taxed at whatever bracket that reaches. It feels heavily taxed because your monthly PAYE already spreads the tax rebates and the tax threshold across all twelve months, so by the time the bonus arrives there is nothing left to shelter it."
+      },
+      {
+        "q": "How is tax on a 13th cheque calculated?",
+        "a": "Work out the tax on your income for the year including the bonus, then work out the tax on the same year without it. The difference is the tax on the bonus. That method is more accurate than applying your marginal rate to the whole bonus, because a bonus that crosses a bracket boundary is taxed partly at one rate and partly at the next."
+      },
+      {
+        "q": "Do I pay UIF on my bonus?",
+        "a": "Only if the month the bonus is paid in still falls below the UIF earnings ceiling of R17 712 a month. If your monthly salary already meets or exceeds that ceiling, your UIF contribution is already at its maximum and the bonus attracts no further UIF."
+      },
+      {
+        "q": "Why did my employer deduct more tax on my bonus than this shows?",
+        "a": "Employers sometimes apply a simpler method, such as taxing the bonus at a flat marginal rate, which overstates the tax where a bonus straddles a bracket. Any over-deduction usually comes back to you on assessment. If the difference is large it is worth having someone check the payroll calculation."
       }
     ]
   },

@@ -1,10 +1,8 @@
 {
   "_comment": "Single source of truth for everything that repeats across the site. Change it here, run `python build.py`, and every page updates. Anything left as an empty string is treated as UNVERIFIED and is omitted from the site entirely rather than guessed at — see TODO-BEFORE-LAUNCH.md.",
-
   "domain": "https://knoesen-accounting.co.za",
   "locale": "en-ZA",
   "og_locale": "en_ZA",
-
   "brand": {
     "name": "Knoesen Accounting, Tax & Payroll",
     "short_name": "Knoesen Accounting",
@@ -12,7 +10,6 @@
     "founded": "2021-01",
     "founded_label": "January 2021"
   },
-
   "principal": {
     "name": "Lourens Knoesen",
     "role": "Professional Accountant (SA)",
@@ -21,7 +18,6 @@
     "body_url": "https://www.saipa.co.za/",
     "experience_label": "10+ years in the accounting industry"
   },
-
   "contact": {
     "phone_e164": "+27847932990",
     "phone_display": "+27 (0)84 793 2990",
@@ -29,7 +25,6 @@
     "email": "lourens@knoesenacc.co.za",
     "facebook": "https://www.facebook.com/Knoesenaccountingtaxandpayroll/"
   },
-
   "location": {
     "street": "",
     "suburb": "Walmer Heights",
@@ -42,7 +37,6 @@
     "longitude": "",
     "map_query": "Walmer Heights, Gqeberha, South Africa"
   },
-
   "credentials": {
     "_comment": "Leave blank until confirmed. Blank values are omitted from the page AND from structured data — never faked.",
     "saipa_number": "",
@@ -50,20 +44,27 @@
     "company_reg_number": "",
     "vat_number": ""
   },
-
   "hours": {
     "_comment": "confirmed:false means opening hours are NOT rendered and NOT put in LocalBusiness schema. Set the days, then flip confirmed to true.",
     "confirmed": true,
     "spec": [
-      { "days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "08:00", "closes": "17:00" }
+      {
+        "days": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday"
+        ],
+        "opens": "08:00",
+        "closes": "17:00"
+      }
     ]
   },
-
   "forms": {
     "_comment": "Get a free key at https://web3forms.com and paste it in. Until then the form degrades to a friendly notice instead of silently losing enquiries.",
     "web3forms_key": ""
   },
-
   "areas_served": [
     "Gqeberha (Port Elizabeth)",
     "Walmer",
@@ -84,53 +85,112 @@
     "Humansdorp",
     "Gamtoos Valley"
   ],
-
   "nav": [
-    { "label": "About", "href": "/about" },
+    {
+      "label": "About",
+      "href": "/about"
+    },
     {
       "label": "Services",
       "href": "/services",
       "children": [
-        { "label": "Accounting & Financial Statements", "href": "/services/accounting" },
-        { "label": "Tax & SARS", "href": "/services/tax" },
-        { "label": "Payroll", "href": "/services/payroll" },
-        { "label": "Company Secretarial & CIPC", "href": "/services/company-secretarial" }
+        {
+          "label": "Accounting & Financial Statements",
+          "href": "/services/accounting"
+        },
+        {
+          "label": "Tax & SARS",
+          "href": "/services/tax"
+        },
+        {
+          "label": "Payroll",
+          "href": "/services/payroll"
+        },
+        {
+          "label": "Company Secretarial & CIPC",
+          "href": "/services/company-secretarial"
+        }
       ]
     },
     {
       "label": "Resources",
       "href": "/resources",
       "children": [
-        { "label": "Tax Deadline Calendar", "href": "/resources/tax-deadlines-calendar" },
-        { "label": "Filing Season 2026", "href": "/resources/sars-filing-season-2026" },
-        { "label": "Tax Rates 2026/27", "href": "/resources/tax-rates-2026-2027" },
-        { "label": "VAT Registration Threshold", "href": "/resources/vat-registration-threshold" },
-        { "label": "Small Business Tax", "href": "/resources/small-business-tax-guide" },
-        { "label": "Payroll Compliance", "href": "/resources/payroll-compliance-guide" },
-        { "label": "Contractor or Employee?", "href": "/resources/independent-contractor-or-employee" },
-        { "label": "Starting a Business", "href": "/resources/starting-a-business-in-south-africa" }
+        {
+          "label": "Tax Deadline Calendar",
+          "href": "/resources/tax-deadlines-calendar"
+        },
+        {
+          "label": "Filing Season 2026",
+          "href": "/resources/sars-filing-season-2026"
+        },
+        {
+          "label": "Tax Rates 2026/27",
+          "href": "/resources/tax-rates-2026-2027"
+        },
+        {
+          "label": "VAT Registration Threshold",
+          "href": "/resources/vat-registration-threshold"
+        },
+        {
+          "label": "Small Business Tax",
+          "href": "/resources/small-business-tax-guide"
+        },
+        {
+          "label": "Payroll Compliance",
+          "href": "/resources/payroll-compliance-guide"
+        },
+        {
+          "label": "Contractor or Employee?",
+          "href": "/resources/independent-contractor-or-employee"
+        },
+        {
+          "label": "Starting a Business",
+          "href": "/resources/starting-a-business-in-south-africa"
+        }
       ]
     },
     {
       "label": "Calculators",
       "href": "/tools",
       "children": [
-        { "label": "Income Tax & PAYE Calculator", "href": "/tools/income-tax-calculator" },
-        { "label": "VAT Calculator", "href": "/tools/vat-calculator" }
+        {
+          "label": "Income Tax & PAYE Calculator",
+          "href": "/tools/income-tax-calculator"
+        },
+        {
+          "label": "Bonus & 13th Cheque Tax",
+          "href": "/tools/bonus-tax-calculator"
+        },
+        {
+          "label": "VAT Calculator",
+          "href": "/tools/vat-calculator"
+        }
       ]
     },
-    { "label": "Areas We Serve", "href": "/areas-we-serve" },
-    { "label": "Contact", "href": "/contact" }
+    {
+      "label": "Areas We Serve",
+      "href": "/areas-we-serve"
+    },
+    {
+      "label": "Contact",
+      "href": "/contact"
+    }
   ],
-
   "tax_year": {
     "label": "2026/27",
     "assessment_year": "2027 year of assessment",
     "period": "1 March 2026 – 28 February 2027",
     "verified_on": "2026-08-03",
     "sources": [
-      { "label": "National Treasury — Budget 2026 Tax Guide", "url": "https://www.treasury.gov.za/documents/national%20budget/2026/sars/Budget%202026%20Tax%20guide.pdf" },
-      { "label": "SARS — Filing Season", "url": "https://www.sars.gov.za/types-of-tax/personal-income-tax/filing-season/" }
+      {
+        "label": "National Treasury — Budget 2026 Tax Guide",
+        "url": "https://www.treasury.gov.za/documents/national%20budget/2026/sars/Budget%202026%20Tax%20guide.pdf"
+      },
+      {
+        "label": "SARS — Filing Season",
+        "url": "https://www.sars.gov.za/types-of-tax/personal-income-tax/filing-season/"
+      }
     ]
   }
 }
