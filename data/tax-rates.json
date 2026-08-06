@@ -3,9 +3,77 @@
 
   "_updating": "After a Budget: add the new year, move `current`, then run `python build.py --check`. The check proves every cumulative `base` equals the tax at the top of the bracket below it, and that each threshold equals its rebate divided by the first bracket rate. A mistyped digit fails the build rather than silently shipping confident wrong answers.",
 
+  "_partial_years": "A year may carry only the sections a calculator needs. 2025/26 has `individual`, `payroll` and `vat` — every figure in it was checked against sars.gov.za and the Budget guide — and deliberately omits SBC, turnover tax, transfer duty, CGT, estate duty and the rest, because nothing on the site uses those for a past year and publishing unverified figures is worse than publishing none. Fill a section in only when you have read it off a primary source. build.py validates whatever is present and skips what is absent.",
+
   "current": "2026/27",
 
   "years": {
+    "2025/26": {
+      "label": "2025/26",
+      "assessment_year": "2026 year of assessment",
+      "period": "1 March 2025 – 28 February 2026",
+      "verified_on": "2026-08-06",
+      "sources": [
+        {
+          "label": "SARS — Rates of tax for individuals",
+          "url": "https://www.sars.gov.za/tax-rates/income-tax/rates-of-tax-for-individuals/"
+        },
+        {
+          "label": "SARS — Medical tax credit rates",
+          "url": "https://www.sars.gov.za/tax-rates/medical-tax-credit-rates/"
+        }
+      ],
+
+      "individual": {
+        "_comment": "SARS recorded 'no changes' to the brackets for this year, so they are identical to the year before AND to 2026/27. What moved in Budget 2026 was the rebates, the medical credits and the retirement cap — which is exactly why a year selector is worth having: the brackets look the same and the answer is not.",
+        "brackets": [
+          { "from": 0,       "to": 245100,   "base": 0,      "rate": 0.18 },
+          { "from": 245100,  "to": 383100,   "base": 44118,  "rate": 0.26 },
+          { "from": 383100,  "to": 530200,   "base": 79998,  "rate": 0.31 },
+          { "from": 530200,  "to": 695800,   "base": 125599, "rate": 0.36 },
+          { "from": 695800,  "to": 887000,   "base": 185215, "rate": 0.39 },
+          { "from": 887000,  "to": 1878600,  "base": 259783, "rate": 0.41 },
+          { "from": 1878600, "to": null,     "base": 666339, "rate": 0.45 }
+        ],
+
+        "rebates": {
+          "primary": 17235,
+          "secondary": 9444,
+          "tertiary": 3145
+        },
+
+        "_thresholds_comment": "SARS publishes these rounded to the rand; the exact quotient is 148 216.67 and 165 688.89. build.py allows a rand of slack for that.",
+        "thresholds": {
+          "under_65": 95750,
+          "age_65_to_74": 148217,
+          "age_75_plus": 165689
+        },
+
+        "medical_credit": {
+          "first_two_each": 364,
+          "each_additional": 246
+        },
+
+        "_retirement_comment": "R350 000 was the cap from 2016 until Budget 2026 raised it to R430 000 with effect from 1 March 2026.",
+        "retirement": {
+          "rate": 0.275,
+          "annual_cap": 350000
+        }
+      },
+
+      "payroll": {
+        "uif_employer_rate": 0.01,
+        "uif_employee_rate": 0.01,
+        "uif_monthly_ceiling": 17712,
+        "sdl_rate": 0.01,
+        "sdl_exemption_annual_remuneration": 500000
+      },
+
+      "vat": {
+        "standard_rate": 0.15
+      }
+    },
+
     "2026/27": {
       "label": "2026/27",
       "assessment_year": "2027 year of assessment",

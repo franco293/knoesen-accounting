@@ -6,7 +6,9 @@
         ({{tax_period}}) using the official brackets, rebates and medical
         credits from
         <a href="https://www.treasury.gov.za/documents/national%20budget/2026/sars/Budget%202026%20Tax%20guide.pdf" target="_blank" rel="noopener noreferrer">National Treasury's Budget 2026 Tax Guide</a>.
-        Nothing you type leaves your browser. Reviewed {{verified_on}}.
+        You can also switch it to <strong>2025/26</strong> to check a prior
+        year or compare the two. Nothing you type leaves your browser.
+        Reviewed {{verified_on}}.
       </p>
     </div>
   </div>
@@ -17,6 +19,17 @@
     <div class="calc-layout">
       <form class="calc-form" id="tax-calc" novalidate>
         <h2 class="calc-heading">Your details</h2>
+
+        <fieldset class="calc-fieldset">
+          <legend>Tax year</legend>
+          <div class="form-field">
+            <label for="tc-year" class="visually-hidden">Which tax year</label>
+            <select id="tc-year">
+              {{rates:year_options}}
+            </select>
+            <p class="calc-hint" id="tc-year-note"></p>
+          </div>
+        </fieldset>
 
         <fieldset class="calc-fieldset">
           <legend>Income</legend>

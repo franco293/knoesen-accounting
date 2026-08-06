@@ -32,42 +32,52 @@
     return;
   }
 
-  var YEAR = DATA.years[DATA.current];
-  var IND = YEAR.individual;
-
-  /* `to: null` marks the top bracket in the data, because JSON has no
-     Infinity. The arithmetic below compares against it, so convert once. */
-  var BRACKETS = IND.brackets.map(function (b) {
-    return {
-      from: b.from,
-      to: b.to === null ? Infinity : b.to,
-      base: b.base,
-      rate: b.rate
-    };
-  });
-
-  /* Rebates are cumulative: a 76-year-old gets all three. */
-  var REBATES = IND.rebates;
-
-  /* Medical scheme fees tax credit, per month: one amount for each of the
-     first two people covered, a lower one for every dependant after that. */
-  var MEDICAL = IND.medical_credit;
-
-  /* Retirement fund contributions: deductible up to a percentage of the
-     greater of remuneration or taxable income, and never more than the annual
-     cap. */
-  var RETIREMENT = IND.retirement;
-
-  /* UIF is the one figure NOT in the Budget guide, which says only "below a
-     certain amount" — the ceiling comes from SARS. It is capped MONTHLY, so
-     annualising the ceiling is only correct for steady pay, which is exactly
-     what this calculator assumes. */
-  var UIF = {
-    rate: YEAR.payroll.uif_employee_rate,
-    monthlyCeiling: YEAR.payroll.uif_monthly_ceiling
-  };
-
   var el = function (id) { return document.getElementById(id); };
+
+  /* Which year's figures to use. Read per render rather than resolved once,
+     because the visitor can change it — and between 2025/26 and 2026/27 the
+     BRACKETS ARE IDENTICAL while the rebates, medical credits and retirement
+     cap all moved. A calculator that quietly used one year's rebates against
+     another year's income would look right and be wrong. */
+  function ratesFor(yearKey) {
+    var year = DATA.years[yearKey] || DATA.years[DATA.current];
+    var ind = year.individual;
+    return {
+      key: DATA.years[yearKey] ? yearKey : DATA.current,
+      meta: year,
+      /* `to: null` marks the top bracket in the data, because JSON has no
+         Infinity. The arithmetic compares against it, so convert here. */
+      brackets: ind.brackets.map(function (b) {
+        return {
+          from: b.from,
+          to: b.to === null ? Infinity : b.to,
+          base: b.base,
+          rate: b.rate
+        };
+      }),
+      /* Rebates are cumulative: a 76-year-old gets all three. */
+      rebates: ind.rebates,
+      /* Medical scheme fees tax credit, per month: one amount for each of the
+         first two people covered, a lower one for every dependant after. */
+      medical: ind.medical_credit,
+      /* Retirement contributions: deductible up to a percentage of the greater
+         of remuneration or taxable income, never more than the annual cap. */
+      retirement: ind.retirement,
+      /* UIF is the one figure NOT in the Budget guide, which says only "below
+         a certain amount" — the ceiling comes from SARS. It is capped MONTHLY,
+         so annualising it is only correct for steady pay, which is what this
+         calculator assumes. */
+      uif: {
+        rate: year.payroll.uif_employee_rate,
+        monthlyCeiling: year.payroll.uif_monthly_ceiling
+      }
+    };
+  }
+
+  function selectedYear() {
+    var picker = el("tc-year");
+    return picker ? picker.value : DATA.current;
+  }
 
   /* ---- Formatting --------------------------------------------------------
      Non-breaking thin gaps between thousands, matching how SARS and the rate
@@ -87,34 +97,35 @@
 
   /* ---- The arithmetic ---------------------------------------------------- */
 
-  function bracketFor(taxableIncome) {
-    for (var i = 0; i < BRACKETS.length; i++) {
-      if (taxableIncome <= BRACKETS[i].to) return BRACKETS[i];
+  function bracketFor(taxableIncome, R) {
+    var brackets = R.brackets;
+    for (var i = 0; i < brackets.length; i++) {
+      if (taxableIncome <= brackets[i].to) return brackets[i];
     }
-    return BRACKETS[BRACKETS.length - 1];
+    return brackets[brackets.length - 1];
   }
 
-  function taxBeforeRebates(taxableIncome) {
+  function taxBeforeRebates(taxableIncome, R) {
     if (taxableIncome <= 0) return 0;
-    var b = bracketFor(taxableIncome);
+    var b = bracketFor(taxableIncome, R);
     return b.base + (taxableIncome - b.from) * b.rate;
   }
 
-  function rebateFor(ageBand) {
-    var total = REBATES.primary;
-    if (ageBand === "65" || ageBand === "75") total += REBATES.secondary;
-    if (ageBand === "75") total += REBATES.tertiary;
+  function rebateFor(ageBand, R) {
+    var total = R.rebates.primary;
+    if (ageBand === "65" || ageBand === "75") total += R.rebates.secondary;
+    if (ageBand === "75") total += R.rebates.tertiary;
     return total;
   }
 
-  function medicalCreditFor(members) {
+  function medicalCreditFor(members, R) {
     if (members <= 0) return 0;
-    var first = Math.min(members, 2) * MEDICAL.first_two_each;
-    var rest = Math.max(members - 2, 0) * MEDICAL.each_additional;
+    var first = Math.min(members, 2) * R.medical.first_two_each;
+    var rest = Math.max(members - 2, 0) * R.medical.each_additional;
     return (first + rest) * 12;
   }
 
-  function calculate(input) {
+  function calculate(input, R) {
     var gross = input.annualGross;
 
     /* Deductible portion of retirement contributions. The statutory test is
@@ -123,14 +134,14 @@
        deduction, so remuneration is the right base here. */
     var allowedRetirement = Math.min(
       input.annualRetirement,
-      gross * RETIREMENT.rate,
-      RETIREMENT.annual_cap
+      gross * R.retirement.rate,
+      R.retirement.annual_cap
     );
 
     var taxableIncome = Math.max(gross - allowedRetirement, 0);
-    var beforeRebates = taxBeforeRebates(taxableIncome);
-    var rebates = rebateFor(input.ageBand);
-    var medical = medicalCreditFor(input.medicalMembers);
+    var beforeRebates = taxBeforeRebates(taxableIncome, R);
+    var rebates = rebateFor(input.ageBand, R);
+    var medical = medicalCreditFor(input.medicalMembers, R);
 
     /* Rebates and the medical credit are credits, not refunds: they can reduce
        the liability to nil but never below it. */
@@ -138,7 +149,7 @@
     var tax = Math.max(afterRebates - medical, 0);
 
     var uif = input.includeUif
-      ? Math.min(input.monthlyGross, UIF.monthlyCeiling) * UIF.rate * 12
+      ? Math.min(input.monthlyGross, R.uif.monthlyCeiling) * R.uif.rate * 12
       : 0;
 
     var takeHome = gross - tax - uif - input.annualRetirement;
@@ -163,7 +174,7 @@
          still absorbs that next rand, so there is genuinely no marginal rate
          to report. What both cases turn on is whether anything survives the
          rebates. */
-      marginalRate: afterRebates > 0 ? bracketFor(taxableIncome).rate : 0,
+      marginalRate: afterRebates > 0 ? bracketFor(taxableIncome, R).rate : 0,
       /* "Below the threshold" means the age rebates alone cover the tax — that
          is what the threshold IS. Someone pushed to nil by the medical credit
          is above the threshold and is still required to file, so telling them
@@ -176,10 +187,10 @@
 
   /* Tax charged slice by slice, so the result is explainable rather than a
      single number the visitor has to take on faith. */
-  function bracketBreakdown(taxableIncome) {
+  function bracketBreakdown(taxableIncome, R) {
     var rows = [];
-    for (var i = 0; i < BRACKETS.length; i++) {
-      var b = BRACKETS[i];
+    for (var i = 0; i < R.brackets.length; i++) {
+      var b = R.brackets[i];
       if (taxableIncome <= b.from) break;
       var slice = Math.min(taxableIncome, b.to) - b.from;
       rows.push({
@@ -222,7 +233,38 @@
     if (node) node.textContent = text;
   }
 
+  /* Say which year's figures produced the numbers, and when they were last
+     checked. On a page that can show more than one year, "R17 820" on its own
+     is ambiguous — and a visitor who has switched to a past year needs to know
+     the answer is deliberately historic, not stale. */
+  var MONTHS = ["January", "February", "March", "April", "May", "June", "July",
+                "August", "September", "October", "November", "December"];
+
+  /* "2026-08-06" -> "6 August 2026", matching how the guides stamp their
+     review dates. Parsed by hand rather than with Date, because `new
+     Date("2026-08-06")` is UTC midnight and renders as the 5th for anyone
+     west of Greenwich. */
+  function prettyDate(iso) {
+    var parts = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
+    if (!parts) return iso || "";
+    return Number(parts[3]) + " " + MONTHS[Number(parts[2]) - 1] + " " + parts[1];
+  }
+
+  function renderYearNote(R) {
+    var note = el("tc-year-note");
+    if (!note) return;
+    var reviewed = R.meta.verified_on
+      ? ", reviewed " + prettyDate(R.meta.verified_on)
+      : "";
+    note.textContent =
+      "Using the " + R.meta.label + " figures (" + R.meta.period + ")" +
+      reviewed + ".";
+  }
+
   function render() {
+    var R = ratesFor(selectedYear());
+    renderYearNote(R);
+
     var input = readInput();
 
     if (input.annualGross <= 0) {
@@ -234,7 +276,7 @@
     el("tc-empty").hidden = true;
     el("tc-results").hidden = false;
 
-    var r = calculate(input);
+    var r = calculate(input, R);
 
     setText("tc-out-tax-month", money(r.tax / 12));
     setText("tc-out-tax-year", money(r.tax));
@@ -282,7 +324,7 @@
     /* Bracket breakdown table. */
     var tbody = el("tc-brackets-body");
     if (tbody) {
-      var rows = bracketBreakdown(r.taxableIncome);
+      var rows = bracketBreakdown(r.taxableIncome, R);
       tbody.textContent = "";
       rows.forEach(function (row) {
         var tr = document.createElement("tr");
@@ -317,6 +359,46 @@
     }, 700);
   }
 
+  /* The chosen year lives in the URL so a particular year can be linked to and
+     shared — "/tools/income-tax-calculator?year=2025/26".
+
+     Only the YEAR goes in the URL. The income, age and medical details
+     deliberately do not, even though putting them there would make a whole
+     result shareable: a URL carrying somebody's salary gets pasted into chats,
+     kept in browser history and logged by every proxy in between. This page
+     promises that nothing you type leaves your browser, and a query string is
+     the one part of a page that does. */
+  /* Years are keyed "2026/27" for display, but a slash in a query string
+     percent-encodes to "%2F" and turns a link people are meant to share into
+     "?year=2025%2F26". The URL uses a hyphen instead. */
+  function yearToSlug(key) { return key.replace("/", "-"); }
+
+  function slugToYear(slug) {
+    var keys = Object.keys(DATA.years);
+    for (var i = 0; i < keys.length; i++) {
+      if (yearToSlug(keys[i]) === slug || keys[i] === slug) return keys[i];
+    }
+    return null;
+  }
+
+  function yearFromUrl() {
+    var match = /[?&]year=([^&]+)/.exec(window.location.search);
+    return match ? slugToYear(decodeURIComponent(match[1])) : null;
+  }
+
+  function syncUrlToYear() {
+    if (!window.history || !window.history.replaceState) return;
+    var picker = el("tc-year");
+    if (!picker) return;
+    /* replaceState, not pushState: flicking between years is adjusting one
+       control, not navigating, and it should not take several Back presses to
+       leave the page. */
+    var url = window.location.pathname +
+      (picker.value === DATA.current ? "" : "?year=" + yearToSlug(picker.value)) +
+      window.location.hash;
+    window.history.replaceState(null, "", url);
+  }
+
   function update() {
     render();
     announce();
@@ -329,6 +411,14 @@
     update();
   });
 
-  /* Nothing is prefilled, so the first paint shows the empty state. */
+  var yearPicker = el("tc-year");
+  if (yearPicker) {
+    var requested = yearFromUrl();
+    if (requested) yearPicker.value = requested;
+    yearPicker.addEventListener("change", syncUrlToYear);
+  }
+
+  /* Nothing is prefilled, so the first paint shows the empty state — but the
+     year note still needs to render, hence a full render rather than nothing. */
   render();
 })();

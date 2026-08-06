@@ -313,7 +313,32 @@ def simple_rows(spec: list) -> list[str]:
     return rows
 
 
+def year_options() -> list[str]:
+    """<option> for every tax year in the data, newest first, current selected.
+
+    Generated rather than written into the fragment so that adding a year to
+    data/tax-rates.json is genuinely a one-file change — the selector, the
+    calculators and the tables all follow from it.
+    """
+    def sort_key(label: str) -> str:
+        return label
+
+    labels = sorted(RATES["years"], key=sort_key, reverse=True)
+    out = []
+    for label in labels:
+        year = RATES["years"][label]
+        selected = " selected" if label == RATES["current"] else ""
+        current = " (current)" if label == RATES["current"] else ""
+        out.append(
+            f'<option value="{esc(label)}"{selected}>'
+            f'{esc(label)}{current} &mdash; {esc(year["period"])}</option>'
+        )
+    return out
+
+
 def rate_table(name: str) -> list[str]:
+    if name == "year_options":
+        return year_options()
     ind = "individual"
     if name == "individual_brackets":
         return bracket_rows(resolve(f"{ind}.brackets"), "taxable income")
@@ -1159,12 +1184,17 @@ def check_tax_constants() -> list[str]:
     problems = []
 
     for year_label, year in RATES["years"].items():
-        tables = [
-            ("individual", year["individual"]["brackets"]),
-            ("SBC", year["company"]["sbc_brackets"]),
-            ("turnover tax", year["company"]["turnover_brackets"]),
-            ("transfer duty", year["transfer_duty"]["brackets"]),
+        # A past year may carry only the sections a calculator needs — see
+        # `_partial_years` in the JSON. Validate what is there; do not demand
+        # figures nobody has verified yet.
+        candidates = [
+            ("individual", year.get("individual", {}).get("brackets")),
+            ("SBC", year.get("company", {}).get("sbc_brackets")),
+            ("turnover tax", year.get("company", {}).get("turnover_brackets")),
+            ("transfer duty", year.get("transfer_duty", {}).get("brackets")),
         ]
+        tables = [(name, rows) for name, rows in candidates if rows]
+
         for name, brackets in tables:
             for i in range(1, len(brackets)):
                 prev, row = brackets[i - 1], brackets[i]
@@ -1187,7 +1217,9 @@ def check_tax_constants() -> list[str]:
             if brackets[-1]["to"] is not None:
                 problems.append(f"  {year_label} {name}: the top bracket must have \"to\": null")
 
-        ind = year["individual"]
+        ind = year.get("individual")
+        if not ind:
+            continue
         first_rate = ind["brackets"][0]["rate"]
         rebates = ind["rebates"]
         for key, cumulative in (

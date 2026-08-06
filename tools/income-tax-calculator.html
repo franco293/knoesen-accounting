@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SARS Income Tax &amp; PAYE Calculator 2026/27 | South Africa</title>
-    <meta name="description" content="Free 2026/27 South African income tax calculator. Work out your monthly PAYE and take-home pay, with age rebates and medical tax credits." />
+    <title>SARS Income Tax &amp; PAYE Calculator 2026/27 &amp; 2025/26 | SA</title>
+    <meta name="description" content="Free South African income tax calculator for 2026/27 and 2025/26. Work out monthly PAYE and take-home pay, with age rebates, medical credits and retirement contributions." />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="canonical" href="https://knoesen-accounting.co.za/tools/income-tax-calculator" />
     <meta name="theme-color" content="#1E3B2F" />
@@ -15,8 +15,8 @@
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Knoesen Accounting, Tax &amp; Payroll" />
-    <meta property="og:title" content="SARS Income Tax &amp; PAYE Calculator 2026/27 | South Africa" />
-    <meta property="og:description" content="Free 2026/27 South African income tax calculator. Work out your monthly PAYE and take-home pay, with age rebates and medical tax credits." />
+    <meta property="og:title" content="SARS Income Tax &amp; PAYE Calculator 2026/27 &amp; 2025/26 | SA" />
+    <meta property="og:description" content="Free South African income tax calculator for 2026/27 and 2025/26. Work out monthly PAYE and take-home pay, with age rebates, medical credits and retirement contributions." />
     <meta property="og:url" content="https://knoesen-accounting.co.za/tools/income-tax-calculator" />
     <meta property="og:image" content="https://knoesen-accounting.co.za/assets/og-image.png" />
     <meta property="og:image:width" content="1200" />
@@ -25,8 +25,8 @@
     <meta property="og:locale" content="en_ZA" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="SARS Income Tax &amp; PAYE Calculator 2026/27 | South Africa" />
-    <meta name="twitter:description" content="Free 2026/27 South African income tax calculator. Work out your monthly PAYE and take-home pay, with age rebates and medical tax credits." />
+    <meta name="twitter:title" content="SARS Income Tax &amp; PAYE Calculator 2026/27 &amp; 2025/26 | SA" />
+    <meta name="twitter:description" content="Free South African income tax calculator for 2026/27 and 2025/26. Work out monthly PAYE and take-home pay, with age rebates, medical credits and retirement contributions." />
     <meta name="twitter:image" content="https://knoesen-accounting.co.za/assets/og-image.png" />
 
     <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
@@ -199,7 +199,7 @@
       "@id": "https://knoesen-accounting.co.za/tools/income-tax-calculator#webapp",
       "name": "South African income tax calculator 2026/27",
       "url": "https://knoesen-accounting.co.za/tools/income-tax-calculator",
-      "description": "Free 2026/27 South African income tax calculator. Work out your monthly PAYE and take-home pay, with age rebates and medical tax credits.",
+      "description": "Free South African income tax calculator for 2026/27 and 2025/26. Work out monthly PAYE and take-home pay, with age rebates, medical credits and retirement contributions.",
       "applicationCategory": "FinanceApplication",
       "applicationSubCategory": "Tax calculator",
       "operatingSystem": "Any modern web browser",
@@ -355,7 +355,9 @@
         (1 March 2026 – 28 February 2027) using the official brackets, rebates and medical
         credits from
         <a href="https://www.treasury.gov.za/documents/national%20budget/2026/sars/Budget%202026%20Tax%20guide.pdf" target="_blank" rel="noopener noreferrer">National Treasury's Budget 2026 Tax Guide</a>.
-        Nothing you type leaves your browser. Reviewed 2026-08-03.
+        You can also switch it to <strong>2025/26</strong> to check a prior
+        year or compare the two. Nothing you type leaves your browser.
+        Reviewed 2026-08-03.
       </p>
     </div>
   </div>
@@ -366,6 +368,18 @@
     <div class="calc-layout">
       <form class="calc-form" id="tax-calc" novalidate>
         <h2 class="calc-heading">Your details</h2>
+
+        <fieldset class="calc-fieldset">
+          <legend>Tax year</legend>
+          <div class="form-field">
+            <label for="tc-year" class="visually-hidden">Which tax year</label>
+            <select id="tc-year">
+              <option value="2026/27" selected>2026/27 (current) &mdash; 1 March 2026 – 28 February 2027</option>
+              <option value="2025/26">2025/26 &mdash; 1 March 2025 – 28 February 2026</option>
+            </select>
+            <p class="calc-hint" id="tc-year-note"></p>
+          </div>
+        </fieldset>
 
         <fieldset class="calc-fieldset">
           <legend>Income</legend>
@@ -732,7 +746,7 @@
     </nav>
 
     <script src="/js/main.js?v=6f706ac8cb"></script>
-    <script src="/js/tax-rates.js?v=25cc45fd80"></script>
-    <script src="/js/income-tax-calculator.js?v=d52fbf42f2"></script>
+    <script src="/js/tax-rates.js?v=507793bf04"></script>
+    <script src="/js/income-tax-calculator.js?v=aa87f6b1de"></script>
   </body>
 </html>
