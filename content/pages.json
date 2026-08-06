@@ -645,6 +645,49 @@
     ]
   },
   {
+    "slug": "tools/net-to-gross-calculator",
+    "file": "tool-net-to-gross.html",
+    "type": "tool",
+    "breadcrumb": "Net to Gross Calculator",
+    "breadcrumbs": [
+      {
+        "name": "Calculators",
+        "slug": "tools"
+      }
+    ],
+    "title": "Net to Gross Salary Calculator South Africa 2026/27",
+    "description": "Work backwards from take-home pay to the gross salary you need, using SA 2026/27 and 2025/26 tax tables. Free, and nothing you type leaves your browser.",
+    "h1": "Net to gross salary calculator",
+    "eyebrow": "Free Calculator",
+    "lead": "Work backwards from the pay you want in your account to the gross salary it takes. Useful when negotiating a package, or costing a hire.",
+    "changefreq": "monthly",
+    "priority": "0.9",
+    "updated": "2026-08-06",
+    "scripts": [
+      "tax-rates.js",
+      "sa-tax-core.js",
+      "net-to-gross-calculator.js"
+    ],
+    "faq": [
+      {
+        "q": "How do I work out gross salary from net pay in South Africa?",
+        "a": "You cannot simply reverse the tax calculation, because the tax due depends on which bracket the salary falls into and you do not know the bracket until you know the salary. The reliable method is to search for the gross figure that produces your target take-home when put through the normal forward calculation, which is what this calculator does."
+      },
+      {
+        "q": "Why can't I just divide my target by one minus my tax rate?",
+        "a": "That works only if the answer stays inside a single tax bracket. Because South Africa taxes income progressively, a target that crosses a bracket boundary will be understated by that shortcut, and boundaries are exactly where most salary negotiations happen."
+      },
+      {
+        "q": "Is the gross salary the same as the cost to the employer?",
+        "a": "No. On top of the gross salary an employer also pays UIF, and the Skills Development Levy where the payroll exceeds the R500 000 annual remuneration exemption. The gross figure here is what appears on the employment contract, not the full cost of employment."
+      },
+      {
+        "q": "Does this account for a travel allowance or company car?",
+        "a": "No. It covers a plain salary with the age rebates, medical scheme fees tax credit, your own retirement contributions and UIF. A package built out of allowances or a company car changes the amount subject to PAYE and needs to be worked out properly."
+      }
+    ]
+  },
+  {
     "slug": "privacy-policy",
     "file": "privacy-policy.html",
     "type": "page",

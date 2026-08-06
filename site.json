@@ -163,6 +163,10 @@
           "href": "/tools/bonus-tax-calculator"
         },
         {
+          "label": "Net to Gross Salary",
+          "href": "/tools/net-to-gross-calculator"
+        },
+        {
           "label": "VAT Calculator",
           "href": "/tools/vat-calculator"
         }
