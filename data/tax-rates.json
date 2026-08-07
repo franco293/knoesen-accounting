@@ -129,6 +129,11 @@
         "third_period_due": "2026-09-30"
       },
 
+      "coida": {
+        "_provenance": "WEAKER SOURCING THAN EVERYTHING ELSE IN THIS FILE — read this before relying on it. The COIDA earnings ceiling is set by the Department of Employment and Labour in a Government Gazette notice, and it is not published on a stable public page the way SARS publishes tax rates. This figure is corroborated across independent payroll-industry sources that track the gazette, but it was NOT read off the gazette directly. Confirm it against your Letter of Good Standing or the notice itself before relying on it for an assessment.",
+        "earnings_ceiling": 633168
+      },
+
       "vat": {
         "standard_rate": 0.15
       }
@@ -285,6 +290,14 @@
         "first_period_due": "2026-08-31",
         "second_period_due": "2027-02-28",
         "third_period_due": "2027-09-30"
+      },
+
+      "coida": {
+        "_provenance": "See the note on the 2025/26 coida block — this figure is corroborated across payroll-industry sources tracking the Government Gazette, not read off the gazette directly, and is sourced more weakly than the SARS and Treasury figures elsewhere in this file.",
+        "earnings_ceiling": 668000,
+        "_minimum_assessment_comment": "The Compensation Fund also charges a MINIMUM assessment per employer — around R1 621 for commercial employers and R560 for private households. It is an employer-level floor, not a per-employee figure, so the calculator explains it rather than computing it.",
+        "minimum_assessment_commercial": 1621,
+        "minimum_assessment_household": 560
       },
 
       "travel": {

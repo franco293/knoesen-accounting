@@ -348,6 +348,8 @@ def rate_table(name: str) -> list[str]:
         return year_options(requires="company")
     if name == "year_options_interest":
         return year_options(requires="sars_interest")
+    if name == "year_options_coida":
+        return year_options(requires="coida")
     ind = "individual"
     if name == "individual_brackets":
         return bracket_rows(resolve(f"{ind}.brackets"), "taxable income")

@@ -876,6 +876,49 @@
     ]
   },
   {
+    "slug": "tools/employer-cost-calculator",
+    "file": "tool-employer-cost.html",
+    "type": "tool",
+    "breadcrumb": "Employer Cost Calculator",
+    "breadcrumbs": [
+      {
+        "name": "Calculators",
+        "slug": "tools"
+      }
+    ],
+    "title": "Employer Cost to Company Calculator SA | UIF, SDL & COIDA",
+    "description": "Work out the true cost of a hire in South Africa: gross salary plus employer UIF, Skills Development Levy and COIDA. Free, no sign-up.",
+    "h1": "Employer cost-to-company calculator",
+    "eyebrow": "Free Calculator",
+    "lead": "What a hire actually costs the business, not what appears on the contract — gross salary plus employer UIF, the Skills Development Levy and your COIDA assessment.",
+    "changefreq": "monthly",
+    "priority": "0.8",
+    "updated": "2026-08-06",
+    "scripts": [
+      "tax-rates.js",
+      "sa-tax-core.js",
+      "employer-cost-calculator.js"
+    ],
+    "faq": [
+      {
+        "q": "What does an employee actually cost an employer in South Africa?",
+        "a": "The gross salary plus three statutory charges: employer UIF at 1% of remuneration capped at R17 712 a month, the Skills Development Levy at 1% of total remuneration with no ceiling, and the annual COIDA assessment at a rate set by your industry class. Employer contributions to a retirement fund or medical scheme sit on top of that."
+      },
+      {
+        "q": "Who is exempt from the Skills Development Levy?",
+        "a": "An employer whose total annual remuneration is below R500 000 is exempt. The test is on the whole payroll, not on each employee, so the hire that takes a business past the threshold makes the levy payable on everybody — a business at R490 000 of payroll adding a R60 000 role picks up about R5 500 of levy, not R600."
+      },
+      {
+        "q": "How is the COIDA assessment calculated?",
+        "a": "It is your industry assessment rate applied to your employees' annual earnings, with each employee's earnings capped at the prescribed ceiling. The rate depends on your industry class and appears on your Letter of Good Standing, running from well under 1% for office work to several per cent for construction and heavy industry. A minimum assessment also applies per employer."
+      },
+      {
+        "q": "Is employer UIF capped?",
+        "a": "Yes. Employer UIF is 1% of remuneration but capped on monthly earnings at R17 712, so the maximum employer contribution is R177.12 a month regardless of how senior the role is. On lower salaries it is a real proportional cost; at senior level it is close to negligible."
+      }
+    ]
+  },
+  {
     "slug": "privacy-policy",
     "file": "privacy-policy.html",
     "type": "page",

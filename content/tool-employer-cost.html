@@ -1,0 +1,284 @@
+<section class="section section--paper">
+  <div class="container">
+    <div class="prose reveal">
+      <p class="lead-note">
+        Works out what a hire actually costs the business, rather than what
+        appears on the employment contract &mdash; gross salary plus employer
+        UIF, the Skills Development Levy and your COIDA assessment. Nothing you
+        type leaves your browser. Reviewed {{verified_on}}.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section section--raised ruled">
+  <div class="container">
+    <div class="calc-layout">
+      <form class="calc-form" id="employer-calc" novalidate>
+        <h2 class="calc-heading">The role</h2>
+
+        <fieldset class="calc-fieldset">
+          <legend>Tax year</legend>
+          <div class="form-field">
+            <label for="ec-year" class="visually-hidden">Which tax year</label>
+            <select id="ec-year">
+              {{rates:year_options_coida}}
+            </select>
+            <p class="calc-hint" id="ec-year-note"></p>
+          </div>
+        </fieldset>
+
+        <fieldset class="calc-fieldset">
+          <legend>Salary</legend>
+
+          <div class="form-field">
+            <label for="ec-salary">Gross salary for this employee</label>
+            <input type="text" inputmode="decimal" id="ec-salary" autocomplete="off" placeholder="e.g. 25000" />
+          </div>
+
+          <div class="calc-radios" role="radiogroup" aria-label="Is that a monthly or an annual figure?">
+            <label class="calc-radio">
+              <input type="radio" name="ec-period" value="monthly" checked />
+              <span>Per month</span>
+            </label>
+            <label class="calc-radio">
+              <input type="radio" name="ec-period" value="annual" />
+              <span>Per year</span>
+            </label>
+          </div>
+
+          <label class="form-consent calc-check">
+            <input type="checkbox" id="ec-thirteenth" />
+            <span>Include a 13th cheque &mdash; one extra month's salary</span>
+          </label>
+        </fieldset>
+
+        <fieldset class="calc-fieldset">
+          <legend>Your payroll</legend>
+          <div class="form-field">
+            <label for="ec-payroll">
+              Total annual payroll for the business <span class="calc-optional">(optional)</span>
+            </label>
+            <input type="text" inputmode="decimal" id="ec-payroll" autocomplete="off" placeholder="0" />
+            <p class="calc-hint">
+              Only used to work out whether you are exempt from the Skills
+              Development Levy. Leave it blank and the levy is charged.
+            </p>
+          </div>
+        </fieldset>
+
+        <fieldset class="calc-fieldset">
+          <legend>COIDA</legend>
+          <div class="form-field">
+            <label for="ec-coida-rate">Your assessment rate (%)</label>
+            <input type="text" inputmode="decimal" id="ec-coida-rate" autocomplete="off" placeholder="e.g. 0.98" />
+            <p class="calc-hint">
+              This is set by your industry class and appears on your Letter of
+              Good Standing or your Return of Earnings. Rates run from well
+              under 1% for office work to several per cent for construction and
+              heavy industry &mdash; too varied to guess, so we ask.
+            </p>
+          </div>
+        </fieldset>
+
+        <fieldset class="calc-fieldset">
+          <legend>Employer contributions <span class="calc-optional">(optional)</span></legend>
+
+          <div class="form-field">
+            <label for="ec-retirement">Annual employer retirement contribution</label>
+            <input type="text" inputmode="decimal" id="ec-retirement" autocomplete="off" placeholder="0" />
+          </div>
+
+          <div class="form-field">
+            <label for="ec-medical">Annual employer medical scheme contribution</label>
+            <input type="text" inputmode="decimal" id="ec-medical" autocomplete="off" placeholder="0" />
+          </div>
+        </fieldset>
+
+        <p class="calc-note">
+          Figures update as you type. Nothing is sent anywhere &mdash; the sums
+          run in your browser.
+        </p>
+      </form>
+
+      <div class="calc-output">
+        <h2 class="calc-heading">What it costs you</h2>
+
+        <p class="calc-empty" id="ec-empty">
+          Enter the gross salary on the left and the full cost of the role
+          appears here.
+        </p>
+
+        <div id="ec-results" hidden>
+          <div class="calc-headline">
+            <div class="calc-figure calc-figure--accent">
+              <span class="calc-figure-label">Total cost per month</span>
+              <strong class="calc-figure-value" id="ec-out-total-month">R0.00</strong>
+              <span class="calc-figure-sub"><span id="ec-out-total-year">R0.00</span> per year</span>
+            </div>
+            <div class="calc-figure">
+              <span class="calc-figure-label">Above the salary</span>
+              <strong class="calc-figure-value" id="ec-out-uplift">0%</strong>
+            </div>
+          </div>
+
+          <h3 class="table-title">What makes it up</h3>
+          <div class="table-wrap">
+            <table class="data-table data-table--numeric calc-table">
+              <caption class="visually-hidden">Breakdown of the total annual cost of employing this person</caption>
+              <tbody>
+                <tr>
+                  <th scope="row">Gross salary</th>
+                  <td id="ec-out-salary">R0.00</td>
+                </tr>
+                <tr id="ec-row-thirteenth" hidden>
+                  <th scope="row">13th cheque</th>
+                  <td id="ec-out-thirteenth">R0.00</td>
+                </tr>
+                <tr>
+                  <th scope="row">Employer UIF</th>
+                  <td id="ec-out-uif">R0.00</td>
+                </tr>
+                <tr>
+                  <th scope="row">Skills Development Levy</th>
+                  <td id="ec-out-sdl">R0.00</td>
+                </tr>
+                <tr>
+                  <th scope="row">COIDA assessment</th>
+                  <td id="ec-out-coida">R0.00</td>
+                </tr>
+                <tr id="ec-row-retirement" hidden>
+                  <th scope="row">Employer retirement contribution</th>
+                  <td id="ec-out-retirement">R0.00</td>
+                </tr>
+                <tr id="ec-row-medical" hidden>
+                  <th scope="row">Employer medical contribution</th>
+                  <td id="ec-out-medical">R0.00</td>
+                </tr>
+                <tr class="calc-table-total">
+                  <th scope="row">Total cost to company</th>
+                  <td id="ec-out-total-2">R0.00</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="calc-hint">
+            Statutory charges alone come to
+            <strong id="ec-out-statutory">R0.00</strong> a year.
+          </p>
+
+          <p class="calc-threshold" id="ec-note-coida-missing" hidden>
+            No COIDA rate entered, so the assessment shows as nil. It is not
+            optional &mdash; every employer must register with the Compensation
+            Fund. Your rate is on your Letter of Good Standing.
+          </p>
+
+          <p class="calc-hint" id="ec-note-uif-capped" hidden>
+            This salary is above the UIF ceiling of
+            <strong id="ec-out-uif-ceiling">R17 712</strong> a month, so the
+            employer UIF contribution has stopped rising. It is capped at
+            R177.12 a month however senior the role.
+          </p>
+
+          <p class="calc-hint" id="ec-note-coida-capped" hidden>
+            Earnings above the COIDA ceiling of
+            <strong id="ec-out-coida-ceiling">R668 000</strong> a year are
+            excluded from the assessment, so the COIDA cost stops rising there
+            too.
+          </p>
+
+          <p class="calc-threshold" id="ec-note-sdl-exempt" hidden>
+            Your total payroll is below
+            <strong id="ec-out-sdl-limit">R500 000</strong>, so you are exempt
+            from the Skills Development Levy and it shows as nil. Watch that
+            line: the exemption is tested on the <em>whole</em> payroll, so the
+            hire that takes you over it makes the levy payable on everybody,
+            not just on them.
+          </p>
+
+          <p class="calc-hint" id="ec-note-sdl-assumed" hidden>
+            The Skills Development Levy is charged here because no total
+            payroll was given. If your annual payroll is under
+            <strong>R500 000</strong> you are exempt &mdash; enter it above to
+            see that.
+          </p>
+        </div>
+
+        <p class="visually-hidden" id="ec-live" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <noscript>
+      <p class="calc-noscript">
+        This calculator needs JavaScript. The payroll levy rates are published
+        on <a class="text-link" href="/resources/tax-rates-2026-2027">our {{tax_year}} tax rates page</a>,
+        and our <a class="text-link" href="/resources/payroll-compliance-guide">payroll compliance guide</a>
+        explains what each one is.
+      </p>
+    </noscript>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="container">
+    <div class="prose reveal">
+      <h2>Three charges, three different shapes</h2>
+      <p>
+        The statutory add-ons to a salary do not scale the same way, which is
+        why a flat "add 10%" rule of thumb misleads at both ends.
+      </p>
+      <p>
+        <strong>Employer UIF</strong> is 1% but capped on monthly earnings. On
+        a R10 000 salary it is a real R100 a month; on a R60 000 salary it is
+        still R177.12. As a proportion it shrinks to almost nothing at senior
+        level.
+      </p>
+      <p>
+        <strong>The Skills Development Levy</strong> is 1% with no ceiling at
+        all, but the whole business is exempt while its annual payroll stays
+        under R500 000. That produces a genuine cliff: the hire that takes you
+        past the threshold makes the levy payable on your entire payroll, not
+        just on the new person. A business at R490 000 of payroll adding a
+        R60 000 role does not pick up R600 of levy &mdash; it picks up R5 500.
+      </p>
+      <p>
+        <strong>COIDA</strong> is an annual assessment, not a monthly
+        deduction, and the rate depends entirely on what your business does.
+        Office-based work sits well under 1%; construction, transport and
+        heavy industry run several times higher. There is also a minimum
+        assessment per employer &mdash; roughly R1 621 for commercial employers
+        &mdash; so a very small payroll pays that floor rather than the
+        calculated amount.
+      </p>
+
+      <h2>Why this matters beyond budgeting</h2>
+      <p>
+        A candidate who names a take-home figure has not told you what the role
+        costs. Between PAYE, UIF, SDL and COIDA, the gap between "what they
+        want in their account" and "what leaves the business" is routinely a
+        third or more. Our
+        <a class="text-link" href="/tools/net-to-gross-calculator">net to gross calculator</a>
+        handles the first half of that; this handles the second.
+      </p>
+
+      <h2>What this doesn't cover</h2>
+      <ul>
+        <li>The <strong>COIDA minimum assessment</strong>, which is an employer-level floor rather than a per-employee amount.</li>
+        <li><strong>Bargaining council levies</strong> and industry-specific funds, which apply in construction, motor, road freight, hospitality and others and can be substantial.</li>
+        <li>Leave provisions, recruitment cost, equipment, training, and the employer's share of any fringe benefit &mdash; all real costs of a hire that are not statutory charges.</li>
+        <li>The <strong>employment tax incentive</strong>, which can reduce PAYE for qualifying young employees and would lower your net cost.</li>
+      </ul>
+      <p>
+        We run payroll for businesses from one employee to a hundred, including
+        the EMP201 and EMP501 submissions and the annual Return of Earnings.
+        <a class="text-link" href="/contact">Get in touch</a> if you would like
+        us to cost a role properly, incentives and all.
+      </p>
+      <p class="note-line">
+        Related: <a class="text-link" href="/tools/net-to-gross-calculator">net to gross calculator</a> &middot;
+        <a class="text-link" href="/resources/payroll-compliance-guide">payroll compliance guide</a> &middot;
+        <a class="text-link" href="/services/payroll">how we help with payroll</a>
+      </p>
+    </div>
+  </div>
+</section>

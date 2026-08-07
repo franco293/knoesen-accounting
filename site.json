@@ -185,6 +185,10 @@
         {
           "label": "SARS Penalties & Interest",
           "href": "/tools/sars-penalty-calculator"
+        },
+        {
+          "label": "Employer Cost to Company",
+          "href": "/tools/employer-cost-calculator"
         }
       ]
     },
