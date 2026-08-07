@@ -346,6 +346,8 @@ def rate_table(name: str) -> list[str]:
         return year_options()
     if name == "year_options_company":
         return year_options(requires="company")
+    if name == "year_options_interest":
+        return year_options(requires="sars_interest")
     ind = "individual"
     if name == "individual_brackets":
         return bracket_rows(resolve(f"{ind}.brackets"), "taxable income")
@@ -414,9 +416,11 @@ def write_tax_rates_js() -> None:
         strip_comments({
             "current": RATES["current"],
             "years": RATES["years"],
-            # Statutory fees that are not tax and do not move with the tax
-            # year — CIPC annual returns — but which a calculator still needs.
+            # Statutory amounts that are not tax and do not move with the tax
+            # year — CIPC annual return fees, and the Tax Administration Act
+            # penalty table — but which a calculator still needs.
             "cipc": RATES.get("cipc", {}),
+            "sars_penalties": RATES.get("sars_penalties", {}),
         }),
         separators=(",", ":"),
         ensure_ascii=False,

@@ -181,6 +181,10 @@
         {
           "label": "CIPC Annual Return Fees",
           "href": "/tools/cipc-annual-return-calculator"
+        },
+        {
+          "label": "SARS Penalties & Interest",
+          "href": "/tools/sars-penalty-calculator"
         }
       ]
     },

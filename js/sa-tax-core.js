@@ -68,18 +68,36 @@
     return DATA ? Object.keys(DATA.years) : [];
   }
 
-  /* Statutory fees that are not tax and do not move with the tax year. */
+  /* Statutory amounts that are not tax and do not move with the tax year. */
   function cipc() {
     return DATA ? (DATA.cipc || null) : null;
   }
 
+  function sarsPenalties() {
+    return DATA ? (DATA.sars_penalties || null) : null;
+  }
+
   /* Pick the band a value falls into, for any table of {from, to} bands where
-     `to: null` means open-ended. Used by the CIPC fee tables, which are flat
-     amounts per band rather than the cumulative brackets tax uses. */
-  function bandFor(value, bands) {
+     `to: null` means open-ended. For flat amounts per band, as distinct from
+     the cumulative brackets tax uses.
+
+     `inclusive` decides what happens exactly ON a boundary, and the two tables
+     this serves genuinely differ:
+
+       CIPC fees            "less than R1 million" — R1 000 000 is in the NEXT
+                            band up. Exclusive. This is the default.
+
+       s211 penalty table   "R0 – R250 000" — R250 000 is in THAT band, and
+                            R250 001 starts the next. Inclusive.
+
+     Getting this backwards is invisible everywhere except exactly on a
+     boundary, which is precisely where round-number incomes like R250 000 and
+     R1 000 000 sit. Passing the semantics in rather than assuming one keeps
+     both tables honest to their own wording. */
+  function bandFor(value, bands, inclusive) {
     for (var i = 0; i < bands.length; i++) {
       var top = bands[i].to === null ? Infinity : bands[i].to;
-      if (value < top) return bands[i];
+      if (inclusive ? value <= top : value < top) return bands[i];
     }
     return bands[bands.length - 1];
   }
@@ -111,8 +129,20 @@
     return (negative ? "−R" : "R") + parts.join(".");
   }
 
-  function percent(value) {
-    return (value * 100).toFixed(1).replace(/\.0$/, "") + "%";
+  /* One decimal by default, which is right for a derived figure like an
+     effective tax rate — "20.61%" is false precision on a number that moves
+     with every rand of income.
+
+     Pass `dp` where the figure is a STATUTORY rate being quoted rather than
+     computed. The prescribed interest rate is 10.25%, and rendering it as
+     "10.3%" on a page about penalties misquotes the law to save a character.
+     Trailing zeros are trimmed either way, so 27.50 still reads "27.5%". */
+  function percent(value, dp) {
+    var text = (value * 100).toFixed(dp === undefined ? 1 : dp);
+    if (text.indexOf(".") >= 0) {
+      text = text.replace(/0+$/, "").replace(/\.$/, "");
+    }
+    return text + "%";
   }
 
   var MONTHS = ["January", "February", "March", "April", "May", "June", "July",
@@ -283,6 +313,7 @@
     years: years,
     currentYear: currentYear,
     cipc: cipc,
+    sarsPenalties: sarsPenalties,
     bandFor: bandFor,
     yearToSlug: yearToSlug,
     slugToYear: slugToYear,

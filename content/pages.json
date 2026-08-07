@@ -829,6 +829,53 @@
     ]
   },
   {
+    "slug": "tools/sars-penalty-calculator",
+    "file": "tool-sars-penalty.html",
+    "type": "tool",
+    "breadcrumb": "SARS Penalty Calculator",
+    "breadcrumbs": [
+      {
+        "name": "Calculators",
+        "slug": "tools"
+      }
+    ],
+    "title": "SARS Penalty & Interest Calculator | Outstanding Returns",
+    "description": "Estimate SARS administrative penalties on outstanding returns, plus the 10% late payment penalty and interest. Free, and nothing you type leaves your browser.",
+    "h1": "SARS penalty &amp; interest calculator",
+    "eyebrow": "Free Calculator",
+    "lead": "What outstanding returns and late payments are actually costing you — the monthly administrative penalty, the late payment penalty, and interest.",
+    "changefreq": "monthly",
+    "priority": "0.9",
+    "updated": "2026-08-06",
+    "scripts": [
+      "tax-rates.js",
+      "sa-tax-core.js",
+      "sars-penalty-calculator.js"
+    ],
+    "faq": [
+      {
+        "q": "How much is the SARS penalty for not submitting a tax return?",
+        "a": "It is a fixed monthly amount set by your preceding year's taxable income, from R250 a month where taxable income is R250 000 or less, up to R16 000 a month above R50 million. An assessed loss falls in the lowest band regardless of its size. The penalty is charged for each outstanding return, for every month or part month it remains outstanding."
+      },
+      {
+        "q": "How long does the SARS admin penalty keep running?",
+        "a": "It recurs for up to 35 months where SARS holds your current address and can deliver the assessment, or 47 months from the date of non-compliance where it does not. The penalty stops the month the outstanding return is filed, which is the only thing that halts it."
+      },
+      {
+        "q": "Do I get an admin penalty even if I owe no tax?",
+        "a": "Yes. The administrative non-compliance penalty is not a percentage of tax owed — it is a fixed amount for failing to file. A nil return that is three years late still attracts roughly R9 000 at the lowest band."
+      },
+      {
+        "q": "What is the penalty for paying SARS late?",
+        "a": "Ten per cent of the amount not paid on time, plus interest at the prescribed rate on the outstanding balance. The 10% applies across PAYE, VAT and provisional tax. Interest is calculated on daily balances and compounded monthly."
+      },
+      {
+        "q": "Can SARS admin penalties be cancelled?",
+        "a": "They can be disputed through a Request for Remission, and SARS may remit a penalty where there were exceptional circumstances or where it was a first infringement. It is a genuine avenue, but it works considerably better once the outstanding returns have actually been filed."
+      }
+    ]
+  },
+  {
     "slug": "privacy-policy",
     "file": "privacy-policy.html",
     "type": "page",

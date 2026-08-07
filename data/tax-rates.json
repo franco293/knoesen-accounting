@@ -7,6 +7,28 @@
 
   "_partial_years": "A year may carry only the sections a calculator needs. 2025/26 has `individual`, `payroll` and `vat` — every figure in it was checked against sars.gov.za and the Budget guide — and deliberately omits SBC, turnover tax, transfer duty, CGT, estate duty and the rest, because nothing on the site uses those for a past year and publishing unverified figures is worse than publishing none. Fill a section in only when you have read it off a primary source. build.py validates whatever is present and skips what is absent.",
 
+  "_sars_penalties_comment": "Administrative non-compliance penalties under section 211 of the Tax Administration Act. Fixed rand amounts, unchanged since the regime began, so they do not move with the tax year and sit outside `years`. SARS's own pages publish only the range (R250 to R16 000) and the 35-month cap, not the table; the bands here are transcribed from SAIPA's Centre of Tax Excellence admin penalty guide, which reproduces the statutory table, and the endpoints and cap agree with what SARS publishes.",
+
+  "sars_penalties": {
+    "_admin_comment": "Charged PER OUTSTANDING RETURN, per month or part of a month, and the band is set by the taxable income of the PRECEDING year — not the year the return relates to. An assessed loss is treated as the lowest band regardless of its size.",
+    "_bounds_comment": "Bands are INCLUSIVE of their upper figure: the table reads 'R0 – R250 000' then 'R250 001 – R500 000', so R250 000 exactly attracts R250 and R250 001 attracts R500. This is the opposite of the CIPC table above, which is worded 'less than'. Calculators must pass inclusive=true to bandFor for this table.",
+    "admin_penalty_bands": [
+      { "from": 0,        "to": 250000,   "penalty": 250 },
+      { "from": 250000,   "to": 500000,   "penalty": 500 },
+      { "from": 500000,   "to": 1000000,  "penalty": 1000 },
+      { "from": 1000000,  "to": 5000000,  "penalty": 2000 },
+      { "from": 5000000,  "to": 10000000, "penalty": 4000 },
+      { "from": 10000000, "to": 50000000, "penalty": 8000 },
+      { "from": 50000000, "to": null,     "penalty": 16000 }
+    ],
+    "assessed_loss_penalty": 250,
+    "max_months_with_address": 35,
+    "_max_months_comment": "35 months where SARS holds the taxpayer's current address and can deliver the assessment; 47 months from the date of non-compliance where it does not.",
+    "max_months_without_address": 47,
+    "late_payment_penalty_rate": 0.10,
+    "_late_payment_comment": "10% of the amount unpaid — paragraph 6 of the Fourth Schedule for PAYE, section 39 of the VAT Act for VAT, and paragraph 27 of the Fourth Schedule for provisional tax. A single rate across the three, which is why one figure covers them."
+  },
+
   "_cipc_comment": "CIPC annual return fees are set by regulation — table CR 2B of the Companies Regulations 2011 and Schedule 1 of the Close Corporation Administrative Regulations — and do not move with the tax year, so they sit outside `years`. Transcribed from CIPC's own Annual Returns FAQ (v5.0) and Information Guide (v1.4), which publish identical tables.",
 
   "cipc": {
