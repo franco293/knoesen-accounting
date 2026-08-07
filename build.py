@@ -884,9 +884,16 @@ def hero_for(page: dict) -> str:
         # so format it by hand.
         stamp_day = date.fromisoformat(updated)
         pretty = f"{stamp_day.day} {stamp_day.strftime('%B %Y')}"
+        # Which primary sources this page was actually checked against. Most
+        # guides are tax and so default to SARS and Treasury, but not all of
+        # them are — the CIPC reinstatement guide is checked against CIPC, and
+        # a stamp claiming otherwise is a false statement about provenance on a
+        # site whose whole argument is that its figures are properly sourced.
+        # Override per page with "sources" in pages.json.
+        sources = page.get("sources", "SARS and National Treasury")
         stamp = (
             f'<p class="page-stamp">Last reviewed <time datetime="{updated}">{pretty}</time>'
-            " against SARS and National Treasury sources.</p>"
+            f" against {esc(sources)} sources.</p>"
         )
     return f"""<section class="page-hero">
         <div class="container">

@@ -497,6 +497,54 @@
     ]
   },
   {
+    "slug": "resources/cipc-reinstatement",
+    "file": "guide-cipc-reinstatement.html",
+    "type": "article",
+    "breadcrumb": "CIPC Reinstatement",
+    "breadcrumbs": [
+      {
+        "name": "Resources",
+        "slug": "resources"
+      }
+    ],
+    "eyebrow": "Company Secretarial",
+    "title": "Deregistered by CIPC? How to Reinstate a Company (CoR40.5)",
+    "description": "How to reinstate a company or close corporation deregistered by CIPC: the CoR40.5 process on e-Services, the evidence rule, court orders and what it costs.",
+    "h1": "Deregistered by CIPC: how to get your company back",
+    "lead": "Deregistration is not paperwork &mdash; the company stops existing and its assets fall to the state. Here is the route back, as CIPC now actually runs it.",
+    "priority": "0.8",
+    "changefreq": "yearly",
+    "published": "2026-08-06",
+    "updated": "2026-08-06",
+    "faq": [
+      {
+        "q": "Can a deregistered company be reinstated?",
+        "a": "Yes, by filing Form CoR40.5 through CIPC e-Services, but only if the company or close corporation was in business or had other economic value at the time of final deregistration. If it had already stopped trading and held nothing of value, reinstatement is not available and CIPC's own guidance is to register a new company instead, which costs R175."
+      },
+      {
+        "q": "What happens to a company's assets when it is deregistered?",
+        "a": "They fall to the state as bona vacantia — ownerless property — until the company is reinstated. Reinstatement operates retrospectively, so the company is treated as having existed throughout, which is why it matters for property, contracts and anything else that happened while it was off the register."
+      },
+      {
+        "q": "Do I still need proof the company was trading?",
+        "a": "You no longer submit it with the application, following Practice Note 1 of 2022, but the requirement itself remains. CIPC states the evidence must be retained and that it may request it at any time under Companies Regulation 168. If you cannot produce it, CIPC may withdraw both the reinstatement and the annual returns filed after it."
+      },
+      {
+        "q": "When do I need a court order to reinstate a company?",
+        "a": "When a creditor or another outside party wants the company reinstated in order to enforce a liability against it. The order must do more than reinstate the company: it must also mandate the company to comply with its Companies Act obligations, including outstanding annual returns, the beneficial ownership declaration and financial statements. If it does not, CIPC places the company straight back into deregistration after implementing the order."
+      },
+      {
+        "q": "How much does it cost to reinstate a company with CIPC?",
+        "a": "The reinstatement application is R200. The larger cost is usually the outstanding annual returns, which must all be filed before the company's status changes to in business — one for every year missed, each charged at the late fee, with a further penalty per lodgment for close corporations."
+      },
+      {
+        "q": "Is the company back in business once the CoR40.5 is processed?",
+        "a": "No. The status only changes once every outstanding annual return, the latest beneficial ownership declaration and the annual financial statements or financial accountability supplement have all been filed. Amendments such as a director or address change can only be made after that point."
+      }
+    ],
+    "sources": "CIPC"
+  },
+  {
     "slug": "tools",
     "file": "tools.html",
     "type": "page",

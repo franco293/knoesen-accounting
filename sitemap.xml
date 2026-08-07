@@ -109,6 +109,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://knoesen-accounting.co.za/resources/cipc-reinstatement</loc>
+    <lastmod>2026-08-06</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://knoesen-accounting.co.za/tools</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
