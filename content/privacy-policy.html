@@ -2,7 +2,7 @@
         <div class="container">
           <div class="policy reveal">
             
-            <p class="policy-updated">Last updated: 2 August 2026 · Applies from this date until replaced</p>
+            <p class="policy-updated">Last updated: {{policy_updated}} · Applies from this date until replaced</p>
             <div class="policy-toc" aria-label="Contents">
               <p>On this page</p>
               <ol>
@@ -66,14 +66,6 @@
                 this notice, including access, correction and objection
                 requests.
               </p>
-              <p>
-                <strong>Before this site goes live:</strong> the practice
-                should confirm its Information Officer is registered with the
-                Information Regulator (a short online process at
-                <a href="https://inforegulator.org.za/" target="_blank" rel="noopener noreferrer">inforegulator.org.za</a>)
-                and add the resulting registration reference here.
-              </p>
-
               <h2 id="what-we-collect">3. Information we collect</h2>
               <h3>Through this website</h3>
               <p>We collect personal information only when you give it to us directly, by:</p>
@@ -82,14 +74,18 @@
                 <li>Submitting the contact form, if enabled — typically your name, email address, phone number and the content of your message; and</li>
                 <li>Loading the embedded Google Map, which shares your IP address with Google (only happens if you click "Load Map" — see <a href="#third-parties">Sharing &amp; third parties</a>).</li>
               </ul>
+              <!-- feature:cloudflare-analytics -->
               <p>
                 We use <strong>Cloudflare Web Analytics</strong> to see which
                 pages are read and roughly where visitors come from. It sets no
                 cookies, does not fingerprint your device, and does not follow
                 you to other websites — it records a page view, a referrer and
-                a coarse country, and nothing that identifies you. We use no
-                advertising trackers and no other analytics.
+                a coarse country, and nothing that identifies you.<!-- nofeature:tracking -->
+                We use no advertising trackers and no other analytics.<!-- /nofeature:tracking --><!-- feature:tracking -->
+                We also use the optional cookies described in
+                <a href="#cookies">section 7</a>, and only if you allow them.<!-- /feature:tracking -->
               </p>
+              <!-- /feature:cloudflare-analytics -->
               <p>
                 Please don't submit your ID number, tax reference number,
                 banking details, or other sensitive information through the
@@ -151,9 +147,18 @@
               <ul>
                 <li><strong>Regulators and revenue authorities</strong> — SARS, CIPC and the Department of Labour, as required to deliver tax, statutory and payroll services;</li>
                 <li><strong>Software used to deliver our services</strong> — accounting and payroll platforms used to prepare your records, statements and payslips;</li>
-                <li><strong>Google Maps</strong> — only if you click "Load Map" in the Contact section, at which point Google receives your IP address and standard device/browser information to display the embed;</li>
+                <li><strong>Google Maps</strong> — only if you click "Load Map" on the <a href="/areas-we-serve">Areas We Serve</a> page, at which point Google receives your IP address and standard device/browser information to display the embed;</li>
                 <li><strong>Web3Forms</strong> — if the contact form is active, your submission is relayed through Web3Forms' service to deliver it to our inbox. If you'd rather avoid this, use the phone, WhatsApp or email links instead; and</li>
                 <li><strong>Cloudflare</strong> — Cloudflare serves this website and provides its analytics. Loading any page necessarily involves Cloudflare receiving your IP address, as it would with any hosting provider. Cloudflare Web Analytics uses no cookies and builds no profile of you.</li>
+                <!-- feature:tracking-ga4 -->
+                <li><strong>Google Analytics</strong> — only if you accept analytics cookies. Google receives your IP address (anonymised), the pages you view and basic device information, and uses it to produce the visit statistics we see;</li>
+                <!-- /feature:tracking-ga4 -->
+                <!-- feature:tracking-google-ads -->
+                <li><strong>Google Ads</strong> — only if you accept marketing cookies. Google receives your visit and any conversion event, so we can tell which adverts work and show adverts to people who have visited before;</li>
+                <!-- /feature:tracking-google-ads -->
+                <!-- feature:tracking-meta-pixel -->
+                <li><strong>Meta Platforms</strong> — only if you accept marketing cookies. Meta receives your visit through its Pixel, which lets us measure adverts and show them to people who have visited before;</li>
+                <!-- /feature:tracking-meta-pixel -->
               </ul>
               <p>
                 Some of these providers may process information on servers
@@ -166,6 +171,7 @@
               </p>
 
               <h2 id="cookies">7. Cookies &amp; this website</h2>
+              <!-- nofeature:tracking -->
               <p>
                 This website sets no cookies of its own — no tracking cookies,
                 no advertising cookies, and none needed to read it. That is
@@ -184,6 +190,86 @@
                 can block either using your browser's privacy settings without
                 affecting your ability to read the site.
               </p>
+              <!-- /nofeature:tracking -->
+              <!-- feature:tracking -->
+              <p>
+                Reading this website sets nothing on your device. Fonts, styles
+                and images are all served from this domain, so a page contacts
+                nobody but Cloudflare, who serve it. Everything below is
+                optional, off until you switch it on, and the site works
+                identically either way.
+              </p>
+              <p>
+                When you first arrive we ask which optional cookies you are
+                willing to accept. Nothing optional is set before you answer,
+                and closing the banner without answering is treated as a
+                refusal — not as agreement. Your answer is remembered for six
+                months, after which we ask again.
+              </p>
+              <h3>The cookie we set to remember your answer</h3>
+              <p>
+                One cookie, <code>ka_consent</code>, records what you chose. It
+                holds nothing but your choices — no identifier, no profile — and
+                it is strictly necessary in the sense that without it we could
+                not honour a refusal, so it is set whichever way you answer. It
+                expires after six months.
+              </p>
+              <h3>What you can switch on</h3>
+              <!-- feature:tracking-analytics -->
+              <p>
+                <strong>Analytics.</strong> Tells us which pages are read and
+                which are ignored, so we know what to improve. It is never used
+                to advertise to you.
+                <!-- feature:tracking-ga4 -->
+                This uses <strong>Google Analytics</strong>, which sets cookies
+                (<code>_ga</code> and <code>_ga_*</code>, expiring after two
+                years) to tell one visit apart from the next. We have IP
+                anonymisation switched on. Google processes this information on
+                servers outside South Africa — see the cross-border note in
+                <a href="#third-parties">section 6</a>.
+                <!-- /feature:tracking-ga4 -->
+              </p>
+              <!-- /feature:tracking-analytics -->
+              <!-- feature:tracking-marketing -->
+              <p>
+                <strong>Marketing.</strong> Measures whether an advert brought
+                you here, and lets those platforms show you our adverts on other
+                websites.
+                <!-- feature:tracking-google-ads -->
+                This uses <strong>Google Ads</strong> conversion and remarketing
+                tags.
+                <!-- /feature:tracking-google-ads -->
+                <!-- feature:tracking-meta-pixel -->
+                This uses the <strong>Meta (Facebook) Pixel</strong>, which
+                reports your visit to Meta and lets us show adverts to people
+                who have been here before.
+                <!-- /feature:tracking-meta-pixel -->
+                These providers process the information on servers outside South
+                Africa — see the cross-border note in
+                <a href="#third-parties">section 6</a>.
+              </p>
+              <!-- /feature:tracking-marketing -->
+              <h3>Changing your mind</h3>
+              <p>
+                You can change or withdraw your answer at any time using the
+                <strong>Cookie settings</strong> link at the foot of every page.
+                Withdrawing consent stops any further collection and clears the
+                cookies those tools had set on your device. It cannot undo what
+                was already collected and sent while consent was in place, which
+                is what POPIA section 11(2)(b) provides. You can also clear or
+                block cookies in your browser's privacy settings without
+                affecting your ability to read the site.
+              </p>
+              <p>
+                Two things sit outside these toggles, and both are disclosed in
+                <a href="#third-parties">section 6</a>:
+                <strong>Cloudflare Web Analytics</strong>, which records a page
+                view with no cookie and no identifier for you at all, and
+                <strong>Google Maps</strong>, which loads only when you click
+                "Load Map" and may then set its own cookies — that click is the
+                consent, which is why there is no toggle for it.
+              </p>
+              <!-- /feature:tracking -->
 
               <h2 id="security">8. How we protect it</h2>
               <p>

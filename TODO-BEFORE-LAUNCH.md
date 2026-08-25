@@ -92,6 +92,35 @@ losing enquiries.
 
 Until then, every enquiry has to come by phone, WhatsApp or email.
 
+## 3b. Turn analytics on, when you want it
+
+The consent layer is built and tested but no tracking tag is configured, so
+right now there is deliberately **no cookie banner** — the site sets nothing
+that anyone could consent to, and the privacy notice says exactly that.
+
+Cloudflare Web Analytics is already running and already answers a lot: page
+views, referrers, top pages and Core Web Vitals, without cookies and without a
+banner. Check that before deciding you need more.
+
+To add Google Analytics (or Google Ads, or the Meta Pixel):
+
+1. Put the ID in `site.json` → `analytics` (`ga4_measurement_id` is the
+   `G-XXXXXXXXXX` from your GA4 property)
+2. Bump `site.json` → `legal.privacy_policy_updated` to today
+3. `python build.py --check`
+
+That one change brings up the cookie banner, the matching consent toggle, the
+CSP origins that tag needs, and the paragraph in the privacy notice that
+discloses it. `--check` fails if any of those four disagree, including if you
+forget step 2. Nothing loads before the visitor accepts.
+
+**A word of caution.** Once a banner exists, roughly a third of visitors say no
+and their visits stop appearing in GA — so GA will show fewer visits than
+Cloudflare does. That is consent working, not a bug. And a banner is a small
+tax on every first visit to a site whose whole selling point is that it does not
+mess visitors around. Worth being sure the extra detail is detail you will act
+on.
+
 ## 4. The facts I could not verify
 
 Add whichever of these you can confirm. Each is in `site.json`, and each is

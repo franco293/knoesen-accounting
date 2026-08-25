@@ -2663,6 +2663,7 @@ body {
 @media print {
   .site-header,
   .sticky-contact,
+  .consent,
   .notice-band,
   .cta-band,
   .breadcrumbs,
@@ -3007,4 +3008,130 @@ body {
   font-size: 0.92rem;
   color: var(--green-800);
   margin-bottom: 1.75rem;
+}
+
+/* ---- Cookie consent -------------------------------------------------------
+   Only ever in the DOM when a tracking tag is configured — build.py omits the
+   markup entirely otherwise, so these rules usually match nothing.
+
+   It sits above .sticky-contact (z-index 90) and hides that bar while open,
+   rather than trying to stack two fixed bars at the bottom of a phone screen
+   and getting the arithmetic wrong on every device that is not the one it was
+   tested on.
+
+   Accept and Reject share one button style on purpose. A prominent Accept
+   beside a faint Reject is how consent stops being freely given, and consent
+   that is not freely given is not consent. */
+.consent {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 95;
+  background: var(--green-900);
+  color: var(--paper);
+  border-top: 1px solid rgba(176, 138, 70, 0.35);
+  box-shadow: 0 -10px 30px rgba(11, 20, 15, 0.35);
+  padding: 1.25rem var(--gutter) calc(1.25rem + env(safe-area-inset-bottom));
+}
+.consent[hidden] {
+  display: none;
+}
+body.consent-open .sticky-contact {
+  display: none;
+}
+.consent-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+}
+.consent-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  margin: 0 0 0.4rem;
+  color: var(--brass-light);
+}
+.consent-title:focus-visible {
+  outline: 3px solid var(--brass-light);
+  outline-offset: 4px;
+}
+.consent-text {
+  font-size: var(--fs-small);
+  line-height: 1.6;
+  max-width: 62ch;
+  margin: 0 0 1rem;
+  color: rgba(245, 241, 230, 0.88);
+}
+.consent-text a {
+  color: var(--brass-light);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.consent-options {
+  display: grid;
+  gap: 0.7rem;
+  margin: 0 0 1.1rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(176, 138, 70, 0.28);
+  border-radius: var(--radius);
+  background: rgba(245, 241, 230, 0.04);
+}
+.consent-options[hidden] {
+  display: none;
+}
+.consent-option {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.7rem;
+  align-items: start;
+  font-size: var(--fs-small);
+  line-height: 1.55;
+  color: rgba(245, 241, 230, 0.88);
+  cursor: pointer;
+}
+.consent-option input {
+  width: 1.05rem;
+  height: 1.05rem;
+  margin-top: 0.2rem;
+  accent-color: var(--brass);
+  cursor: pointer;
+}
+.consent-option input:focus-visible {
+  outline: 3px solid var(--brass-light);
+  outline-offset: 2px;
+}
+.consent-option strong {
+  display: block;
+  color: var(--paper);
+}
+.consent-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+.consent-actions .btn {
+  cursor: pointer;
+}
+.consent-actions .btn-outline {
+  color: var(--paper);
+}
+.consent-actions .btn[hidden] {
+  display: none;
+}
+
+/* The footer control that reopens the panel. It is a <button> because it acts
+   on this page rather than going anywhere, but it sits in a column of links and
+   has to read as one. */
+.footer-consent-btn {
+  display: block;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  font-size: 0.92rem;
+  padding: 0.45rem 0;
+  color: rgba(245, 241, 230, 0.78);
+  text-align: left;
+  cursor: pointer;
+}
+.footer-consent-btn:hover {
+  color: var(--brass-light);
 }

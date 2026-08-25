@@ -51,6 +51,14 @@ css/styles.css         Hand-maintained. "The Ledger" design system, and the
                        @font-face block for the self-hosted fonts.
 js/main.js             Hand-maintained. Mobile nav, map consent gate,
                        contact form. Loaded on every page.
+js/consent.js          Hand-maintained. Cookie consent: stores the answer,
+                       shows the banner, and gates every tracking tag. Knows
+                       nothing about any vendor. Only shipped when a tag is
+                       configured in site.json.
+js/tags.js             ← generated from site.json -> analytics. The tracking
+                       tags, each waiting on its consent category. Do not edit.
+_headers               ← generated. The CSP is assembled from which tags are
+                       configured, so it cannot drift. Do not edit.
 js/tax-rates.js        ← generated from data/tax-rates.json. Do not edit.
 js/*-calculator.js     Per-page only. Listed in pages.json under `scripts`,
                        so the 22 pages without a calculator never fetch them.
@@ -147,6 +155,38 @@ and `/tools/*` to `/resources` so old links and indexed results do not 404.
 To bring them back: set `features.calculators` to `true`, run
 `python build.py --check`, then delete the calculator block at the bottom of
 `.assetsignore` and the two `/tools` rules at the bottom of `_redirects`.
+
+### Tracking tags and cookie consent
+
+`site.json` → `analytics` holds one slot per tracking tag. **A blank ID means
+that tag does not exist**: no script, no CSP origin, no consent category, no
+paragraph in the privacy notice. Every slot is blank today, which is why the
+site has no cookie banner — there is nothing to consent to, and section 7 of
+the privacy notice says so.
+
+Paste an ID in, bump `legal.privacy_policy_updated`, run `python build.py`, and
+four things appear together:
+
+| | Comes from |
+|---|---|
+| The tag itself, behind its consent category | `js/tags.js` — generated |
+| The origins it needs in the CSP | `_headers` — generated |
+| Its toggle in the cookie banner | the banner markup, generated per category |
+| Its disclosure in the privacy notice | `<!-- feature:tracking-* -->` blocks |
+
+`python build.py --check` fails if those four ever disagree — a configured tag
+whose CSP origins are missing, an origin left allowed for a tag you removed, or
+a privacy notice still carrying its old review date after you switched a tag on.
+
+**Nothing loads before consent.** `js/consent.js` is vendor-neutral: it stores
+the answer in a first-party `ka_consent` cookie (six months, so consent expires
+and gets asked again) and exposes `KAConsent.onGrant(category, fn)`. The
+generated `js/tags.js` is the only file that knows a vendor exists, and it can
+only reach one through that API. Google Consent Mode v2 is set to denied before
+any Google script can load. Refusing or withdrawing a category clears the
+cookies that category already set.
+
+`_headers` is generated. Do not hand-edit it — change `site.json` and rebuild.
 
 ---
 

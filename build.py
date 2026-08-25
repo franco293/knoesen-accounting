@@ -76,9 +76,20 @@ BUILD_DATE = date.today().isoformat()
 # whole section comes back exactly as it was.
 FEATURES = SITE.get("features", {})
 
+# Flags nobody writes by hand: they are worked out further down from what is
+# actually configured — chiefly which tracking tags have an ID. Kept separate
+# from FEATURES so that a derived flag can never be silently overridden by a
+# stray key in site.json, and so the build report only lists the flags a human
+# really did switch off. Populated in the "Analytics & consent" section below;
+# empty until then, which is fine because nothing reads a derived flag before
+# that point.
+DERIVED_FEATURES: dict[str, bool] = {}
+
 
 def feature_on(name: str) -> bool:
     """Unknown flags default to on — a feature has to be switched off on purpose."""
+    if name in DERIVED_FEATURES:
+        return DERIVED_FEATURES[name]
     return bool(FEATURES.get(name, True))
 
 
@@ -106,10 +117,506 @@ NOFEATURE_RE = re.compile(
 
 
 def apply_features(markup: str) -> str:
-    """Keep the variant of each flagged block that matches the current flags."""
-    markup = NOFEATURE_RE.sub(lambda m: "" if feature_on(m.group(1)) else m.group(2), markup)
-    markup = FEATURE_RE.sub(lambda m: m.group(2) if feature_on(m.group(1)) else "", markup)
-    return markup
+    """Keep the variant of each flagged block that matches the current flags.
+
+    Runs to a fixed point rather than once, because these blocks nest: a
+    per-vendor disclosure sits inside its category's block, which sits inside
+    the tracking block. re.sub resumes scanning AFTER each replacement, so a
+    nested block inside a block that was kept is copied through untouched by a
+    single pass — which once shipped a paragraph naming Google Ads on a site
+    that had no Google Ads tag. Repeating until the markup stops changing
+    strips every layer.
+
+    An unclosed marker cannot spin here: it simply never matches, and the loop
+    settles. The bound only trips on absurd nesting, which is worth failing on.
+    """
+    for _ in range(10):
+        before = markup
+        markup = NOFEATURE_RE.sub(lambda m: "" if feature_on(m.group(1)) else m.group(2), markup)
+        markup = FEATURE_RE.sub(lambda m: m.group(2) if feature_on(m.group(1)) else "", markup)
+        if markup == before:
+            return markup
+    raise SystemExit("build: feature blocks nested more than 10 deep — check for a stray marker")
+
+
+# --------------------------------------------------------------------------
+#  Analytics & consent
+# --------------------------------------------------------------------------
+#
+# The rule this whole section exists to enforce: a tracking tag, the CSP origins
+# it needs, the consent toggle that gates it, and the privacy-notice paragraph
+# that discloses it either ALL exist or NONE of them do. They are derived from
+# one place — `site.json -> analytics` — so they cannot drift apart.
+#
+# With every ID blank there is no cookie banner, no consent cookie and no
+# consent script: nothing is set that anyone could consent to, and the privacy
+# notice says exactly that. Paste an ID in and the banner, the category toggle,
+# the CSP origins and the disclosure paragraph all appear on the next build.
+#
+# Nothing here fires a tag on its own. js/consent.js stores the visitor's answer
+# and js/tags.js (generated below) waits for the matching category to be granted
+# before it puts a single third-party <script> in the page.
+ANALYTICS = SITE.get("analytics", {})
+LEGAL = SITE.get("legal", {})
+
+# The day the "this website sets no cookies of its own" wording in
+# content/privacy-policy.html was written. Switching a tracker on replaces that
+# wording, so the notice's own "last updated" date has to move past this date —
+# otherwise the page shows new text under an old review date. --check enforces
+# it, because a stale date on a privacy notice is the kind of detail a regulator
+# notices and a visitor cannot verify.
+POLICY_BASE_DATE = "2026-08-25"
+
+CATEGORIES = {
+    "analytics": {
+        "label": "Analytics",
+        "blurb": "Counts visits and shows which pages people actually read, so we know what to improve. Never used to advertise to you.",
+    },
+    "marketing": {
+        "label": "Marketing",
+        "blurb": "Measures whether an advert brought you here, and lets those platforms show you our adverts on other sites.",
+    },
+}
+
+# One entry per tag we are prepared to run. `id_key` is the site.json field that
+# switches it on; `flag` is the feature flag its privacy-notice paragraph is
+# wrapped in; `csp` is every origin it needs, which is what keeps _headers
+# honest — see write_headers(). `prefix` is a cheap sanity check on the ID
+# itself, so a mistyped or pasted-in-the-wrong-slot ID fails the build instead
+# of silently loading nothing.
+VENDORS = [
+    {
+        "id_key": "ga4_measurement_id",
+        "cookies": ["_ga", "_ga_*", "_gid", "_gat*"],
+        "label": "Google Analytics 4",
+        "category": "analytics",
+        "flag": "tracking-ga4",
+        "prefix": "G-",
+        "csp": {
+            "script-src": ["https://www.googletagmanager.com"],
+            "img-src": ["https://www.google-analytics.com", "https://*.google-analytics.com"],
+            "connect-src": [
+                "https://www.google-analytics.com",
+                "https://*.google-analytics.com",
+                "https://*.analytics.google.com",
+                "https://*.googletagmanager.com",
+            ],
+        },
+        "loader": (
+            '  KAConsent.onGrant("analytics", function () {\n'
+            "    loadScript(\"https://www.googletagmanager.com/gtag/js?id=__ID__\");\n"
+            '    gtag("js", new Date());\n'
+            '    gtag("config", "__ID__", { anonymize_ip: true });\n'
+            "  });\n"
+        ),
+    },
+    {
+        "id_key": "google_ads_id",
+        "cookies": ["_gcl_*", "_gac_*"],
+        "label": "Google Ads",
+        "category": "marketing",
+        "flag": "tracking-google-ads",
+        "prefix": "AW-",
+        "csp": {
+            "script-src": [
+                "https://www.googletagmanager.com",
+                "https://www.googleadservices.com",
+                "https://googleads.g.doubleclick.net",
+            ],
+            "img-src": [
+                "https://googleads.g.doubleclick.net",
+                "https://www.google.com",
+                "https://www.google.co.za",
+            ],
+            "connect-src": ["https://www.google.com", "https://*.googletagmanager.com"],
+            "frame-src": ["https://td.doubleclick.net", "https://bid.g.doubleclick.net"],
+        },
+        "loader": (
+            '  KAConsent.onGrant("marketing", function () {\n'
+            "    loadScript(\"https://www.googletagmanager.com/gtag/js?id=__ID__\");\n"
+            '    gtag("js", new Date());\n'
+            '    gtag("config", "__ID__");\n'
+            "  });\n"
+        ),
+    },
+    {
+        "id_key": "meta_pixel_id",
+        "cookies": ["_fbp", "_fbc"],
+        "label": "Meta (Facebook) Pixel",
+        "category": "marketing",
+        "flag": "tracking-meta-pixel",
+        "prefix": "",
+        "csp": {
+            "script-src": ["https://connect.facebook.net"],
+            "img-src": ["https://www.facebook.com"],
+            "connect-src": ["https://www.facebook.com"],
+        },
+        "loader": (
+            '  KAConsent.onGrant("marketing", function () {\n'
+            "    window.fbq = window.fbq || function () { (window.fbq.q = window.fbq.q || []).push(arguments); };\n"
+            "    loadScript(\"https://connect.facebook.net/en_US/fbevents.js\");\n"
+            '    window.fbq("init", "__ID__");\n'
+            '    window.fbq("track", "PageView");\n'
+            "  });\n"
+        ),
+    },
+]
+
+
+def vendor_id(vendor: dict) -> str:
+    return str(ANALYTICS.get(vendor["id_key"], "") or "").strip()
+
+
+ACTIVE_VENDORS = [vendor for vendor in VENDORS if vendor_id(vendor)]
+ACTIVE_CATEGORIES = [
+    name for name in CATEGORIES
+    if any(vendor["category"] == name for vendor in ACTIVE_VENDORS)
+]
+CF_ANALYTICS = bool(ANALYTICS.get("cloudflare_web_analytics", True))
+TRACKING_ON = bool(ACTIVE_VENDORS)
+
+# These drive the privacy notice. `tracking` swaps section 7 between the
+# no-cookies wording and the consent wording; the per-vendor flags reveal one
+# disclosure paragraph and one cookie-table row each.
+DERIVED_FEATURES["tracking"] = TRACKING_ON
+DERIVED_FEATURES["cloudflare-analytics"] = CF_ANALYTICS
+for _vendor in VENDORS:
+    DERIVED_FEATURES[_vendor["flag"]] = bool(vendor_id(_vendor))
+for _category in CATEGORIES:
+    DERIVED_FEATURES["tracking-" + _category] = _category in ACTIVE_CATEGORIES
+
+
+def consent_markup() -> str:
+    """The cookie banner — or nothing at all, which is the normal case.
+
+    Rendered into the HTML rather than injected by JavaScript, so there is no
+    flash of a banner on a page whose visitor answered months ago, and no layout
+    shift. It ships `hidden`; js/consent.js reveals it only when there is no
+    stored answer. That also means a visitor with JavaScript off never sees it —
+    correct, because with JavaScript off not one tag can load either.
+
+    Accept and Reject carry equal visual weight on purpose. Regulators treat a
+    prominent Accept beside a buried Reject as consent that was not freely
+    given, which makes it no consent at all.
+    """
+    if not TRACKING_ON:
+        return ""
+
+    options = "".join(
+        f"""
+          <label class="consent-option">
+            <input type="checkbox" data-consent-category="{name}" />
+            <span>
+              <strong>{esc(CATEGORIES[name]['label'])}</strong>
+              {esc(CATEGORIES[name]['blurb'])}
+            </span>
+          </label>"""
+        for name in ACTIVE_CATEGORIES
+    )
+
+    return f"""
+    <div class="consent" id="consent" role="dialog" aria-modal="false"
+         aria-labelledby="consent-title" aria-describedby="consent-text" hidden>
+      <div class="consent-inner">
+        <!-- tabindex so consent.js can move focus here when the panel is
+             reopened from the footer; without it a keyboard user activates
+             "Cookie settings" and focus stays at the bottom of the page. -->
+        <h2 class="consent-title" id="consent-title" tabindex="-1">Cookies on this site</h2>
+        <p class="consent-text" id="consent-text">
+          We would like to set optional cookies to understand how this site is
+          used, so we can improve it. They are off unless you switch them on,
+          and the site works exactly the same either way. Full detail in our
+          <a href="/privacy-policy#cookies">Privacy Policy</a>.
+        </p>
+        <div class="consent-options" id="consent-options" hidden>{options}
+        </div>
+        <div class="consent-actions">
+          <button type="button" class="btn btn-primary" data-consent-action="accept">Accept all</button>
+          <button type="button" class="btn btn-primary" data-consent-action="reject">Reject all</button>
+          <button type="button" class="btn btn-outline" data-consent-action="choose">Choose</button>
+          <button type="button" class="btn btn-primary" data-consent-action="save" hidden>Save choices</button>
+        </div>
+      </div>
+    </div>"""
+
+
+def consent_footer_link() -> str:
+    """Lets a visitor change their mind. POPIA s11(2)(b) — consent may be
+    withdrawn at any time — so the only honest banner is one you can reopen."""
+    if not TRACKING_ON:
+        return ""
+    return (
+        '\n              <button type="button" class="footer-consent-btn" '
+        'data-consent-action="open">Cookie settings</button>'
+    )
+
+
+def write_tag_loaders() -> None:
+    """Generate js/tags.js: the configured tags, each waiting on its category.
+
+    Generated rather than hand-written so that the file contains exactly the
+    tags that are switched on — no commented-out vendor waiting to be
+    uncommented by accident, and no ID left behind when one is removed.
+
+    The Consent Mode block matters more than it looks. Google's tags assume
+    consent unless told otherwise, so the defaults have to be denied BEFORE
+    gtag.js is fetched. Setting them here, at parse time, guarantees that: the
+    Google script itself cannot load until a category is granted, which happens
+    strictly later.
+    """
+    target = ROOT / "js" / "tags.js"
+    if not TRACKING_ON:
+        # Nothing to load. Leaving a stale generated file on disk would ship an
+        # unreferenced script that still names an ID that is no longer in use.
+        if target.exists():
+            target.unlink()
+            print("  removed js/tags.js (no tracking tags configured)")
+        return
+
+    google = [v for v in ACTIVE_VENDORS if v["id_key"] in ("ga4_measurement_id", "google_ads_id")]
+    consent_mode = ""
+    if google:
+        consent_mode = (
+            "  /* Google Consent Mode v2. Denied by default, before any Google\n"
+            "     script exists on the page; KAConsent sends the update. */\n"
+            "  window.dataLayer = window.dataLayer || [];\n"
+            "  window.gtag = function () { window.dataLayer.push(arguments); };\n"
+            '  gtag("consent", "default", {\n'
+            '    ad_storage: "denied",\n'
+            '    ad_user_data: "denied",\n'
+            '    ad_personalization: "denied",\n'
+            '    analytics_storage: "denied",\n'
+            '    personalization_storage: "denied",\n'
+            '    functionality_storage: "granted",\n'
+            '    security_storage: "granted",\n'
+            "    wait_for_update: 500\n"
+            "  });\n\n"
+            '  KAConsent.onChange(function (consent) {\n'
+            '    gtag("consent", "update", {\n'
+            '      analytics_storage: consent.analytics ? "granted" : "denied",\n'
+            '      ad_storage: consent.marketing ? "granted" : "denied",\n'
+            '      ad_user_data: consent.marketing ? "granted" : "denied",\n'
+            '      ad_personalization: consent.marketing ? "granted" : "denied"\n'
+            "    });\n"
+            "  });\n\n"
+        )
+
+    # Telling consent.js which cookies belong to which category is what lets a
+    # withdrawal actually clear them. Stopping collection but leaving the
+    # identifiers sitting on the device is not really honouring a withdrawal.
+    forget = "".join(
+        '  KAConsent.forget("%s", %s);\n' % (vendor["category"], json.dumps(vendor["cookies"]))
+        for vendor in ACTIVE_VENDORS
+        if vendor.get("cookies")
+    )
+
+    loaders = "\n".join(
+        "  /* " + vendor["label"] + " */\n"
+        + vendor["loader"].replace("__ID__", vendor_id(vendor))
+        for vendor in ACTIVE_VENDORS
+    )
+    if forget:
+        loaders = "  /* Cookies to clear if a category is refused or withdrawn. */\n" + forget + "\n" + loaders
+
+    write(
+        target,
+        "/* GENERATED by build.py from site.json -> analytics — do not edit.\n"
+        "   Add or remove a tracking ID there and rebuild; the CSP in _headers,\n"
+        "   the consent categories and the privacy notice all follow from the\n"
+        "   same source and are checked against each other by --check. */\n"
+        "(function () {\n"
+        '  "use strict";\n\n'
+        "  function loadScript(src) {\n"
+        '    var s = document.createElement("script");\n'
+        "    s.async = true;\n"
+        "    s.src = src;\n"
+        "    document.head.appendChild(s);\n"
+        "  }\n\n"
+        + consent_mode
+        + loaders
+        + "})();\n",
+    )
+    print(f"  wrote js/tags.js ({len(ACTIVE_VENDORS)} tag{'s' if len(ACTIVE_VENDORS) != 1 else ''})")
+
+
+# Directive order is the order they appear in the header. Kept explicit so the
+# generated CSP reads the same way every build and diffs stay legible.
+CSP_BASE = {
+    "default-src": ["'self'"],
+    "script-src": ["'self'"],
+    "style-src": ["'self'"],
+    "font-src": ["'self'"],
+    "img-src": ["'self'", "data:"],
+    "connect-src": ["'self'", "https://api.web3forms.com"],
+    "frame-src": ["https://www.google.com"],
+    "manifest-src": ["'self'"],
+    "object-src": ["'none'"],
+    "base-uri": ["'self'"],
+    "form-action": ["'self'", "https://api.web3forms.com"],
+    "frame-ancestors": ["'self'"],
+}
+
+
+def csp_value() -> str:
+    """Build the Content-Security-Policy from what is actually switched on.
+
+    A CSP is only worth having if it is tight, and it only stays tight if
+    nobody has to remember to edit it. Every origin below is here because some
+    configured feature needs it; switch that feature off and the origin goes
+    with it. --check fails the build if an origin is present for a vendor that
+    is not configured, which is how a permissive leftover gets caught.
+    """
+    directives = {name: list(values) for name, values in CSP_BASE.items()}
+
+    if CF_ANALYTICS:
+        directives["script-src"].append("https://static.cloudflareinsights.com")
+        directives["connect-src"].append("https://cloudflareinsights.com")
+
+    for vendor in ACTIVE_VENDORS:
+        for directive, origins in vendor["csp"].items():
+            for origin in origins:
+                if origin not in directives[directive]:
+                    directives[directive].append(origin)
+
+    rendered = "; ".join(f"{name} {' '.join(values)}" for name, values in directives.items())
+    return rendered + "; upgrade-insecure-requests"
+
+
+def write_headers() -> None:
+    """Generate _headers, because the CSP inside it is derived, not authored."""
+    write(
+        ROOT / "_headers",
+        f"""# GENERATED by build.py — do not edit. The Content-Security-Policy below is
+# assembled from site.json: which tracking tags have an ID, and whether
+# Cloudflare Web Analytics is on. Change those, run `python build.py`, and the
+# policy follows. Editing this file by hand is overwritten on the next build.
+#
+# Cloudflare Web Analytics is enabled on this zone, so Cloudflare injects its
+# beacon from static.cloudflareinsights.com into every response. `script-src
+# 'self'` used to block it, which meant the console logged a CSP violation on
+# every page load and the practice collected no traffic data at all — the
+# analytics looked switched on in the dashboard and was silently dead.
+#
+# The beacon is cookieless and collects no personal information, which is why
+# it needs no cookie banner. It IS a third-party request, so it is disclosed in
+# content/privacy-policy.html. If you ever turn Web Analytics OFF in the
+# Cloudflare dashboard, set analytics.cloudflare_web_analytics to false in
+# site.json and remove that disclosure — do not leave an origin allowed that
+# nothing uses.
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), camera=(), microphone=(), payment=(), usb=(), interest-cohort=(), browsing-topics=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  X-Permitted-Cross-Domain-Policies: none
+  Content-Security-Policy: {csp_value()}
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/css/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/js/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# sitemap.xml and robots.txt are regenerated by build.py on every build, so a
+# long cache here would only delay crawlers seeing new pages.
+/sitemap.xml
+  Cache-Control: public, max-age=3600
+
+/robots.txt
+  Cache-Control: public, max-age=3600
+""",
+    )
+
+
+def check_analytics() -> list[str]:
+    """Prove the tag, its CSP origins, its consent toggle and its disclosure
+    are all present together — or all absent together."""
+    problems = []
+
+    for vendor in VENDORS:
+        value = vendor_id(vendor)
+        if value and vendor["prefix"] and not value.startswith(vendor["prefix"]):
+            problems.append(
+                f"  analytics.{vendor['id_key']} is {value!r}, which does not look like a "
+                f"{vendor['label']} ID (expected it to start with {vendor['prefix']!r}). "
+                "Check it is in the right slot."
+            )
+
+    # Compared per directive, not against the CSP as one string. An origin can
+    # be legitimate in one directive and a leak in another: https://www.google.com
+    # belongs in frame-src for the Maps embed whether or not Google Ads is
+    # switched on, but has no business in img-src unless it is.
+    csp = {
+        part.split(" ")[0]: set(part.split(" ")[1:])
+        for part in csp_value().split("; ")
+        if " " in part
+    }
+
+    def allowed_without(vendor: dict) -> set:
+        """(directive, origin) pairs something OTHER than `vendor` justifies."""
+        pairs = {
+            (directive, origin)
+            for directive, origins in CSP_BASE.items()
+            for origin in origins
+        }
+        if CF_ANALYTICS:
+            pairs.add(("script-src", "https://static.cloudflareinsights.com"))
+            pairs.add(("connect-src", "https://cloudflareinsights.com"))
+        for other in ACTIVE_VENDORS:
+            if other is vendor:
+                continue
+            for directive, origins in other["csp"].items():
+                pairs.update((directive, origin) for origin in origins)
+        return pairs
+
+    for vendor in VENDORS:
+        wanted = {
+            (directive, origin)
+            for directive, origins in vendor["csp"].items()
+            for origin in origins
+        }
+        if vendor_id(vendor):
+            missing = sorted(
+                f"{directive} {origin}"
+                for directive, origin in wanted
+                if origin not in csp.get(directive, set())
+            )
+            if missing:
+                problems.append(
+                    f"  {vendor['label']} is configured but the CSP is missing: "
+                    f"{', '.join(missing)}"
+                )
+        else:
+            justified = allowed_without(vendor)
+            leftover = sorted(
+                f"{directive} {origin}"
+                for directive, origin in wanted - justified
+                if origin in csp.get(directive, set())
+            )
+            if leftover:
+                problems.append(
+                    f"  {vendor['label']} is NOT configured but the CSP still allows: "
+                    f"{', '.join(leftover)}"
+                )
+
+    if TRACKING_ON:
+        if not (ROOT / "js" / "consent.js").exists():
+            problems.append("  tracking is configured but js/consent.js is missing")
+        updated = str(LEGAL.get("privacy_policy_updated", ""))
+        if updated <= POLICY_BASE_DATE:
+            problems.append(
+                f"  a tracking tag is switched on, but legal.privacy_policy_updated is "
+                f"{updated or 'unset'!r}. Switching a tag on rewrites section 7 of the "
+                f"privacy notice, so bump that date past {POLICY_BASE_DATE}."
+            )
+
+    return problems
 
 
 def asset_version(relative_path: str) -> str:
@@ -222,6 +729,18 @@ def path_for(slug: str) -> str:
     return "/" if slug == "" else f"/{slug}"
 
 
+def pretty_date(iso: str) -> str:
+    """'2026-08-25' -> '25 August 2026'. Empty in, empty out.
+
+    strftime's day-without-leading-zero flag differs across platforms, so the
+    day is formatted by hand.
+    """
+    if not iso:
+        return ""
+    day = date.fromisoformat(iso)
+    return f"{day.day} {day.strftime('%B %Y')}"
+
+
 def outfile_for(slug: str) -> Path:
     return ROOT / ("index.html" if slug == "" else f"{slug}.html")
 
@@ -272,6 +791,10 @@ TOKENS = {
     "{{tax_year}}": TAXYEAR["label"],
     "{{tax_period}}": TAXYEAR["period"],
     "{{verified_on}}": TAXYEAR["verified_on"],
+    # The privacy notice's own "last updated" date. It lives in site.json rather
+    # than in the prose because switching a tracking tag on rewrites section 7,
+    # and a rewritten notice showing an old review date is worse than no date.
+    "{{policy_updated}}": pretty_date(SITE.get("legal", {}).get("privacy_policy_updated", "")),
     # main.js checks for this exact sentinel and, when it finds it, disables
     # the form and shows the phone/email instead of posting into the void.
     "{{WEB3FORMS_KEY}}": SITE["forms"]["web3forms_key"] or "UNCONFIGURED",
@@ -952,10 +1475,7 @@ def hero_for(page: dict) -> str:
     updated = page.get("updated")
     stamp = ""
     if page.get("type") == "article" and updated:
-        # strftime's day-without-leading-zero flag differs across platforms,
-        # so format it by hand.
-        stamp_day = date.fromisoformat(updated)
-        pretty = f"{stamp_day.day} {stamp_day.strftime('%B %Y')}"
+        pretty = pretty_date(updated)
         # Which primary sources this page was actually checked against. Most
         # guides are tax and so default to SARS and Treasury, but not all of
         # them are — the CIPC reinstatement guide is checked against CIPC, and
@@ -1055,7 +1575,7 @@ def footer_markup() -> str:
             <div class="footer-col">
               <h3 class="footer-label">Legal</h3>
               <a href="/privacy-policy">Privacy Policy (POPIA)</a>
-              <a href="/disclaimer">Disclaimer</a>
+              <a href="/disclaimer">Disclaimer</a>{consent_footer_link()}
               <p class="legal-note">
                 We only ever use your information to provide accounting services
                 and respond to enquiries — never sold, never used for anything
@@ -1148,6 +1668,22 @@ def page_scripts(page: dict) -> str:
     )
 
 
+def consent_scripts() -> str:
+    """consent.js then tags.js, on every page, and only when a tag exists.
+
+    Order is not cosmetic: tags.js registers its loaders through the KAConsent
+    API, so consent.js has to have run first. Neither ships at all while every
+    ID in site.json is blank — a consent script with nothing to consent to is
+    just another script to audit.
+    """
+    if not TRACKING_ON:
+        return ""
+    return (
+        f'    <script src="/js/consent.js?v={asset_version("js/consent.js")}"></script>\n'
+        f'    <script src="/js/tags.js?v={asset_version("js/tags.js")}"></script>\n'
+    )
+
+
 def render(page: dict) -> str:
     body = (CONTENT / page["file"]).read_text(encoding="utf-8")
     # Feature flags first, so a section that is switched off costs nothing
@@ -1179,9 +1715,9 @@ def render(page: dict) -> str:
     </main>
 
     {footer_markup()}
-
+{consent_markup()}
     <script src="/js/main.js?v={JS_VERSION}"></script>
-{page_scripts(page)}  </body>
+{consent_scripts()}{page_scripts(page)}  </body>
 </html>
 """
 
@@ -1379,12 +1915,34 @@ def check_links(written: dict[str, str]) -> list[str]:
     return sorted(set(problems))
 
 
+MARKER_RE = re.compile(r"<!--\s*/?(?:no)?feature:[\w-]+\s*-->")
+
+
+def check_markers(written: dict[str, str]) -> list[str]:
+    """No feature marker may survive into a shipped page.
+
+    A leftover marker means its block was never evaluated, so the page is
+    showing whichever variant happened to be written first — which on the
+    privacy notice means publishing a claim about the site that is not true.
+    """
+    problems = []
+    for slug, markup in written.items():
+        found = sorted(set(MARKER_RE.findall(markup)))
+        if found:
+            problems.append(f"  {path_for(slug) or '/'} still contains {', '.join(found)}")
+    return sorted(problems)
+
+
 def main() -> int:
     # Must run BEFORE the pages render: page_scripts() content-hashes every
     # file it links, so js/tax-rates.js has to be on disk and current or the
     # calculator pages ship a `?v=` for the previous build's data.
     write_tax_rates_js()
     print("  wrote js/tax-rates.js")
+
+    # Same reason: consent_scripts() content-hashes js/tags.js, so it has to be
+    # on disk and current before the first page renders.
+    write_tag_loaders()
 
     written: dict[str, str] = {}
     for page in PAGES:
@@ -1397,8 +1955,10 @@ def main() -> int:
 
     write_sitemap()
     write_robots()
+    write_headers()
     print(f"  wrote sitemap.xml ({sum(1 for p in PAGES if not p.get('noindex'))} URLs)")
     print("  wrote robots.txt")
+    print(f"  wrote _headers ({len(ACTIVE_VENDORS)} tracking origin set(s) in the CSP)")
 
     missing = []
     for label, keys in [
@@ -1413,7 +1973,7 @@ def main() -> int:
             missing.append(label)
 
     print(f"\nBuilt {len(PAGES)} pages for {DOMAIN}")
-    off = [name for name in FEATURES if not name.startswith("_") and not feature_on(name)]
+    off = [name for name in FEATURES if not name.startswith("_") and not FEATURES.get(name)]
     if off:
         print(
             f"\nFeatures switched off in site.json ({', '.join(sorted(off))}) — "
@@ -1444,6 +2004,31 @@ def main() -> int:
             failed = True
         else:
             print("_redirects check passed — all rules are relative URLs.")
+
+        marker_problems = check_markers(written)
+        if marker_problems:
+            print("\nUnresolved feature blocks (the page is showing an unevaluated variant):")
+            print("\n".join(marker_problems))
+            failed = True
+        else:
+            print("Feature block check passed — every flagged block resolved.")
+
+        analytics_problems = check_analytics()
+        if analytics_problems:
+            print("\nTracking, CSP and privacy notice disagree:")
+            print("\n".join(analytics_problems))
+            failed = True
+        elif TRACKING_ON:
+            print(
+                f"Analytics check passed — {len(ACTIVE_VENDORS)} tag"
+                f"{'s' if len(ACTIVE_VENDORS) != 1 else ''} configured, each with its CSP "
+                f"origins, consent category and privacy-notice disclosure."
+            )
+        else:
+            print(
+                "Analytics check passed — no tracking tags configured, so no consent "
+                "banner, no consent cookie and no third-party origins in the CSP."
+            )
 
         tax_problems = check_tax_constants()
         if tax_problems:
