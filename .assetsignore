@@ -25,3 +25,29 @@ build.py
 site.json
 content/
 data/
+
+# ---------------------------------------------------------------------------
+# Calculators — switched OFF (site.json -> features.calculators = false).
+#
+# Nothing links to the tools section any more and build.py no longer writes it,
+# but the HTML it wrote on the last build is still committed here and Workers
+# Assets would happily keep serving it at the old URLs. Ignoring it takes those
+# files out of the deployed output without deleting a line of the source, and
+# `_redirects` sends /tools and /tools/* to /resources instead.
+#
+# To bring the calculators back: set features.calculators to true in site.json,
+# run `python build.py`, delete this block and the two /tools rules in
+# `_redirects`. The pages regenerate exactly as they were.
+tools.html
+tools/
+js/tax-rates.js
+js/sa-tax-core.js
+js/income-tax-calculator.js
+js/bonus-tax-calculator.js
+js/net-to-gross-calculator.js
+js/provisional-tax-calculator.js
+js/small-business-tax-calculator.js
+js/vat-calculator.js
+js/cipc-fee-calculator.js
+js/sars-penalty-calculator.js
+js/employer-cost-calculator.js

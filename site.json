@@ -3,6 +3,10 @@
   "domain": "https://knoesen-accounting.co.za",
   "locale": "en-ZA",
   "og_locale": "en_ZA",
+  "features": {
+    "_comment": "Switches whole sections of the site on and off without deleting what builds them. false means: nav entries and pages tagged with that feature are not rendered and drop out of sitemap.xml, and body markup wrapped in <!-- feature:NAME --> is left out (its <!-- nofeature:NAME --> alternative is used instead). See the Feature flags section at the top of build.py.",
+    "calculators": false
+  },
   "brand": {
     "name": "Knoesen Accounting, Tax & Payroll",
     "short_name": "Knoesen Accounting",
@@ -157,6 +161,7 @@
     {
       "label": "Calculators",
       "href": "/tools",
+      "feature": "calculators",
       "children": [
         {
           "label": "Income Tax & PAYE Calculator",

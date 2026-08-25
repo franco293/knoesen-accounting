@@ -122,11 +122,41 @@ automatically.
 **To change colours or type:** everything is a CSS custom property at the top
 of `css/styles.css` under `:root`.
 
+### Switching a whole section off — feature flags
+
+`site.json` → `features` turns a section of the site on and off without
+deleting anything that builds it. With a flag set to `false`:
+
+- nav entries in `site.json` tagged `"feature": "<name>"` are not rendered, in
+  the header and the mobile menu alike;
+- pages in `content/pages.json` tagged `"feature": "<name>"` are not written,
+  drop out of `sitemap.xml`, and stop counting as valid link targets — so
+  `python build.py --check` fails on any link still pointing at them;
+- body markup wrapped in `<!-- feature:<name> -->…<!-- /feature:<name> -->` is
+  left out, and the `<!-- nofeature:<name> -->…<!-- /nofeature:<name> -->`
+  alternative beside it is used instead, so a sentence reads correctly either
+  way.
+
+**The calculators are currently switched off** (`features.calculators: false`).
+Nothing was deleted: `content/tool-*.html`, the nine `js/*-calculator.js` files
+and every `pages.json` entry are still here, and the HTML from the last build
+they appeared in is still committed. `.assetsignore` keeps that stale HTML and
+the calculator JS out of the deployed output, and `_redirects` sends `/tools`
+and `/tools/*` to `/resources` so old links and indexed results do not 404.
+
+To bring them back: set `features.calculators` to `true`, run
+`python build.py --check`, then delete the calculator block at the bottom of
+`.assetsignore` and the two `/tools` rules at the bottom of `_redirects`.
+
 ---
 
 ## What was done in the latest pass
 
 ### Calculators
+
+> **Not currently live.** The calculators are switched off behind
+> `site.json` → `features.calculators`; see "Switching a whole section off"
+> above. The description below is what ships when the flag is turned back on.
 
 Two free tools, at `/tools/income-tax-calculator` and `/tools/vat-calculator`,
 built on the same verified figures as the rate tables. They are plain

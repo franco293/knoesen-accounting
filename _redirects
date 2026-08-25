@@ -36,3 +36,10 @@
 /tax                   /services/tax                         301
 /payroll               /services/payroll                     301
 /cipc                  /services/company-secretarial         301
+
+# The calculators are switched off (site.json -> features.calculators = false),
+# so /tools and every /tools/* page no longer ship. Anyone arriving on an old
+# link, a bookmark or a still-indexed search result lands on the guides instead
+# of a 404. Remove these two rules when the calculators come back.
+/tools                 /resources                            301
+/tools/*               /resources                            301

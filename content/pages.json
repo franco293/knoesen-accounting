@@ -546,6 +546,7 @@
   },
   {
     "slug": "tools",
+    "feature": "calculators",
     "file": "tools.html",
     "type": "page",
     "breadcrumb": "Calculators",
@@ -560,6 +561,7 @@
   },
   {
     "slug": "tools/income-tax-calculator",
+    "feature": "calculators",
     "file": "tool-income-tax.html",
     "type": "tool",
     "breadcrumb": "Income Tax Calculator",
@@ -608,6 +610,7 @@
   },
   {
     "slug": "tools/vat-calculator",
+    "feature": "calculators",
     "file": "tool-vat.html",
     "type": "tool",
     "breadcrumb": "VAT Calculator",
@@ -651,6 +654,7 @@
   },
   {
     "slug": "tools/bonus-tax-calculator",
+    "feature": "calculators",
     "file": "tool-bonus-tax.html",
     "type": "tool",
     "breadcrumb": "Bonus Tax Calculator",
@@ -694,6 +698,7 @@
   },
   {
     "slug": "tools/net-to-gross-calculator",
+    "feature": "calculators",
     "file": "tool-net-to-gross.html",
     "type": "tool",
     "breadcrumb": "Net to Gross Calculator",
@@ -737,6 +742,7 @@
   },
   {
     "slug": "tools/provisional-tax-calculator",
+    "feature": "calculators",
     "file": "tool-provisional-tax.html",
     "type": "tool",
     "breadcrumb": "Provisional Tax Calculator",
@@ -784,6 +790,7 @@
   },
   {
     "slug": "tools/small-business-tax-calculator",
+    "feature": "calculators",
     "file": "tool-small-business-tax.html",
     "type": "tool",
     "breadcrumb": "Small Business Tax Calculator",
@@ -831,6 +838,7 @@
   },
   {
     "slug": "tools/cipc-annual-return-calculator",
+    "feature": "calculators",
     "file": "tool-cipc-fee.html",
     "type": "tool",
     "breadcrumb": "CIPC Annual Return Fees",
@@ -878,6 +886,7 @@
   },
   {
     "slug": "tools/sars-penalty-calculator",
+    "feature": "calculators",
     "file": "tool-sars-penalty.html",
     "type": "tool",
     "breadcrumb": "SARS Penalty Calculator",
@@ -925,6 +934,7 @@
   },
   {
     "slug": "tools/employer-cost-calculator",
+    "feature": "calculators",
     "file": "tool-employer-cost.html",
     "type": "tool",
     "breadcrumb": "Employer Cost Calculator",
