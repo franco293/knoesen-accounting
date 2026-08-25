@@ -494,6 +494,7 @@
               <h3 class="footer-label">Legal</h3>
               <a href="/privacy-policy">Privacy Policy (POPIA)</a>
               <a href="/disclaimer">Disclaimer</a>
+              <button type="button" class="footer-consent-btn" data-consent-action="open">Cookie settings</button>
               <p class="legal-note">
                 We only ever use your information to provide accounting services
                 and respond to enquiries — never sold, never used for anything
@@ -523,6 +524,38 @@
       <a href="/contact" class="sticky-contact-btn sticky-contact-btn--primary">Enquire</a>
     </nav>
 
+    <div class="consent" id="consent" role="dialog" aria-modal="false"
+         aria-labelledby="consent-title" aria-describedby="consent-text" hidden>
+      <div class="consent-inner">
+        <!-- tabindex so consent.js can move focus here when the panel is
+             reopened from the footer; without it a keyboard user activates
+             "Cookie settings" and focus stays at the bottom of the page. -->
+        <h2 class="consent-title" id="consent-title" tabindex="-1">Cookies on this site</h2>
+        <p class="consent-text" id="consent-text">
+          We would like to set optional cookies to understand how this site is
+          used, so we can improve it. They are off unless you switch them on,
+          and the site works exactly the same either way. Full detail in our
+          <a href="/privacy-policy#cookies">Privacy Policy</a>.
+        </p>
+        <div class="consent-options" id="consent-options" hidden>
+          <label class="consent-option">
+            <input type="checkbox" data-consent-category="analytics" />
+            <span>
+              <strong>Analytics</strong>
+              Counts visits and shows which pages people actually read, so we know what to improve. Never used to advertise to you.
+            </span>
+          </label>
+        </div>
+        <div class="consent-actions">
+          <button type="button" class="btn btn-primary" data-consent-action="accept">Accept all</button>
+          <button type="button" class="btn btn-primary" data-consent-action="reject">Reject all</button>
+          <button type="button" class="btn btn-outline" data-consent-action="choose">Choose</button>
+          <button type="button" class="btn btn-primary" data-consent-action="save" hidden>Save choices</button>
+        </div>
+      </div>
+    </div>
     <script src="/js/main.js?v=5f3dad7351"></script>
+    <script src="/js/consent.js?v=1125196e9f"></script>
+    <script src="/js/tags.js?v=03dc5ca6c5"></script>
   </body>
 </html>

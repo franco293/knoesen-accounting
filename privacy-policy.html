@@ -344,7 +344,8 @@
                 cookies, does not fingerprint your device, and does not follow
                 you to other websites — it records a page view, a referrer and
                 a coarse country, and nothing that identifies you.
-                We use no advertising trackers and no other analytics.
+                We also use the optional cookies described in
+                <a href="#cookies">section 7</a>, and only if you allow them.
               </p>
               
               <p>
@@ -412,6 +413,8 @@
                 <li><strong>Web3Forms</strong> — if the contact form is active, your submission is relayed through Web3Forms' service to deliver it to our inbox. If you'd rather avoid this, use the phone, WhatsApp or email links instead; and</li>
                 <li><strong>Cloudflare</strong> — Cloudflare serves this website and provides its analytics. Loading any page necessarily involves Cloudflare receiving your IP address, as it would with any hosting provider. Cloudflare Web Analytics uses no cookies and builds no profile of you.</li>
 
+                <li><strong>Google Analytics</strong> — only if you accept analytics cookies. Google receives your IP address (anonymised), the pages you view and basic device information, and uses it to produce the visit statistics we see;</li>
+                
 
 
               </ul>
@@ -427,26 +430,69 @@
 
               <h2 id="cookies">7. Cookies &amp; this website</h2>
 
+
               <p>
-                This website sets no cookies of its own — no tracking cookies,
-                no advertising cookies, and none needed to read it. That is
-                also why you have not been shown a cookie banner: there is
-                nothing to consent to. Fonts, styles and images are all served
-                from this domain, so reading a page contacts nobody but us and
-                Cloudflare, who serve it.
+                Reading this website sets nothing on your device. Fonts, styles
+                and images are all served from this domain, so a page contacts
+                nobody but Cloudflare, who serve it. Everything below is
+                optional, off until you switch it on, and the site works
+                identically either way.
               </p>
               <p>
-                Two things reach further, and both are disclosed above:
-                <strong>Cloudflare Web Analytics</strong>, which records a page
-                view without cookies or any identifier for you, and
-                <strong>Google Maps</strong>, which only loads if you click
-                "Load Map" and may then set its own cookies — standard
-                behaviour for their embed, and outside our direct control. You
-                can block either using your browser's privacy settings without
-                affecting your ability to read the site.
+                When you first arrive we ask which optional cookies you are
+                willing to accept. Nothing optional is set before you answer,
+                and closing the banner without answering is treated as a
+                refusal — not as agreement. Your answer is remembered for six
+                months, after which we ask again.
+              </p>
+              <h3>The cookie we set to remember your answer</h3>
+              <p>
+                One cookie, <code>ka_consent</code>, records what you chose. It
+                holds nothing but your choices — no identifier, no profile — and
+                it is strictly necessary in the sense that without it we could
+                not honour a refusal, so it is set whichever way you answer. It
+                expires after six months.
+              </p>
+              <h3>What you can switch on</h3>
+
+              <p>
+                <strong>Analytics.</strong> Tells us which pages are read and
+                which are ignored, so we know what to improve. It is never used
+                to advertise to you.
+
+                This uses <strong>Google Analytics</strong>, which sets cookies
+                (<code>_ga</code> and <code>_ga_*</code>, expiring after two
+                years) to tell one visit apart from the next. It does not store
+                your IP address: the address is used momentarily to work out an
+                approximate location — roughly city and country — and is then
+                discarded. Google processes this information on servers outside
+                South Africa — see the cross-border note in
+                <a href="#third-parties">section 6</a>.
+                
               </p>
               
 
+              <h3>Changing your mind</h3>
+              <p>
+                You can change or withdraw your answer at any time using the
+                <strong>Cookie settings</strong> link at the foot of every page.
+                Withdrawing consent stops any further collection and clears the
+                cookies those tools had set on your device. It cannot undo what
+                was already collected and sent while consent was in place, which
+                is what POPIA section 11(2)(b) provides. You can also clear or
+                block cookies in your browser's privacy settings without
+                affecting your ability to read the site.
+              </p>
+              <p>
+                Two things sit outside these toggles, and both are disclosed in
+                <a href="#third-parties">section 6</a>:
+                <strong>Cloudflare Web Analytics</strong>, which records a page
+                view with no cookie and no identifier for you at all, and
+                <strong>Google Maps</strong>, which loads only when you click
+                "Load Map" and may then set its own cookies — that click is the
+                consent, which is why there is no toggle for it.
+              </p>
+              
 
               <h2 id="security">8. How we protect it</h2>
               <p>
@@ -598,6 +644,7 @@
               <h3 class="footer-label">Legal</h3>
               <a href="/privacy-policy">Privacy Policy (POPIA)</a>
               <a href="/disclaimer">Disclaimer</a>
+              <button type="button" class="footer-consent-btn" data-consent-action="open">Cookie settings</button>
               <p class="legal-note">
                 We only ever use your information to provide accounting services
                 and respond to enquiries — never sold, never used for anything
@@ -627,6 +674,38 @@
       <a href="/contact" class="sticky-contact-btn sticky-contact-btn--primary">Enquire</a>
     </nav>
 
+    <div class="consent" id="consent" role="dialog" aria-modal="false"
+         aria-labelledby="consent-title" aria-describedby="consent-text" hidden>
+      <div class="consent-inner">
+        <!-- tabindex so consent.js can move focus here when the panel is
+             reopened from the footer; without it a keyboard user activates
+             "Cookie settings" and focus stays at the bottom of the page. -->
+        <h2 class="consent-title" id="consent-title" tabindex="-1">Cookies on this site</h2>
+        <p class="consent-text" id="consent-text">
+          We would like to set optional cookies to understand how this site is
+          used, so we can improve it. They are off unless you switch them on,
+          and the site works exactly the same either way. Full detail in our
+          <a href="/privacy-policy#cookies">Privacy Policy</a>.
+        </p>
+        <div class="consent-options" id="consent-options" hidden>
+          <label class="consent-option">
+            <input type="checkbox" data-consent-category="analytics" />
+            <span>
+              <strong>Analytics</strong>
+              Counts visits and shows which pages people actually read, so we know what to improve. Never used to advertise to you.
+            </span>
+          </label>
+        </div>
+        <div class="consent-actions">
+          <button type="button" class="btn btn-primary" data-consent-action="accept">Accept all</button>
+          <button type="button" class="btn btn-primary" data-consent-action="reject">Reject all</button>
+          <button type="button" class="btn btn-outline" data-consent-action="choose">Choose</button>
+          <button type="button" class="btn btn-primary" data-consent-action="save" hidden>Save choices</button>
+        </div>
+      </div>
+    </div>
     <script src="/js/main.js?v=5f3dad7351"></script>
+    <script src="/js/consent.js?v=1125196e9f"></script>
+    <script src="/js/tags.js?v=03dc5ca6c5"></script>
   </body>
 </html>

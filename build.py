@@ -188,6 +188,7 @@ VENDORS = [
     {
         "id_key": "ga4_measurement_id",
         "cookies": ["_ga", "_ga_*", "_gid", "_gat*"],
+        "policy_marker": "Google Analytics",
         "label": "Google Analytics 4",
         "category": "analytics",
         "flag": "tracking-ga4",
@@ -206,13 +207,19 @@ VENDORS = [
             '  KAConsent.onGrant("analytics", function () {\n'
             "    loadScript(\"https://www.googletagmanager.com/gtag/js?id=__ID__\");\n"
             '    gtag("js", new Date());\n'
-            '    gtag("config", "__ID__", { anonymize_ip: true });\n'
+            # No anonymize_ip. It is a Universal Analytics setting that GA4
+            # ignores: GA4 never logs or stores the IP at all, it derives a
+            # coarse location and discards it. Passing it would imply we control
+            # something we do not, and the privacy notice would be describing a
+            # setting that does not exist.
+            '    gtag("config", "__ID__");\n'
             "  });\n"
         ),
     },
     {
         "id_key": "google_ads_id",
         "cookies": ["_gcl_*", "_gac_*"],
+        "policy_marker": "Google Ads",
         "label": "Google Ads",
         "category": "marketing",
         "flag": "tracking-google-ads",
@@ -242,6 +249,7 @@ VENDORS = [
     {
         "id_key": "meta_pixel_id",
         "cookies": ["_fbp", "_fbc"],
+        "policy_marker": "Meta Platforms",
         "label": "Meta (Facebook) Pixel",
         "category": "marketing",
         "flag": "tracking-meta-pixel",
@@ -605,16 +613,56 @@ def check_analytics() -> list[str]:
                     f"{', '.join(leftover)}"
                 )
 
-    if TRACKING_ON:
-        if not (ROOT / "js" / "consent.js").exists():
-            problems.append("  tracking is configured but js/consent.js is missing")
-        updated = str(LEGAL.get("privacy_policy_updated", ""))
-        if updated <= POLICY_BASE_DATE:
+    if TRACKING_ON and not (ROOT / "js" / "consent.js").exists():
+        problems.append("  tracking is configured but js/consent.js is missing")
+
+    updated = str(LEGAL.get("privacy_policy_updated", ""))
+    if updated < POLICY_BASE_DATE:
+        problems.append(
+            f"  legal.privacy_policy_updated is {updated or 'unset'!r}, earlier than the "
+            f"last known review of the notice ({POLICY_BASE_DATE}). A privacy notice's "
+            "date may move forward, never back."
+        )
+
+    # The real guarantee, checked against the page that actually ships rather
+    # than inferred from a date: what the notice SAYS about cookies has to match
+    # what the site DOES. Publishing "this website sets no cookies" over a live
+    # analytics tag is the single worst failure this whole design exists to
+    # prevent, so it is worth asserting on the rendered HTML.
+    policy = ROOT / "privacy-policy.html"
+    if policy.exists():
+        text = policy.read_text(encoding="utf-8")
+        no_cookie_claim = "sets no cookies of its own" in text
+        consent_wording = "ka_consent" in text
+
+        if TRACKING_ON and no_cookie_claim:
             problems.append(
-                f"  a tracking tag is switched on, but legal.privacy_policy_updated is "
-                f"{updated or 'unset'!r}. Switching a tag on rewrites section 7 of the "
-                f"privacy notice, so bump that date past {POLICY_BASE_DATE}."
+                "  a tracking tag is switched on, but the published privacy notice still "
+                "claims the site sets no cookies of its own"
             )
+        if TRACKING_ON and not consent_wording:
+            problems.append(
+                "  a tracking tag is switched on, but the published privacy notice does "
+                "not describe the consent cookie"
+            )
+        if not TRACKING_ON and consent_wording:
+            problems.append(
+                "  no tracking tag is configured, but the published privacy notice "
+                "describes a consent cookie that is never set"
+            )
+
+        for vendor in VENDORS:
+            named = vendor["policy_marker"] in text
+            if vendor_id(vendor) and not named:
+                problems.append(
+                    f"  {vendor['label']} is configured but the published privacy notice "
+                    f"never mentions {vendor['policy_marker']!r}"
+                )
+            if not vendor_id(vendor) and named:
+                problems.append(
+                    f"  the published privacy notice mentions {vendor['policy_marker']!r} "
+                    f"but {vendor['label']} is not configured"
+                )
 
     return problems
 

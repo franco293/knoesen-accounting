@@ -6,7 +6,7 @@
   "analytics": {
     "_comment": "Tracking tags. A blank ID means that tag is NEVER emitted — no script, no CSP origin, no consent category, no policy paragraph. Paste an ID here, bump legal.privacy_policy_updated, run `python build.py --check`, and all four appear together. With every ID blank there is no cookie banner at all, because there is nothing to consent to. cloudflare_web_analytics is cookieless and stores no identifier, so it is disclosed in the privacy notice but not gated behind consent; set it to false if you switch it off in the Cloudflare dashboard.",
     "cloudflare_web_analytics": true,
-    "ga4_measurement_id": "",
+    "ga4_measurement_id": "G-R4QRTNRZKG",
     "google_ads_id": "",
     "meta_pixel_id": ""
   },
