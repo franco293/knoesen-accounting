@@ -10,6 +10,10 @@
     "google_ads_id": "",
     "meta_pixel_id": ""
   },
+  "verification": {
+    "_comment": "Search-engine ownership tokens. Blank means the meta tag is not emitted at all. `google` is ONLY the content= value from Search Console's HTML tag method — paste the token, not the whole <meta> tag; build.py --check rejects a pasted tag. Once Search Console shows the property as verified, leave this in place: removing it un-verifies the property.",
+    "google": "0Puo4IrTi36cqaSlBoVC4B7338Oz3K535-v0syBoTgk"
+  },
   "legal": {
     "_comment": "Bump privacy_policy_updated (YYYY-MM-DD) whenever the privacy notice changes — INCLUDING when you switch a tracker on above, because that rewrites section 7. `python build.py --check` fails if a tracker is configured and this date has not moved past the day the no-tracking wording was written.",
     "privacy_policy_updated": "2026-08-25"

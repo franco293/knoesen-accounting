@@ -542,6 +542,34 @@ def write_headers() -> None:
     )
 
 
+def check_verification() -> list[str]:
+    """Catch the usual site-verification mistake before it ships.
+
+    Search Console hands you a whole `<meta …>` tag and the natural thing to do
+    is paste the lot into the config field. That produces escaped angle brackets
+    inside a content attribute, the tag never matches, and verification fails
+    with nothing obviously wrong on the page — so it is worth failing loudly.
+    """
+    token = str(SITE.get("verification", {}).get("google", "") or "").strip()
+    if not token:
+        return []
+
+    problems = []
+    if "<" in token or "meta name" in token:
+        problems.append(
+            "  verification.google looks like a whole <meta> tag. Paste only the "
+            'content="…" value from Search Console.'
+        )
+    elif '"' in token or " " in token:
+        problems.append(f"  verification.google contains a quote or space: {token!r}")
+    elif len(token) < 20:
+        problems.append(
+            f"  verification.google is only {len(token)} characters — Search Console "
+            "tokens are around 43. Check it was copied in full."
+        )
+    return problems
+
+
 def check_analytics() -> list[str]:
     """Prove the tag, its CSP origins, its consent toggle and its disclosure
     are all present together — or all absent together."""
@@ -1388,12 +1416,23 @@ def head_for(page: dict) -> str:
     robots = page.get("robots", "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1")
     og_type = "article" if page.get("type") == "article" else "website"
 
+    # Search Console only reads this on the URL being verified, but emitting it
+    # site-wide costs ~90 bytes a page and means verification survives whichever
+    # property URL is claimed — and does not break if the home page is ever
+    # restructured. Blank token, no tag: same rule as everything else here.
+    google_token = str(SITE.get("verification", {}).get("google", "") or "").strip()
+    verification = (
+        f'\n    <meta name="google-site-verification" content="{esc(google_token)}" />'
+        if google_token
+        else ""
+    )
+
     return f"""<meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content="{desc}" />
     <meta name="robots" content="{robots}" />
-    <link rel="canonical" href="{url}" />
+    <link rel="canonical" href="{url}" />{verification}
     <meta name="theme-color" content="#1E3B2F" />
     <meta name="color-scheme" content="light" />
     <meta name="author" content="{esc(PRINCIPAL['name'])}" />
@@ -2060,6 +2099,12 @@ def main() -> int:
             failed = True
         else:
             print("Feature block check passed — every flagged block resolved.")
+
+        verification_problems = check_verification()
+        if verification_problems:
+            print("\nSite verification is malformed:")
+            print("\n".join(verification_problems))
+            failed = True
 
         analytics_problems = check_analytics()
         if analytics_problems:
