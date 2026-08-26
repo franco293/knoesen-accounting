@@ -160,9 +160,10 @@ To bring them back: set `features.calculators` to `true`, run
 
 `site.json` → `analytics` holds one slot per tracking tag. **A blank ID means
 that tag does not exist**: no script, no CSP origin, no consent category, no
-paragraph in the privacy notice. Every slot is blank today, which is why the
-site has no cookie banner — there is nothing to consent to, and section 7 of
-the privacy notice says so.
+paragraph in the privacy notice. Google Analytics is configured; Google Ads and
+the Meta Pixel are not, so the banner offers an Analytics toggle and no
+Marketing one. Blank every slot and the banner disappears entirely, because
+there is then nothing to consent to.
 
 Paste an ID in, bump `legal.privacy_policy_updated`, run `python build.py`, and
 four things appear together:
@@ -187,6 +188,25 @@ any Google script can load. Refusing or withdrawing a category clears the
 cookies that category already set.
 
 `_headers` is generated. Do not hand-edit it — change `site.json` and rebuild.
+
+**Conversion events.** `js/main.js` fires `contact_call`, `contact_whatsapp`,
+`contact_email` and `generate_lead` through one delegated listener, each tagged
+with a `where` parameter naming the placement that earned the tap. It calls
+`window.gtag` only if it exists, which it does not until the visitor grants the
+analytics category — so no consent check is needed and nothing breaks if
+analytics is removed.
+
+### Sitemap `lastmod`
+
+`lastmod` is derived, not authored. After every build each page's `<main>`,
+title and description are hashed and compared against `content/lastmod.json`;
+the date moves only when that hash changes. Shared chrome and asset `?v=`
+hashes are excluded, so restyling the site or editing the nav does not mark all
+22 pages as revised — the noise that teaches Google to ignore the signal.
+
+**`content/lastmod.json` must be committed.** It is the build's memory of what
+each page looked like when it was last published. Delete it and every page
+falls back to its editorial `updated` date on the next build.
 
 ---
 

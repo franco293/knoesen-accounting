@@ -38,7 +38,7 @@
     <link rel="preload" href="/assets/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/assets/fonts/fraunces-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/assets/fonts/ibm-plex-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="/css/styles.css?v=d95793a468" />
+    <link rel="stylesheet" href="/css/styles.css?v=d3e1b6b2c8" />
 
     <script type="application/ld+json">
 {
@@ -245,7 +245,7 @@
         <div class="mobile-panel-inner">
           <ul><li><a href="/about">About</a></li><li><a href="/services">Services</a></li><li class="mobile-sub"><a href="/services/accounting">Accounting &amp; Financial Statements</a></li><li class="mobile-sub"><a href="/services/tax">Tax &amp; SARS</a></li><li class="mobile-sub"><a href="/services/payroll">Payroll</a></li><li class="mobile-sub"><a href="/services/company-secretarial">Company Secretarial &amp; CIPC</a></li><li><a href="/resources">Resources</a></li><li class="mobile-sub"><a href="/resources/tax-deadlines-calendar">Tax Deadline Calendar</a></li><li class="mobile-sub"><a href="/resources/sars-filing-season-2026">Filing Season 2026</a></li><li class="mobile-sub"><a href="/resources/tax-rates-2026-2027">Tax Rates 2026/27</a></li><li class="mobile-sub"><a href="/resources/vat-registration-threshold">VAT Registration Threshold</a></li><li class="mobile-sub"><a href="/resources/small-business-tax-guide">Small Business Tax</a></li><li class="mobile-sub"><a href="/resources/payroll-compliance-guide">Payroll Compliance</a></li><li class="mobile-sub"><a href="/resources/independent-contractor-or-employee">Contractor or Employee?</a></li><li class="mobile-sub"><a href="/resources/starting-a-business-in-south-africa">Starting a Business</a></li><li class="mobile-sub"><a href="/resources/cipc-reinstatement">Deregistered by CIPC?</a></li><li><a href="/areas-we-serve">Areas We Serve</a></li><li><a href="/contact">Contact</a></li></ul>
           <div class="container">
-            <a class="nav-phone" href="tel:+27847932990">Call / WhatsApp — +27 (0)84 793 2990</a>
+            <a class="nav-phone" href="tel:+27847932990"><span class="nav-phone-label">Call / WhatsApp — </span>+27 (0)84 793 2990</a>
           </div>
         </div>
       </nav>
@@ -334,78 +334,30 @@
       </div>
     </div>
 
-    <!-- ==== CONTACT FORM ====
-         Activate this by creating a free access key at https://web3forms.com
-         and putting it into site.json under forms.web3forms_key, then running
-         `python build.py`. Until a key is present the form shows a friendly
-         notice with the phone and email instead of silently losing enquiries. -->
+
     <div class="contact-form-card reveal">
       <span class="eyebrow">Prefer To Write?</span>
       <h2>Send a message</h2>
       <p>
-        Fill this in and Lourens will come back to you directly. For
-        anything urgent, calling or WhatsApp is faster.
+        Email is the best way to put something in writing — it reaches
+        Lourens directly, and you keep a copy of what you sent.
       </p>
-
-      <form class="contact-form" id="contact-form" action="https://api.web3forms.com/submit" method="POST">
-        <input type="hidden" name="access_key" value="UNCONFIGURED" />
-        <input type="hidden" name="subject" value="New enquiry from knoesen-accounting.co.za" />
-        <input type="hidden" name="from_name" value="Knoesen Accounting website" />
-        <!-- Honeypot: bots fill every field they can find; people never see this one. -->
-        <div class="form-hp" aria-hidden="true">
-          <label for="hp-website">Leave this field blank</label>
-          <input type="text" id="hp-website" name="website" tabindex="-1" autocomplete="off" />
-        </div>
-
-        <div class="form-field">
-          <label for="cf-name">Name</label>
-          <input type="text" id="cf-name" name="name" autocomplete="name" required />
-        </div>
-        <div class="form-field">
-          <label for="cf-email">Email</label>
-          <input type="email" id="cf-email" name="email" autocomplete="email" required />
-        </div>
-        <div class="form-field">
-          <label for="cf-phone">Phone (optional)</label>
-          <input type="tel" id="cf-phone" name="phone" autocomplete="tel" />
-        </div>
-        <div class="form-field">
-          <label for="cf-topic">What do you need help with?</label>
-          <select id="cf-topic" name="topic">
-            <option value="">Select one…</option>
-            <option>Accounting &amp; financial statements</option>
-            <option>Tax returns &amp; SARS</option>
-            <option>VAT</option>
-            <option>Payroll</option>
-            <option>CIPC &amp; company secretarial</option>
-            <option>Registering a new business</option>
-            <option>Overdue returns / catching up</option>
-            <option>Something else</option>
-          </select>
-        </div>
-        <div class="form-field form-field--full">
-          <label for="cf-message">Message</label>
-          <textarea id="cf-message" name="message" required></textarea>
-        </div>
-
-        <label class="form-consent">
-          <input type="checkbox" id="cf-consent" name="consent" required />
-          <span>
-            I consent to Knoesen Accounting, Tax & Payroll processing the information above, in line
-            with POPIA, solely to respond to this enquiry. See the
-            <a href="/privacy-policy">Privacy Policy</a>. Please don't include
-            your ID number, tax number or banking details in this form.
-          </span>
-        </label>
-
-        <div class="form-actions">
-          <button type="submit" class="btn btn-primary">
-            Send Message<span class="btn-arrow" aria-hidden="true">&rarr;</span>
-          </button>
-        </div>
-        <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
-      </form>
+      <div class="contact-direct">
+        <a class="btn btn-primary" href="mailto:lourens@knoesenacc.co.za?subject=Enquiry%20from%20the%20website">
+          Email Lourens<span class="btn-arrow" aria-hidden="true">&rarr;</span>
+        </a>
+        <a class="btn btn-outline" href="https://wa.me/27847932990" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+        <a class="btn btn-outline" href="tel:+27847932990">+27 (0)84 793 2990</a>
+      </div>
+      <p class="contact-direct-note">
+        Helpful things to include: what your business does, whether it is a
+        company, sole proprietor or trust, and what you need help with. If you
+        are behind on returns, say roughly how far — it is a routine problem and
+        knowing the scale means you get a straight answer first time.
+      </p>
     </div>
+    
+
   </div>
 </section>
 
@@ -528,14 +480,12 @@
     <div class="consent" id="consent" role="dialog" aria-modal="false"
          aria-labelledby="consent-title" aria-describedby="consent-text" hidden>
       <div class="consent-inner">
-        <!-- tabindex so consent.js can move focus here when the panel is
-             reopened from the footer; without it a keyboard user activates
-             "Cookie settings" and focus stays at the bottom of the page. -->
         <h2 class="consent-title" id="consent-title" tabindex="-1">Cookies on this site</h2>
         <p class="consent-text" id="consent-text">
           We would like to set optional cookies to understand how this site is
-          used, so we can improve it. They are off unless you switch them on,
-          and the site works exactly the same either way. Full detail in our
+          used, so we can improve it. They are off unless you switch them
+          on.<span class="consent-detail"> The site works exactly the same
+          either way.</span> Full detail in our
           <a href="/privacy-policy#cookies">Privacy Policy</a>.
         </p>
         <div class="consent-options" id="consent-options" hidden>
@@ -555,7 +505,7 @@
         </div>
       </div>
     </div>
-    <script src="/js/main.js?v=5f3dad7351"></script>
+    <script src="/js/main.js?v=7e557d1a0c"></script>
     <script src="/js/consent.js?v=1125196e9f"></script>
     <script src="/js/tags.js?v=03dc5ca6c5"></script>
   </body>

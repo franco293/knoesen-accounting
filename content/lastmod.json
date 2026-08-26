@@ -1,0 +1,90 @@
+{
+  "": {
+    "date": "2026-08-27",
+    "hash": "9169ba7dc4361aa6"
+  },
+  "404": {
+    "date": "2026-08-27",
+    "hash": "06e275984cb2b5ab"
+  },
+  "about": {
+    "date": "2026-08-27",
+    "hash": "4cad0929af51b311"
+  },
+  "areas-we-serve": {
+    "date": "2026-08-03",
+    "hash": "329c52b14b56c0ba"
+  },
+  "contact": {
+    "date": "2026-08-27",
+    "hash": "bf502802cac8f183"
+  },
+  "disclaimer": {
+    "date": "2026-08-03",
+    "hash": "168a69e4ce723f8d"
+  },
+  "privacy-policy": {
+    "date": "2026-08-03",
+    "hash": "c5d877d4e6bc975e"
+  },
+  "resources": {
+    "date": "2026-08-03",
+    "hash": "8cbf3e81488cc333"
+  },
+  "resources/cipc-reinstatement": {
+    "date": "2026-08-06",
+    "hash": "923b3c04bbcc3ba9"
+  },
+  "resources/independent-contractor-or-employee": {
+    "date": "2026-08-04",
+    "hash": "6824433be3ea9fab"
+  },
+  "resources/payroll-compliance-guide": {
+    "date": "2026-08-03",
+    "hash": "a59697fa3ac9da0e"
+  },
+  "resources/sars-filing-season-2026": {
+    "date": "2026-08-03",
+    "hash": "294fa3c42f05fd20"
+  },
+  "resources/small-business-tax-guide": {
+    "date": "2026-08-03",
+    "hash": "5f46123c5da3cffb"
+  },
+  "resources/starting-a-business-in-south-africa": {
+    "date": "2026-08-03",
+    "hash": "d12a407bd5c9a0e5"
+  },
+  "resources/tax-deadlines-calendar": {
+    "date": "2026-08-03",
+    "hash": "e3f3e72374b4f64c"
+  },
+  "resources/tax-rates-2026-2027": {
+    "date": "2026-08-03",
+    "hash": "f46c4534e48577a5"
+  },
+  "resources/vat-registration-threshold": {
+    "date": "2026-08-03",
+    "hash": "75f622fd4de3816a"
+  },
+  "services": {
+    "date": "2026-08-03",
+    "hash": "b017923921a8cfd2"
+  },
+  "services/accounting": {
+    "date": "2026-08-03",
+    "hash": "22e886cd71390876"
+  },
+  "services/company-secretarial": {
+    "date": "2026-08-03",
+    "hash": "0df91cf0da66fa96"
+  },
+  "services/payroll": {
+    "date": "2026-08-03",
+    "hash": "6e9467fa053b3063"
+  },
+  "services/tax": {
+    "date": "2026-08-03",
+    "hash": "de7f2e6625358893"
+  }
+}

@@ -75,6 +75,30 @@
          and putting it into site.json under forms.web3forms_key, then running
          `python build.py`. Until a key is present the form shows a friendly
          notice with the phone and email instead of silently losing enquiries. -->
+    <!-- nofeature:contact-form -->
+    <div class="contact-form-card reveal">
+      <span class="eyebrow">Prefer To Write?</span>
+      <h2>Send a message</h2>
+      <p>
+        Email is the best way to put something in writing — it reaches
+        {{principal_first}} directly, and you keep a copy of what you sent.
+      </p>
+      <div class="contact-direct">
+        <a class="btn btn-primary" href="mailto:{{email}}?subject=Enquiry%20from%20the%20website">
+          Email {{principal_first}}<span class="btn-arrow" aria-hidden="true">&rarr;</span>
+        </a>
+        <a class="btn btn-outline" href="{{whatsapp}}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+        <a class="btn btn-outline" href="tel:{{tel}}">{{phone}}</a>
+      </div>
+      <p class="contact-direct-note">
+        Helpful things to include: what your business does, whether it is a
+        company, sole proprietor or trust, and what you need help with. If you
+        are behind on returns, say roughly how far — it is a routine problem and
+        knowing the scale means you get a straight answer first time.
+      </p>
+    </div>
+    <!-- /nofeature:contact-form -->
+    <!-- feature:contact-form -->
     <div class="contact-form-card reveal">
       <span class="eyebrow">Prefer To Write?</span>
       <h2>Send a message</h2>
@@ -142,6 +166,7 @@
         <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
       </form>
     </div>
+    <!-- /feature:contact-form -->
   </div>
 </section>
 

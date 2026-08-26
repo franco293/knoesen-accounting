@@ -63,6 +63,47 @@
      pure CSS animation (see .reveal in styles.css) whose resting state is
      visible, so there is nothing to do here and nothing to go wrong. */
 
+  /* Conversion tracking.
+
+     The three things that are actually worth measuring on this site are a
+     phone tap, a WhatsApp tap and a sent enquiry. Sessions and bounce rate say
+     nothing about whether the site is earning work.
+
+     Done with one delegated listener rather than by tagging every link, because
+     the phone number appears in five places (hero, sticky bar, mobile menu,
+     footer, contact page) and a per-link attribute would be forgotten in one of
+     them within a month. `where` records which placement earned the tap, which
+     is the part that tells you what to change.
+
+     window.gtag only exists once js/tags.js has loaded a Google tag, and that
+     only happens after the visitor grants the analytics category. No consent,
+     no gtag, no event — this needs no consent check of its own, and it stays
+     inert if analytics is ever removed entirely. */
+  function placement(el) {
+    var region = el.closest(
+      ".sticky-contact, .mobile-panel, .site-footer, .page-hero, .contact-form-card, .contact-direct, .cta-band, .site-header"
+    );
+    if (!region) return "body";
+    return (region.className.split(" ")[0] || "body").replace(/^(site|page)-/, "");
+  }
+
+  function track(name, el) {
+    if (typeof window.gtag !== "function") return;
+    window.gtag("event", name, {
+      where: placement(el),
+      page_path: location.pathname
+    });
+  }
+
+  document.addEventListener("click", function (event) {
+    var link = event.target.closest && event.target.closest("a[href]");
+    if (!link) return;
+    var href = link.getAttribute("href") || "";
+    if (href.indexOf("tel:") === 0) track("contact_call", link);
+    else if (href.indexOf("wa.me") !== -1) track("contact_whatsapp", link);
+    else if (href.indexOf("mailto:") === 0) track("contact_email", link);
+  });
+
   /* Footer year */
   var yearEl = document.getElementById("year");
   if (yearEl) { yearEl.textContent = new Date().getFullYear(); }
@@ -130,6 +171,9 @@
         .then(function (data) {
           if (data && data.success) {
             showStatus("Thanks — your message is on its way. We'll reply soon.", "success");
+            /* GA4's recommended name for this. Fired on confirmed delivery, not
+               on submit, so a failed send is never counted as a lead. */
+            track("generate_lead", form);
             form.reset();
           } else {
             showStatus("Something went wrong sending that. Please try calling, WhatsApp or email instead.", "error");

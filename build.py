@@ -25,6 +25,7 @@ Requires Python 3.8+. No third-party packages.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import sys
@@ -114,6 +115,37 @@ FEATURE_RE = re.compile(
 NOFEATURE_RE = re.compile(
     r"[ \t]*<!--\s*nofeature:([\w-]+)\s*-->(.*?)<!--\s*/nofeature:\1\s*-->", re.S
 )
+
+
+COMMENT_RE = re.compile(r"[ \t]*<!--(?!\[if)(?:(?!-->).)*?-->[ \t]*\n?", re.S)
+PROTECTED_RE = re.compile(r"<(script|pre|textarea)\b.*?</\1>", re.S | re.I)
+
+
+def strip_comments(markup: str) -> str:
+    """Remove HTML comments from what ships.
+
+    Comments in content/ are notes between maintainers — activation
+    instructions, reasoning, and in one case "A real face converts
+    substantially better than initials", which is a candid remark about the
+    business sitting in the public source of the About page. Useful in the
+    repository, not something to publish.
+
+    <script>, <pre> and <textarea> are lifted out first: JSON-LD and code
+    samples can legitimately contain the character sequences this matches, and
+    a regex that does not know the difference will happily corrupt them.
+    Downlevel-revealed conditional comments (<!--[if …) are left alone.
+    """
+    protected = []
+
+    def stash(match):
+        protected.append(match.group(0))
+        return f"@@PROTECTED{len(protected) - 1}@@"
+
+    markup = PROTECTED_RE.sub(stash, markup)
+    markup = COMMENT_RE.sub("", markup)
+    for index, original in enumerate(protected):
+        markup = markup.replace(f"@@PROTECTED{index}@@", original)
+    return markup
 
 
 def apply_features(markup: str) -> str:
@@ -287,6 +319,11 @@ TRACKING_ON = bool(ACTIVE_VENDORS)
 # no-cookies wording and the consent wording; the per-vendor flags reveal one
 # disclosure paragraph and one cookie-table row each.
 DERIVED_FEATURES["tracking"] = TRACKING_ON
+# The contact form only exists when it can actually deliver. Without a key it
+# used to render complete and convincing, then refuse the enquiry AFTER the
+# visitor had typed it — the worst possible ordering. Now the page offers the
+# routes that do work instead, and the form reappears the moment a key is set.
+DERIVED_FEATURES["contact-form"] = bool(str(SITE["forms"].get("web3forms_key", "") or "").strip())
 DERIVED_FEATURES["cloudflare-analytics"] = CF_ANALYTICS
 for _vendor in VENDORS:
     DERIVED_FEATURES[_vendor["flag"]] = bool(vendor_id(_vendor))
@@ -306,6 +343,10 @@ def consent_markup() -> str:
     Accept and Reject carry equal visual weight on purpose. Regulators treat a
     prominent Accept beside a buried Reject as consent that was not freely
     given, which makes it no consent at all.
+
+    The title carries tabindex="-1" so consent.js can move focus to it when the
+    panel is reopened from the footer; without it a keyboard user activates
+    "Cookie settings" and focus stays stranded at the bottom of the page.
     """
     if not TRACKING_ON:
         return ""
@@ -326,14 +367,12 @@ def consent_markup() -> str:
     <div class="consent" id="consent" role="dialog" aria-modal="false"
          aria-labelledby="consent-title" aria-describedby="consent-text" hidden>
       <div class="consent-inner">
-        <!-- tabindex so consent.js can move focus here when the panel is
-             reopened from the footer; without it a keyboard user activates
-             "Cookie settings" and focus stays at the bottom of the page. -->
         <h2 class="consent-title" id="consent-title" tabindex="-1">Cookies on this site</h2>
         <p class="consent-text" id="consent-text">
           We would like to set optional cookies to understand how this site is
-          used, so we can improve it. They are off unless you switch them on,
-          and the site works exactly the same either way. Full detail in our
+          used, so we can improve it. They are off unless you switch them
+          on.<span class="consent-detail"> The site works exactly the same
+          either way.</span> Full detail in our
           <a href="/privacy-policy#cookies">Privacy Policy</a>.
         </p>
         <div class="consent-options" id="consent-options" hidden>{options}
@@ -714,7 +753,6 @@ def asset_version(relative_path: str) -> str:
     path = ROOT / relative_path
     if not path.exists():
         return BUILD_DATE
-    import hashlib
 
     return hashlib.sha256(path.read_bytes()).hexdigest()[:10]
 
@@ -1531,7 +1569,7 @@ def header_for(page: dict) -> str:
         <div class="mobile-panel-inner">
           <ul>{mobile_nav_markup()}</ul>
           <div class="container">
-            <a class="nav-phone" href="tel:{CONTACT['phone_e164']}">Call / WhatsApp — {esc(CONTACT['phone_display'])}</a>
+            <a class="nav-phone" href="tel:{CONTACT['phone_e164']}"><span class="nav-phone-label">Call / WhatsApp — </span>{esc(CONTACT['phone_display'])}</a>
           </div>
         </div>
       </nav>
@@ -1777,6 +1815,9 @@ def render(page: dict) -> str:
     # downstream — no rate tables expanded into it, no tokens resolved, and
     # nothing left for check_links() to trip over.
     body = apply_features(body)
+    # Comments go after the feature blocks, which are themselves comments and
+    # have to be read before anything strips them.
+    body = strip_comments(body)
     # Rate tables next: they emit markup containing no tokens, but detokenise
     # must still run over the surrounding prose.
     body = expand_rate_tables(body)
@@ -1809,7 +1850,87 @@ def render(page: dict) -> str:
 """
 
 
-def write_sitemap() -> None:
+LASTMOD_STATE = CONTENT / "lastmod.json"
+
+# Asset cache-busting hashes change on every CSS or JS edit, and a restyle is
+# not a content change. Stripped before hashing so a stylesheet tweak does not
+# claim all 22 pages were revised.
+VERSION_QUERY_RE = re.compile(r"\?v=[0-9a-f]+")
+MAIN_RE = re.compile(r"<main\b.*?</main>", re.S)
+TITLE_RE = re.compile(r"<title>(.*?)</title>", re.S)
+DESC_RE = re.compile(r'<meta name="description" content="(.*?)"', re.S)
+
+
+def content_fingerprint(markup: str) -> str:
+    """Hash of this page's own content — not the chrome wrapped around it.
+
+    Hashing the whole document looks obviously right and is wrong: the header,
+    nav and footer are identical on all 22 pages, so adding a span to the phone
+    link in the mobile menu marks every page as revised on the same day. That
+    is precisely the noise that teaches Google to stop trusting lastmod.
+
+    What a reader would notice changing is the <main> region, the title and the
+    meta description. Everything else — chrome, asset hashes, JSON-LD that is
+    regenerated identically — is excluded.
+    """
+    main = MAIN_RE.search(markup)
+    title = TITLE_RE.search(markup)
+    desc = DESC_RE.search(markup)
+    payload = "\n".join([
+        title.group(1).strip() if title else "",
+        desc.group(1).strip() if desc else "",
+        VERSION_QUERY_RE.sub("", main.group(0)) if main else markup,
+    ])
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:16]
+
+
+def resolve_lastmods(written: dict[str, str]) -> dict[str, str]:
+    """Work out, per page, the date its content genuinely last changed.
+
+    `lastmod` used to come from the hand-maintained `updated` field in
+    pages.json, which nobody bumps when a page body or a feature flag changes
+    the rendered text — so the privacy notice was rewritten twice in one day
+    while the sitemap still advertised a three-week-old date. Google uses
+    lastmod for crawl scheduling only while it proves trustworthy, and demotes
+    the signal site-wide when it does not, so a wrong date is worse than none.
+
+    The date now moves when, and only when, the rendered page actually changes.
+    State lives in content/lastmod.json, which must be committed — it is the
+    build's memory of what each page looked like last time.
+
+    Pages seen for the first time inherit their editorial `updated` date rather
+    than today's, so a first run does not claim the whole site changed at once.
+    """
+    try:
+        state = json.loads(LASTMOD_STATE.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        state = {}
+
+    resolved, updated_state, changed = {}, {}, []
+    for slug, markup in written.items():
+        fingerprint = content_fingerprint(markup)
+        previous = state.get(slug)
+        if previous and previous.get("hash") == fingerprint:
+            date_str = previous.get("date", BUILD_DATE)
+        elif previous:
+            date_str = BUILD_DATE
+            changed.append(path_for(slug) or "/")
+        else:
+            # First sighting: trust the editorial date over "today".
+            page = next((p for p in PAGES if p["slug"] == slug), {})
+            date_str = page.get("updated", BUILD_DATE)
+        resolved[slug] = date_str
+        updated_state[slug] = {"hash": fingerprint, "date": date_str}
+
+    write(LASTMOD_STATE, json.dumps(updated_state, indent=2, sort_keys=True) + "\n")
+    if changed:
+        print(f"  content changed on {len(changed)} page(s); sitemap lastmod set to {BUILD_DATE}")
+        for path in sorted(changed)[:8]:
+            print(f"    · {path}")
+    return resolved
+
+
+def write_sitemap(lastmods: dict[str, str]) -> None:
     entries = []
     for page in PAGES:
         if page.get("noindex"):
@@ -1817,7 +1938,7 @@ def write_sitemap() -> None:
         entries.append(
             "  <url>\n"
             f"    <loc>{url_for(page['slug'])}</loc>\n"
-            f"    <lastmod>{page.get('updated', BUILD_DATE)}</lastmod>\n"
+            f"    <lastmod>{lastmods.get(page['slug'], page.get('updated', BUILD_DATE))}</lastmod>\n"
             f"    <changefreq>{page.get('changefreq', 'monthly')}</changefreq>\n"
             f"    <priority>{page.get('priority', '0.6')}</priority>\n"
             "  </url>"
@@ -2040,7 +2161,8 @@ def main() -> int:
         written[page["slug"]] = markup
         print(f"  wrote {target.relative_to(ROOT)}")
 
-    write_sitemap()
+    lastmods = resolve_lastmods(written)
+    write_sitemap(lastmods)
     write_robots()
     write_headers()
     print(f"  wrote sitemap.xml ({sum(1 for p in PAGES if not p.get('noindex'))} URLs)")
