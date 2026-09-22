@@ -1233,6 +1233,16 @@ textarea {
   }
 }
 
+/* Below-fold homepage sections can wait until they approach the viewport.
+   Auto keeps content searchable and available to accessibility tools. The
+   remembered size stabilises repeat scrolling; print uses normal layout. */
+@media screen and (max-width: 859px) {
+  #hero ~ section.section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 900px;
+  }
+}
+
 /* ---- 404 page ------------------------------------------------------------------------ */
 .error-page {
   min-height: 70vh;
