@@ -203,7 +203,6 @@
       returnFocus = document.activeElement;
     }
     banner.hidden = false;
-    banner.scrollTop = 0;
     document.body.classList.add("consent-open");
     if (options) options.hidden = !expanded;
     setActions(expanded);
@@ -214,7 +213,13 @@
     });
     /* Focus is moved only when the visitor asked for the panel. Stealing it on
        page load would rip a keyboard user out of the content they came for. */
-    if (moveFocus && title) title.focus();
+    /* A fresh banner already starts at the top. Resetting scrollTop after
+       unhiding it forces a synchronous page layout before the remaining
+       visibility changes. Only reset when reopening, after all DOM writes. */
+    if (moveFocus) {
+      banner.scrollTop = 0;
+      if (title) title.focus();
+    }
   }
 
   function hide() {
