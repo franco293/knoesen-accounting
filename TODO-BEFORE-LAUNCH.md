@@ -1,3 +1,8 @@
+> Current release procedure: [RELEASE-CHECKLIST.md](RELEASE-CHECKLIST.md).
+> Run `python publish.py` and publish only `dist/`. The contact form remains
+> disabled while the provider key is blank; direct contact is the supported path.
+> Older checklist wording below does not establish that production is verified.
+
 # Before this goes live
 
 Everything on this list needs a decision, a login, or a fact I could not
@@ -179,7 +184,7 @@ HTTPS-only.
 ```bash
 python build.py           # rebuild all pages, sitemap.xml and robots.txt
 python build.py --check   # rebuild, then fail on any broken internal link
-python -m http.server 8000  # preview at http://localhost:8000
+python preview.py --port 8000  # preview at http://localhost:8000
 ```
 
 `build.py` prints a list of everything it omitted for lack of verification, so

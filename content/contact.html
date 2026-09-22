@@ -91,6 +91,7 @@
         <a class="btn btn-outline" href="tel:{{tel}}">{{phone}}</a>
       </div>
       <p class="contact-direct-note">
+        Please do not send ID numbers, tax numbers or banking details in an initial enquiry.
         Helpful things to include: what your business does, whether it is a
         company, sole proprietor or trust, and what you need help with. If you
         are behind on returns, say roughly how far — it is a routine problem and
@@ -119,15 +120,15 @@
 
         <div class="form-field">
           <label for="cf-name">Name</label>
-          <input type="text" id="cf-name" name="name" autocomplete="name" required />
+          <input type="text" id="cf-name" name="name" autocomplete="name" maxlength="120" required />
         </div>
         <div class="form-field">
           <label for="cf-email">Email</label>
-          <input type="email" id="cf-email" name="email" autocomplete="email" required />
+          <input type="email" id="cf-email" name="email" autocomplete="email" maxlength="254" required />
         </div>
         <div class="form-field">
           <label for="cf-phone">Phone (optional)</label>
-          <input type="tel" id="cf-phone" name="phone" autocomplete="tel" />
+          <input type="tel" id="cf-phone" name="phone" autocomplete="tel" maxlength="40" />
         </div>
         <div class="form-field">
           <label for="cf-topic">What do you need help with?</label>
@@ -145,7 +146,7 @@
         </div>
         <div class="form-field form-field--full">
           <label for="cf-message">Message</label>
-          <textarea id="cf-message" name="message" required></textarea>
+          <textarea id="cf-message" name="message" maxlength="5000" required></textarea>
         </div>
 
         <label class="form-consent">

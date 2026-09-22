@@ -1,0 +1,25 @@
+{
+  "verified_on": "2026-09-21",
+  "review_trigger": "Check SARS interest tables monthly and when rates change; practitioner owns review.",
+  "tax": {
+    "rate": "10.50",
+    "effective": "1 September 2026",
+    "previous_rate": "10.25",
+    "previous_period": "1 March–31 August 2026",
+    "source": "https://www.sars.gov.za/legal-pub-irt-01-interest-rates-table-1/"
+  },
+  "refund": {
+    "rate": "6.50",
+    "effective": "1 September 2026",
+    "previous_rate": "6.25",
+    "previous_period": "1 March–31 August 2026",
+    "source": "https://www.sars.gov.za/legal-pub-irt-02-interest-rates-table-2/"
+  },
+  "loan": {
+    "rate": "8.00",
+    "effective": "1 June 2026",
+    "previous_rate": "7.75",
+    "previous_period": "1 December 2025–31 May 2026",
+    "source": "https://www.sars.gov.za/legal-pub-irt-03-interest-rates-table-3/"
+  }
+}

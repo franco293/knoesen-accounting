@@ -179,7 +179,8 @@
 
   function yearFromUrl() {
     var match = /[?&]year=([^&]+)/.exec(window.location.search);
-    return match ? T.slugToYear(decodeURIComponent(match[1])) : null;
+    try { return match ? T.slugToYear(decodeURIComponent(match[1])) : null; }
+    catch (error) { return null; }
   }
 
   function syncUrlToYear() {

@@ -75,10 +75,8 @@
      them within a month. `where` records which placement earned the tap, which
      is the part that tells you what to change.
 
-     window.gtag only exists once js/tags.js has loaded a Google tag, and that
-     only happens after the visitor grants the analytics category. No consent,
-     no gtag, no event — this needs no consent check of its own, and it stays
-     inert if analytics is ever removed entirely. */
+     The gtag queue exists before permission. Check the current decision on
+     every activation, including after a visitor withdraws consent. */
   function placement(el) {
     var region = el.closest(
       ".sticky-contact, .mobile-panel, .site-footer, .page-hero, .contact-form-card, .contact-direct, .cta-band, .site-header"
@@ -88,6 +86,7 @@
   }
 
   function track(name, el) {
+    if (!window.KAConsent || !window.KAConsent.get("analytics")) return;
     if (typeof window.gtag !== "function") return;
     window.gtag("event", name, {
       where: placement(el),
@@ -137,8 +136,10 @@
   }
 
   if (form && status) {
+    var submitting = false;
     form.addEventListener("submit", function (event) {
       event.preventDefault();
+      if (submitting || !form.reportValidity()) return;
 
       var honeypot = form.querySelector('input[name="website"]');
       if (honeypot && honeypot.value) {
@@ -159,20 +160,32 @@
       }
 
       var submitBtn = form.querySelector('button[type="submit"]');
+      submitting = true;
       if (submitBtn) { submitBtn.disabled = true; }
       showStatus("Sending…", "info");
-
-      fetch(form.action, {
+      var controller = new AbortController();
+      var timeout;
+      var request = fetch(form.action, {
         method: "POST",
         headers: { Accept: "application/json" },
         body: new FormData(form),
-      })
-        .then(function (res) { return res.json(); })
+        signal: controller.signal
+      });
+      var deadline = new Promise(function (resolve, reject) {
+        timeout = setTimeout(function () {
+          controller.abort();
+          reject(new Error("Request timed out"));
+        }, 15000);
+      });
+      Promise.race([request, deadline])
+        .then(function (res) {
+          if (!res.ok) throw new Error("Request rejected");
+          return res.json();
+        })
         .then(function (data) {
           if (data && data.success) {
             showStatus("Thanks — your message is on its way. We'll reply soon.", "success");
-            /* GA4's recommended name for this. Fired on confirmed delivery, not
-               on submit, so a failed send is never counted as a lead. */
+            /* Provider acceptance, not proof of delivery or qualification. */
             track("generate_lead", form);
             form.reset();
           } else {
@@ -183,6 +196,8 @@
           showStatus("Something went wrong sending that. Please try calling, WhatsApp or email instead.", "error");
         })
         .finally(function () {
+          clearTimeout(timeout);
+          submitting = false;
           if (submitBtn) { submitBtn.disabled = false; }
         });
     });

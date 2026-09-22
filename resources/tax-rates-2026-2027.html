@@ -38,8 +38,9 @@
     <link rel="preload" href="/assets/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/assets/fonts/fraunces-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/assets/fonts/ibm-plex-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="/css/styles.css?v=d3e1b6b2c8" />
+    <link rel="stylesheet" href="/css/styles.css?v=6c8c1fc366" />
 
+    <noscript><link rel="stylesheet" href="/css/no-js.css?v=0114701be0" /></noscript>
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -585,15 +586,24 @@
       </div><p class="table-scroll-hint" aria-hidden="true">Scroll the table sideways to see every column &rarr;</p>
     </div>
 
-    <h3 class="table-title reveal">SARS interest rates</h3>
-    <div class="table-wrap reveal" role="region" aria-label="SARS interest rates applicable from 1 March 2026, scrollable" tabindex="0">
+    <h3 class="table-title reveal" id="interest-rates">SARS interest rates</h3>
+    <p class="source-note">Interest rates checked 2026-09-21:
+      <a href="https://www.sars.gov.za/legal-pub-irt-01-interest-rates-table-1/">SARS Table 1 (outstanding tax)</a>,
+      <a href="https://www.sars.gov.za/legal-pub-irt-02-interest-rates-table-2/">Table 2 (provisional-tax credit amounts)</a> and
+      <a href="https://www.sars.gov.za/legal-pub-irt-03-interest-rates-table-3/">Table 3 (official loan rate)</a>.
+      These change independently of the annual Budget. Earlier periods used
+      10.25% for tax and 6.25% for
+      provisional-tax credit amounts (1 March–31 August 2026), and
+      7.75% for loans (1 December 2025–31 May 2026).
+      Check the applicable period and tax type before calculating interest.</p>
+    <div class="table-wrap reveal" role="region" aria-label="SARS interest rates and their effective dates, scrollable" tabindex="0">
       <table class="data-table data-table--numeric">
-        <caption class="visually-hidden">SARS interest rates applicable from 1 March 2026</caption>
+        <caption class="visually-hidden">SARS interest rates and their effective dates</caption>
         <tbody>
-          <tr><td>Late or underpayment of tax (from 1 March 2026)</td><td>10.25% p.a.</td></tr>
-          <tr><td>Late payment of VAT (from 1 March 2026)</td><td>10.25% p.a.</td></tr>
-          <tr><td>Refund of overpayment of provisional tax</td><td>6.25% p.a.</td></tr>
-          <tr><td>Fringe benefit — interest-free or low-interest loan (from 1 December 2025)</td><td>7.75% p.a.</td></tr>
+          <tr><td>Late or underpayment of tax (from 1 September 2026)</td><td>10.50% p.a.</td></tr>
+          <tr><td>Late payment of VAT (from 1 September 2026)</td><td>10.50% p.a.</td></tr>
+          <tr><td>Refund of overpayment of provisional tax (from 1 September 2026)</td><td>6.50% p.a.</td></tr>
+          <tr><td>Fringe benefit — interest-free or low-interest loan (from 1 June 2026)</td><td>8.00% p.a.</td></tr>
         </tbody>
       </table>
     </div><p class="table-scroll-hint" aria-hidden="true">Scroll the table sideways to see every column &rarr;</p>
@@ -601,7 +611,7 @@
     <p class="source-note reveal">
       Source: National Treasury, <em>Budget 2026 Tax Guide</em>, covering
       1 March 2026 – 28 February 2027. Reviewed 2026-08-03. Rates change with each annual
-      Budget — if you are reading this well after the review date above, check
+      Budget; interest rates can change during the year — check
       against the current guide before relying on it. This page is general
       information, not advice about your circumstances; see the
       <a href="/disclaimer">disclaimer</a>.
@@ -725,8 +735,8 @@
         </div>
       </div>
     </div>
-    <script src="/js/main.js?v=7e557d1a0c"></script>
-    <script src="/js/consent.js?v=1125196e9f"></script>
-    <script src="/js/tags.js?v=03dc5ca6c5"></script>
+    <script src="/js/main.js?v=47ca5bc087"></script>
+    <script src="/js/consent.js?v=76291066a5"></script>
+    <script src="/js/tags.js?v=92338629a5"></script>
   </body>
 </html>

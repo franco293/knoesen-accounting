@@ -2,8 +2,11 @@ name = "knoesen-accounting"
 compatibility_date = "2026-08-03"
 compatibility_flags = ["nodejs_compat"]
 
+[build]
+command = "python publish.py"
+
 [observability]
   enabled = true
 
 [assets]
-  directory = "."
+directory = "./dist"

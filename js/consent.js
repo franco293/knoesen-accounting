@@ -47,20 +47,29 @@
   var changeListeners = [];
   var granted = {};
   var decided = false;
+  var returnFocus = null;
 
   /* ---- Storage ---------------------------------------------------------- */
 
   function readCookie() {
-    var match = document.cookie.match(new RegExp("(?:^|; )" + COOKIE + "=([^;]*)"));
-    return match ? decodeURIComponent(match[1]) : "";
+    try {
+      var match = document.cookie.match(new RegExp("(?:^|; )" + COOKIE + "=([^;]*)"));
+      return match ? decodeURIComponent(match[1]) : "";
+    } catch (error) {
+      return "";
+    }
   }
 
   function writeCookie(value) {
     var maxAge = CONSENT_MONTHS * 30 * 24 * 60 * 60;
     var secure = location.protocol === "https:" ? "; Secure" : "";
-    document.cookie =
-      COOKIE + "=" + encodeURIComponent(value) +
-      "; Max-Age=" + maxAge + "; Path=/; SameSite=Lax" + secure;
+    try {
+      document.cookie =
+        COOKIE + "=" + encodeURIComponent(value) +
+        "; Max-Age=" + maxAge + "; Path=/; SameSite=Lax" + secure;
+    } catch (error) {
+      /* The current decision still applies when persistence is unavailable. */
+    }
   }
 
   /* Stored as "v1:analytics=1,marketing=0" — legible in devtools, and the
@@ -98,7 +107,9 @@
     var patterns = owned[category];
     if (!patterns || !patterns.length) return;
 
-    document.cookie.split("; ").forEach(function (pair) {
+    var cookies;
+    try { cookies = document.cookie; } catch (error) { return; }
+    cookies.split("; ").forEach(function (pair) {
       var name = pair.split("=")[0];
       if (!name) return;
       var mine = patterns.some(function (pattern) {
@@ -111,8 +122,10 @@
          dot-host, at the root path. That covers how these vendors set theirs. */
       var host = location.hostname;
       [host, "." + host, ""].forEach(function (domain) {
-        document.cookie =
-          name + "=; Max-Age=0; Path=/" + (domain ? "; Domain=" + domain : "");
+        try {
+          document.cookie =
+            name + "=; Max-Age=0; Path=/" + (domain ? "; Domain=" + domain : "");
+        } catch (error) { /* Storage cannot veto withdrawal. */ }
       });
     });
   }
@@ -129,10 +142,7 @@
   }
 
   function apply(state, remember) {
-    if (remember) {
-      writeCookie(serialise(state));
-      decided = true;
-    }
+    if (remember) decided = true;
 
     categories.forEach(function (name) {
       granted[name] = !!state[name];
@@ -142,13 +152,16 @@
       if (!granted[name]) forgetCookies(name);
     });
 
+    /* Update permission (and vendor opt-out flags) before loading a new tag. */
+    if (decided) changeListeners.forEach(run);
+
     grantListeners = grantListeners.filter(function (entry) {
       if (!granted[entry.category]) return true;
       run(entry.fn);
       return false;
     });
 
-    if (decided) changeListeners.forEach(run);
+    if (remember) writeCookie(serialise(state));
   }
 
   function snapshot() {
@@ -186,7 +199,11 @@
 
   function show(expanded, moveFocus) {
     if (!banner) return;
+    if (moveFocus && !banner.contains(document.activeElement)) {
+      returnFocus = document.activeElement;
+    }
     banner.hidden = false;
+    banner.scrollTop = 0;
     document.body.classList.add("consent-open");
     if (options) options.hidden = !expanded;
     setActions(expanded);
@@ -204,6 +221,8 @@
     if (!banner) return;
     banner.hidden = true;
     document.body.classList.remove("consent-open");
+    if (returnFocus && document.contains(returnFocus)) returnFocus.focus();
+    returnFocus = null;
   }
 
   function decide(state) {

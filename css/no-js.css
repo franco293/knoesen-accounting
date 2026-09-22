@@ -1,0 +1,16 @@
+/* Loaded only when scripting is disabled; keep primary navigation usable. */
+@media (max-width: 859px) {
+  .nav-toggle { display: none; }
+  .mobile-panel {
+    position: static;
+    visibility: visible;
+    opacity: 1;
+    max-height: none;
+    height: auto;
+    overflow: visible;
+    transform: none;
+    pointer-events: auto;
+    padding-block: 1rem;
+  }
+}
+.footer-consent-btn, #map-load-btn { display: none; }

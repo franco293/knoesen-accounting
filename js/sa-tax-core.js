@@ -25,9 +25,8 @@
 
   /* Resolve one year's figures into the shape the arithmetic below wants.
      Called per calculation rather than once, because a page may let the
-     visitor switch years — and between 2025/26 and 2026/27 the brackets are
-     identical while the rebates, medical credits and retirement cap all moved,
-     so using the wrong year's rebates looks right and is wrong. */
+     visitor switch years — the brackets, rebates and limits are year-specific.
+     Never substitute the current schedule for a historical year. */
   function ratesFor(yearKey) {
     if (!DATA) return null;
     var key = DATA.years[yearKey] ? yearKey : DATA.current;

@@ -16,7 +16,7 @@
   },
   "legal": {
     "_comment": "Bump privacy_policy_updated (YYYY-MM-DD) whenever the privacy notice changes — INCLUDING when you switch a tracker on above, because that rewrites section 7. `python build.py --check` fails if a tracker is configured and this date has not moved past the day the no-tracking wording was written.",
-    "privacy_policy_updated": "2026-08-25"
+    "privacy_policy_updated": "2026-09-22"
   },
   "features": {
     "_comment": "Switches whole sections of the site on and off without deleting what builds them. false means: nav entries and pages tagged with that feature are not rendered and drop out of sitemap.xml, and body markup wrapped in <!-- feature:NAME --> is left out (its <!-- nofeature:NAME --> alternative is used instead). See the Feature flags section at the top of build.py.",

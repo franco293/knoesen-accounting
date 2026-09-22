@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "npx http-server . -p 8081"
+    "start": "python preview.py",
+    "build": "python publish.py",
+    "test": "python -m unittest discover -s tests"
   }
 }

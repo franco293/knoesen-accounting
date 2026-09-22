@@ -1,71 +1,115 @@
 {
   "_comment": "Single source of truth for every South African tax figure this site publishes. Before this file existed the brackets lived in TWO places — js/income-tax-calculator.js as data and content/guide-rates.html as a readable table — and nothing but a regex-scraping validator held them together. Every figure a calculator needs, and every figure the rate tables show, now comes from here. build.py renders the bracket tables from it and emits js/tax-rates.js for the browser. Add a new tax year as a new key under `years`, point `current` at it, and both the tables and the calculators follow.",
-
   "_updating": "After a Budget: add the new year, move `current`, then run `python build.py --check`. The check proves every cumulative `base` equals the tax at the top of the bracket below it, and that each threshold equals its rebate divided by the first bracket rate. A mistyped digit fails the build rather than silently shipping confident wrong answers.",
-
   "_provisional_rules": "The provisional tax rules below do not change from year to year and so are not stored per year. Estimates may not fall below the BASIC AMOUNT — the taxable income per the latest assessment issued at least 14 days before the estimate is due, excluding taxable capital gains, retirement lump sums and severance benefits — increased by 8% if the estimate is made more than 18 months after the end of that assessed year. Under-estimation penalty (Fourth Schedule para 20) is 20%: where actual taxable income is R1 million or LESS it bites only if the final estimate is below BOTH 90% of actual AND the basic amount, and is charged on the lesser of the tax on 90% of actual and the tax on the basic amount, less employees' tax and provisional tax already paid; ABOVE R1 million the basic amount gives no protection at all and the estimate must reach 80% of actual. Source: SARS Guide for Provisional Tax GEN-PT-01-G01.",
-
   "_partial_years": "A year may carry only the sections a calculator needs. 2025/26 has `individual`, `payroll` and `vat` — every figure in it was checked against sars.gov.za and the Budget guide — and deliberately omits SBC, turnover tax, transfer duty, CGT, estate duty and the rest, because nothing on the site uses those for a past year and publishing unverified figures is worse than publishing none. Fill a section in only when you have read it off a primary source. build.py validates whatever is present and skips what is absent.",
-
   "_sars_penalties_comment": "Administrative non-compliance penalties under section 211 of the Tax Administration Act. Fixed rand amounts, unchanged since the regime began, so they do not move with the tax year and sit outside `years`. SARS's own pages publish only the range (R250 to R16 000) and the 35-month cap, not the table; the bands here are transcribed from SAIPA's Centre of Tax Excellence admin penalty guide, which reproduces the statutory table, and the endpoints and cap agree with what SARS publishes.",
-
   "sars_penalties": {
     "_admin_comment": "Charged PER OUTSTANDING RETURN, per month or part of a month, and the band is set by the taxable income of the PRECEDING year — not the year the return relates to. An assessed loss is treated as the lowest band regardless of its size.",
     "_bounds_comment": "Bands are INCLUSIVE of their upper figure: the table reads 'R0 – R250 000' then 'R250 001 – R500 000', so R250 000 exactly attracts R250 and R250 001 attracts R500. This is the opposite of the CIPC table above, which is worded 'less than'. Calculators must pass inclusive=true to bandFor for this table.",
     "admin_penalty_bands": [
-      { "from": 0,        "to": 250000,   "penalty": 250 },
-      { "from": 250000,   "to": 500000,   "penalty": 500 },
-      { "from": 500000,   "to": 1000000,  "penalty": 1000 },
-      { "from": 1000000,  "to": 5000000,  "penalty": 2000 },
-      { "from": 5000000,  "to": 10000000, "penalty": 4000 },
-      { "from": 10000000, "to": 50000000, "penalty": 8000 },
-      { "from": 50000000, "to": null,     "penalty": 16000 }
+      {
+        "from": 0,
+        "to": 250000,
+        "penalty": 250
+      },
+      {
+        "from": 250000,
+        "to": 500000,
+        "penalty": 500
+      },
+      {
+        "from": 500000,
+        "to": 1000000,
+        "penalty": 1000
+      },
+      {
+        "from": 1000000,
+        "to": 5000000,
+        "penalty": 2000
+      },
+      {
+        "from": 5000000,
+        "to": 10000000,
+        "penalty": 4000
+      },
+      {
+        "from": 10000000,
+        "to": 50000000,
+        "penalty": 8000
+      },
+      {
+        "from": 50000000,
+        "to": null,
+        "penalty": 16000
+      }
     ],
     "assessed_loss_penalty": 250,
     "max_months_with_address": 35,
     "_max_months_comment": "35 months where SARS holds the taxpayer's current address and can deliver the assessment; 47 months from the date of non-compliance where it does not.",
     "max_months_without_address": 47,
-    "late_payment_penalty_rate": 0.10,
+    "late_payment_penalty_rate": 0.1,
     "_late_payment_comment": "10% of the amount unpaid — paragraph 6 of the Fourth Schedule for PAYE, section 39 of the VAT Act for VAT, and paragraph 27 of the Fourth Schedule for provisional tax. A single rate across the three, which is why one figure covers them."
   },
-
   "_cipc_comment": "CIPC annual return fees are set by regulation — table CR 2B of the Companies Regulations 2011 and Schedule 1 of the Close Corporation Administrative Regulations — and do not move with the tax year, so they sit outside `years`. Transcribed from CIPC's own Annual Returns FAQ (v5.0) and Information Guide (v1.4), which publish identical tables.",
-
   "cipc": {
     "_late_treatment": "The two Acts express lateness differently, and the difference is load-bearing. For COMPANIES the 2008 Act table gives two alternative totals — 'filing within 30 business days' vs 'filing more than 30 business days' — so the late figure REPLACES the standard fee. For CLOSE CORPORATIONS the second column is headed 'penalty for each late lodgment' and is R150 in BOTH turnover bands, including the band whose standard fee is R4 000. Read as a replacement that would make late filing cheaper than filing on time, which cannot be right, so for close corporations the R150 is ADDED to the standard fee. Stated here rather than buried in code because it is an interpretation, not a quotation.",
-
     "reinstatement_fee": 200,
     "_reinstatement_comment": "Form CoR40.5, payable where the entity has already been referred for deregistration. Outstanding annual returns still have to be filed on top of it.",
-
     "company": {
       "_comment": "Companies Act, 2008 table — applies to any annual return that fell due on or after 1 May 2011, which is every return anyone is filing today. `late` is the full replacement fee, not an add-on.",
       "bands": [
-        { "from": 0,        "to": 1000000,  "standard": 100,  "late": 150 },
-        { "from": 1000000,  "to": 10000000, "standard": 450,  "late": 600 },
-        { "from": 10000000, "to": 25000000, "standard": 2000, "late": 2500 },
-        { "from": 25000000, "to": null,     "standard": 3000, "late": 4000 }
+        {
+          "from": 0,
+          "to": 1000000,
+          "standard": 100,
+          "late": 150
+        },
+        {
+          "from": 1000000,
+          "to": 10000000,
+          "standard": 450,
+          "late": 600
+        },
+        {
+          "from": 10000000,
+          "to": 25000000,
+          "standard": 2000,
+          "late": 2500
+        },
+        {
+          "from": 25000000,
+          "to": null,
+          "standard": 3000,
+          "late": 4000
+        }
       ]
     },
-
     "close_corporation": {
       "_comment": "Close Corporations Act, 1984 table. `late_penalty` is charged for each late lodgment IN ADDITION to the standard fee — see _late_treatment above.",
       "_boundary_note": "CIPC words these bands as 'Between 0 to R50 million' and 'R50 million and above', which overlap at exactly R50 000 000. Bands are applied here as 'below R50m' and 'R50m or more', matching how the company table words its own top band ('R25 million or more'). It only bites at a turnover of exactly R50 000 000.00.",
       "late_penalty": 150,
       "bands": [
-        { "from": 0,         "to": 50000000, "standard": 100 },
-        { "from": 50000000,  "to": null,     "standard": 4000 }
+        {
+          "from": 0,
+          "to": 50000000,
+          "standard": 100
+        },
+        {
+          "from": 50000000,
+          "to": null,
+          "standard": 4000
+        }
       ]
     }
   },
-
   "current": "2026/27",
-
   "years": {
     "2025/26": {
       "label": "2025/26",
       "assessment_year": "2026 year of assessment",
       "period": "1 March 2025 – 28 February 2026",
-      "verified_on": "2026-08-06",
+      "verified_on": "2026-09-21",
       "sources": [
         {
           "label": "SARS — Rates of tax for individuals",
@@ -76,44 +120,73 @@
           "url": "https://www.sars.gov.za/tax-rates/medical-tax-credit-rates/"
         }
       ],
-
       "individual": {
-        "_comment": "SARS recorded 'no changes' to the brackets for this year, so they are identical to the year before AND to 2026/27. What moved in Budget 2026 was the rebates, the medical credits and the retirement cap — which is exactly why a year selector is worth having: the brackets look the same and the answer is not.",
+        "_comment": "2025/26 retains the 2023/24 brackets; 2026/27 has different bands. Source: SARS individual rates, checked 21 September 2026.",
         "brackets": [
-          { "from": 0,       "to": 245100,   "base": 0,      "rate": 0.18 },
-          { "from": 245100,  "to": 383100,   "base": 44118,  "rate": 0.26 },
-          { "from": 383100,  "to": 530200,   "base": 79998,  "rate": 0.31 },
-          { "from": 530200,  "to": 695800,   "base": 125599, "rate": 0.36 },
-          { "from": 695800,  "to": 887000,   "base": 185215, "rate": 0.39 },
-          { "from": 887000,  "to": 1878600,  "base": 259783, "rate": 0.41 },
-          { "from": 1878600, "to": null,     "base": 666339, "rate": 0.45 }
+          {
+            "to": 237100,
+            "base": 0,
+            "rate": 0.18,
+            "from": 0
+          },
+          {
+            "to": 370500,
+            "base": 42678,
+            "rate": 0.26,
+            "from": 237100
+          },
+          {
+            "to": 512800,
+            "base": 77362,
+            "rate": 0.31,
+            "from": 370500
+          },
+          {
+            "to": 673000,
+            "base": 121475,
+            "rate": 0.36,
+            "from": 512800
+          },
+          {
+            "to": 857900,
+            "base": 179147,
+            "rate": 0.39,
+            "from": 673000
+          },
+          {
+            "to": 1817000,
+            "base": 251258,
+            "rate": 0.41,
+            "from": 857900
+          },
+          {
+            "to": null,
+            "base": 644489,
+            "rate": 0.45,
+            "from": 1817000
+          }
         ],
-
         "rebates": {
           "primary": 17235,
           "secondary": 9444,
           "tertiary": 3145
         },
-
         "_thresholds_comment": "SARS publishes these rounded to the rand; the exact quotient is 148 216.67 and 165 688.89. build.py allows a rand of slack for that.",
         "thresholds": {
           "under_65": 95750,
           "age_65_to_74": 148217,
           "age_75_plus": 165689
         },
-
         "medical_credit": {
           "first_two_each": 364,
           "each_additional": 246
         },
-
         "_retirement_comment": "R350 000 was the cap from 2016 until Budget 2026 raised it to R430 000 with effect from 1 March 2026.",
         "retirement": {
           "rate": 0.275,
           "annual_cap": 350000
         }
       },
-
       "payroll": {
         "uif_employer_rate": 0.01,
         "uif_employee_rate": 0.01,
@@ -121,24 +194,20 @@
         "sdl_rate": 0.01,
         "sdl_exemption_annual_remuneration": 500000
       },
-
       "provisional": {
         "_comment": "Dates are for a 28/29 February year of assessment, which covers every individual and most small companies. A company with another financial year-end shifts all three. Source: SARS Guide for Provisional Tax (GEN-PT-01-G01), which works this exact year as its example.",
         "first_period_due": "2025-08-31",
         "second_period_due": "2026-02-28",
         "third_period_due": "2026-09-30"
       },
-
       "coida": {
         "_provenance": "WEAKER SOURCING THAN EVERYTHING ELSE IN THIS FILE — read this before relying on it. The COIDA earnings ceiling is set by the Department of Employment and Labour in a Government Gazette notice, and it is not published on a stable public page the way SARS publishes tax rates. This figure is corroborated across independent payroll-industry sources that track the gazette, but it was NOT read off the gazette directly. Confirm it against your Letter of Good Standing or the notice itself before relying on it for an assessment.",
         "earnings_ceiling": 633168
       },
-
       "vat": {
         "standard_rate": 0.15
       }
     },
-
     "2026/27": {
       "label": "2026/27",
       "assessment_year": "2027 year of assessment",
@@ -155,83 +224,146 @@
           "url": "https://www.sars.gov.za/types-of-tax/personal-income-tax/filing-season/"
         }
       ],
-
       "individual": {
         "_comment": "`base` is cumulative: the tax due at the top of the bracket below. It is load-bearing — an error in one silently shifts every result above it instead of producing an obviously wrong answer. build.py --check proves each one.",
         "brackets": [
-          { "from": 0,       "to": 245100,   "base": 0,      "rate": 0.18 },
-          { "from": 245100,  "to": 383100,   "base": 44118,  "rate": 0.26 },
-          { "from": 383100,  "to": 530200,   "base": 79998,  "rate": 0.31 },
-          { "from": 530200,  "to": 695800,   "base": 125599, "rate": 0.36 },
-          { "from": 695800,  "to": 887000,   "base": 185215, "rate": 0.39 },
-          { "from": 887000,  "to": 1878600,  "base": 259783, "rate": 0.41 },
-          { "from": 1878600, "to": null,     "base": 666339, "rate": 0.45 }
+          {
+            "from": 0,
+            "to": 245100,
+            "base": 0,
+            "rate": 0.18
+          },
+          {
+            "from": 245100,
+            "to": 383100,
+            "base": 44118,
+            "rate": 0.26
+          },
+          {
+            "from": 383100,
+            "to": 530200,
+            "base": 79998,
+            "rate": 0.31
+          },
+          {
+            "from": 530200,
+            "to": 695800,
+            "base": 125599,
+            "rate": 0.36
+          },
+          {
+            "from": 695800,
+            "to": 887000,
+            "base": 185215,
+            "rate": 0.39
+          },
+          {
+            "from": 887000,
+            "to": 1878600,
+            "base": 259783,
+            "rate": 0.41
+          },
+          {
+            "from": 1878600,
+            "to": null,
+            "base": 666339,
+            "rate": 0.45
+          }
         ],
-
         "_rebates_comment": "Cumulative: a 76-year-old gets all three.",
         "rebates": {
           "primary": 17820,
           "secondary": 9765,
           "tertiary": 3249
         },
-
         "_thresholds_comment": "Derived, not independent: the threshold is the rebate divided by the first bracket rate. Stored explicitly because the guide publishes them, and checked against the rebates at build time.",
         "thresholds": {
           "under_65": 99000,
           "age_65_to_74": 153250,
           "age_75_plus": 171300
         },
-
         "interest_exemption": {
           "under_65": 23800,
           "age_65_plus": 34500
         },
-
         "_medical_comment": "Medical scheme fees tax credit, per month.",
         "medical_credit": {
           "first_two_each": 376,
           "each_additional": 254
         },
-
         "_retirement_comment": "Deductible up to 27.5% of the greater of remuneration or taxable income, capped annually. The cap was raised from R350 000 — a figure many calculators still use.",
         "retirement": {
           "rate": 0.275,
           "annual_cap": 430000
         },
-
         "tax_free_investment_annual": 46000,
-        "donations_deduction_rate": 0.10
+        "donations_deduction_rate": 0.1
       },
-
       "company": {
         "rate": 0.27,
-
         "_sbc_comment": "Small Business Corporation rates. The R20m gross income ceiling is only ONE of six section 12E tests — the others (all shareholders natural persons, no shareholder holding an interest in another company, not more than 20% investment or personal-service income, entity type, and not being a personal service provider) cannot be judged from turnover and profit alone, so no calculator should claim to determine SBC status from figures. Limit confirmed against SARS Interpretation Note 9.",
         "sbc_gross_income_limit": 20000000,
         "sbc_brackets": [
-          { "from": 0,      "to": 99000,  "base": 0,     "rate": 0.0 },
-          { "from": 99000,  "to": 365000, "base": 0,     "rate": 0.07 },
-          { "from": 365000, "to": 550000, "base": 18620, "rate": 0.21 },
-          { "from": 550000, "to": null,   "base": 57470, "rate": 0.27 }
+          {
+            "from": 0,
+            "to": 99000,
+            "base": 0,
+            "rate": 0.0
+          },
+          {
+            "from": 99000,
+            "to": 365000,
+            "base": 0,
+            "rate": 0.07
+          },
+          {
+            "from": 365000,
+            "to": 550000,
+            "base": 18620,
+            "rate": 0.21
+          },
+          {
+            "from": 550000,
+            "to": null,
+            "base": 57470,
+            "rate": 0.27
+          }
         ],
-
         "_turnover_comment": "Turnover tax for micro businesses. The widely-syndicated version of this table has an error in the third bracket — these come from the Budget guide directly. Unlike the SBC tests, the qualifying limit here IS a single checkable number, so a calculator can legitimately rule it in or out: R2.3 million of qualifying turnover, confirmed on sars.gov.za for a year of assessment ending between 1 March 2026 and 28 February 2027.",
         "turnover_qualifying_limit": 2300000,
         "turnover_brackets": [
-          { "from": 0,       "to": 600000,  "base": 0,     "rate": 0.0 },
-          { "from": 600000,  "to": 950000,  "base": 0,     "rate": 0.01 },
-          { "from": 950000,  "to": 1400000, "base": 3500,  "rate": 0.02 },
-          { "from": 1400000, "to": null,    "base": 12500, "rate": 0.03 }
+          {
+            "from": 0,
+            "to": 600000,
+            "base": 0,
+            "rate": 0.0
+          },
+          {
+            "from": 600000,
+            "to": 950000,
+            "base": 0,
+            "rate": 0.01
+          },
+          {
+            "from": 950000,
+            "to": 1400000,
+            "base": 3500,
+            "rate": 0.02
+          },
+          {
+            "from": 1400000,
+            "to": null,
+            "base": 12500,
+            "rate": 0.03
+          }
         ]
       },
-
       "vat": {
         "standard_rate": 0.15,
         "compulsory_threshold": 2300000,
         "voluntary_threshold": 120000,
         "_threshold_comment": "The compulsory threshold rose from R1 million on 1 April 2026. A great deal of South African tax content online still quotes the old figure."
       },
-
       "cgt": {
         "_comment": "Maximum effective rates.",
         "max_effective": {
@@ -247,35 +379,60 @@
           "_small_business_comment": "Age 55+, business market value up to R15m."
         }
       },
-
-      "dividends_tax_rate": 0.20,
-
+      "dividends_tax_rate": 0.2,
       "donations_tax": {
-        "rate_to_30m": 0.20,
+        "rate_to_30m": 0.2,
         "rate_above_30m": 0.25,
         "cumulative_threshold": 30000000,
         "annual_exemption_natural_person": 150000
       },
-
       "estate_duty": {
-        "rate_to_30m": 0.20,
+        "rate_to_30m": 0.2,
         "rate_above_30m": 0.25,
         "dutiable_threshold": 30000000,
         "abatement": 3500000
       },
-
       "transfer_duty": {
         "_comment": "Payable on property transactions not subject to VAT.",
         "brackets": [
-          { "from": 0,        "to": 1210000,  "base": 0,       "rate": 0.0 },
-          { "from": 1210000,  "to": 1663800,  "base": 0,       "rate": 0.03 },
-          { "from": 1663800,  "to": 2329300,  "base": 13614,   "rate": 0.06 },
-          { "from": 2329300,  "to": 2994800,  "base": 53544,   "rate": 0.08 },
-          { "from": 2994800,  "to": 13310000, "base": 106784,  "rate": 0.11 },
-          { "from": 13310000, "to": null,     "base": 1241456, "rate": 0.13 }
+          {
+            "from": 0,
+            "to": 1210000,
+            "base": 0,
+            "rate": 0.0
+          },
+          {
+            "from": 1210000,
+            "to": 1663800,
+            "base": 0,
+            "rate": 0.03
+          },
+          {
+            "from": 1663800,
+            "to": 2329300,
+            "base": 13614,
+            "rate": 0.06
+          },
+          {
+            "from": 2329300,
+            "to": 2994800,
+            "base": 53544,
+            "rate": 0.08
+          },
+          {
+            "from": 2994800,
+            "to": 13310000,
+            "base": 106784,
+            "rate": 0.11
+          },
+          {
+            "from": 13310000,
+            "to": null,
+            "base": 1241456,
+            "rate": 0.13
+          }
         ]
       },
-
       "payroll": {
         "uif_employer_rate": 0.01,
         "uif_employee_rate": 0.01,
@@ -284,14 +441,12 @@
         "sdl_rate": 0.01,
         "sdl_exemption_annual_remuneration": 500000
       },
-
       "provisional": {
         "_comment": "Dates are for a 28/29 February year of assessment. Source: SARS Guide for Provisional Tax (GEN-PT-01-G01).",
         "first_period_due": "2026-08-31",
         "second_period_due": "2027-02-28",
         "third_period_due": "2027-09-30"
       },
-
       "coida": {
         "_provenance": "See the note on the 2025/26 coida block — this figure is corroborated across payroll-industry sources tracking the Government Gazette, not read off the gazette directly, and is sourced more weakly than the SARS and Treasury figures elsewhere in this file.",
         "earnings_ceiling": 668000,
@@ -299,14 +454,12 @@
         "minimum_assessment_commercial": 1621,
         "minimum_assessment_household": 560
       },
-
       "travel": {
         "reimbursive_per_km": 4.95,
         "_reimbursive_comment": "Applies where no other travel allowance is received.",
         "subsistence_meals_and_incidental_per_day": 595,
         "subsistence_incidental_only_per_day": 184
       },
-
       "sars_interest": {
         "late_or_underpayment": 0.1025,
         "late_vat": 0.1025,

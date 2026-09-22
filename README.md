@@ -1,7 +1,10 @@
 # Knoesen Accounting, Tax & Payroll — website
 
 Static site for a SAIPA-registered accounting practice in Gqeberha (Port
-Elizabeth). No framework, no dependencies, no build step required to deploy.
+Elizabeth). No framework or production package dependencies. Python 3.9+ builds the release.
+
+**Release instructions:** see [RELEASE-CHECKLIST.md](RELEASE-CHECKLIST.md). Run
+`python publish.py`, then `python preview.py`. Cloudflare publishes only `dist/`.
 
 **Live:** https://knoesen-accounting.co.za
 
@@ -28,7 +31,8 @@ site.json              Every repeated fact: domain, name, phone, email,
 data/
   tax-rates.json       Every tax FIGURE: brackets, rebates, thresholds,
                        medical credits, retirement caps, VAT, SBC, turnover
-                       tax, transfer duty, CGT, payroll levies, SARS interest.
+                       tax, transfer duty, CGT and payroll levies.
+  interest-rates.json  Effective-dated SARS interest, source links and review date.
                        The rate tables and the calculators are both generated
                        from this, so a Budget update happens in one file.
 
@@ -98,7 +102,7 @@ omitted for lack of a verified value, so you always know what is outstanding.
 ### Previewing
 
 ```bash
-python -m http.server 8000
+python preview.py --port 8000
 ```
 
 Then open http://localhost:8000. Note that a plain file server serves
@@ -232,12 +236,14 @@ before rebates, which is the property that catches a transcription error in any
 of the seven `base` amounts.
 
 **If a Budget changes the rates, edit `data/tax-rates.json` and rebuild.** That
-is the whole update. The figures used to live in two places by necessity — the
+must be followed by practitioner review of narrative examples and independent
+source fixtures in `tests/test_release.py`. Interest changes belong in
+`data/interest-rates.json` and can occur between Budgets. The figures used to live in two places by necessity — the
 calculator needed them as data, the guide needed them as a readable table — and
 nothing but a regex-scraping validator held the two together. Both are now
 generated from the one file, so they cannot disagree.
 
-`python build.py --check` proves the data before it ships: every cumulative
+`python build.py --check` checks internal consistency, not authoritative truth: every cumulative
 bracket amount against the bracket below it, every band against its neighbours
 for gaps or overlaps, and every tax threshold against the rebate it is derived
 from. A transposed digit fails the build instead of shipping as a confident
@@ -248,8 +254,8 @@ wrong answer.
 The site loaded three font families from `fonts.googleapis.com` on every page,
 which sat badly beside the Google Maps consent gate: the map is held back
 specifically so a visitor's IP is not sent to Google unasked, and then the
-fonts sent it anyway. They now come from `/assets/fonts` — no third-party
-request is made by any page, and `style-src`/`font-src` in the CSP are back to
+fonts sent it anyway. They now come from `/assets/fonts` — font loading makes no third-party
+request, and `style-src`/`font-src` in the CSP are back to
 `'self'`. The privacy policy no longer lists Google Fonts as a recipient,
 because it no longer is one.
 
@@ -349,18 +355,19 @@ now joined by a disclaimer page — necessary once a site publishes tax figures.
 
 ## Deploy
 
-Already connected to Cloudflare via `wrangler.toml`, serving the repository
-root as static assets. Push to the repo and it redeploys.
+`wrangler.toml` runs `python publish.py` before deployment and serves only
+the generated `dist/` directory. The build host must provide Python 3.9+.
+Run the same command locally, then preview and follow
+[RELEASE-CHECKLIST.md](RELEASE-CHECKLIST.md). No push/deployment integration
+is assumed to work without checking the hosting account.
 
-```bash
-git add .
-git commit -m "Rebuild site: multi-page architecture, verified tax content, canonical fix"
-git push
-```
+The publisher uses an explicit public-file allowlist and records hashes in
+`release-manifest.json` outside the published directory. Tests, development
+metadata and source inputs are excluded. Keep the prior deployed version for
+rollback; the local build replaces its previous generated output.
 
-`_headers` (security headers, caching) and `_redirects` (legacy URLs) are
-Cloudflare features and do not apply on GitHub Pages. `.assetsignore` keeps
-build inputs — `build.py`, `site.json`, `content/` — out of the deployed output.
+`_headers` and `_redirects` are copied into the release for Cloudflare.
+The original root `.assetsignore` is defence in depth, not the main boundary.
 
 **This deploys as a Worker, not as Pages.** That distinction matters for
 `_redirects`: Workers Assets accepts only *relative* URLs there. Absolute

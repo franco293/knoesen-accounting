@@ -3023,6 +3023,10 @@ body {
    beside a faint Reject is how consent stops being freely given, and consent
    that is not freely given is not consent. */
 .consent {
+  max-height: 90vh;
+  max-height: 90dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   position: fixed;
   left: 0;
   right: 0;
@@ -3089,8 +3093,8 @@ body.consent-open .sticky-contact {
   cursor: pointer;
 }
 .consent-option input {
-  width: 1.05rem;
-  height: 1.05rem;
+  width: 1.5rem;
+  height: 1.5rem;
   margin-top: 0.2rem;
   accent-color: var(--brass);
   cursor: pointer;
@@ -3206,3 +3210,5 @@ body.consent-open .sticky-contact {
     display: none;
   }
 }
+
+.notfound-links > h2 { color: var(--ink); }

@@ -1,0 +1,9 @@
+dist/
+release-manifest.json
+__pycache__/
+*.py[cod]
+.wrangler/
+node_modules/
+release-stage-*/
+.env
+.env.*

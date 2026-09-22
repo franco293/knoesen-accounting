@@ -28,6 +28,7 @@
   });
 
   KAConsent.onChange(function (consent) {
+    window["ga-disable-G-R4QRTNRZKG"] = !consent.analytics;
     gtag("consent", "update", {
       analytics_storage: consent.analytics ? "granted" : "denied",
       ad_storage: consent.marketing ? "granted" : "denied",

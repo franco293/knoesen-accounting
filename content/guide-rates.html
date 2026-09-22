@@ -269,15 +269,24 @@
       </div>
     </div>
 
-    <h3 class="table-title reveal">SARS interest rates</h3>
+    <h3 class="table-title reveal" id="interest-rates">SARS interest rates</h3>
+    <p class="source-note">Interest rates checked {{interest_verified_on}}:
+      <a href="{{interest_tax_source}}">SARS Table 1 (outstanding tax)</a>,
+      <a href="{{interest_refund_source}}">Table 2 (provisional-tax credit amounts)</a> and
+      <a href="{{interest_loan_source}}">Table 3 (official loan rate)</a>.
+      These change independently of the annual Budget. Earlier periods used
+      {{interest_tax_previous_rate}}% for tax and {{interest_refund_previous_rate}}% for
+      provisional-tax credit amounts ({{interest_tax_previous_period}}), and
+      {{interest_loan_previous_rate}}% for loans ({{interest_loan_previous_period}}).
+      Check the applicable period and tax type before calculating interest.</p>
     <div class="table-wrap reveal">
       <table class="data-table data-table--numeric">
-        <caption class="visually-hidden">SARS interest rates applicable from 1 March 2026</caption>
+        <caption class="visually-hidden">SARS interest rates and their effective dates</caption>
         <tbody>
-          <tr><td>Late or underpayment of tax (from 1 March 2026)</td><td>10.25% p.a.</td></tr>
-          <tr><td>Late payment of VAT (from 1 March 2026)</td><td>10.25% p.a.</td></tr>
-          <tr><td>Refund of overpayment of provisional tax</td><td>6.25% p.a.</td></tr>
-          <tr><td>Fringe benefit — interest-free or low-interest loan (from 1 December 2025)</td><td>7.75% p.a.</td></tr>
+          <tr><td>Late or underpayment of tax (from {{interest_tax_effective}})</td><td>{{interest_tax_rate}}% p.a.</td></tr>
+          <tr><td>Late payment of VAT (from {{interest_tax_effective}})</td><td>{{interest_tax_rate}}% p.a.</td></tr>
+          <tr><td>Refund of overpayment of provisional tax (from {{interest_refund_effective}})</td><td>{{interest_refund_rate}}% p.a.</td></tr>
+          <tr><td>Fringe benefit — interest-free or low-interest loan (from {{interest_loan_effective}})</td><td>{{interest_loan_rate}}% p.a.</td></tr>
         </tbody>
       </table>
     </div>
@@ -285,7 +294,7 @@
     <p class="source-note reveal">
       Source: National Treasury, <em>Budget 2026 Tax Guide</em>, covering
       {{tax_period}}. Reviewed {{verified_on}}. Rates change with each annual
-      Budget — if you are reading this well after the review date above, check
+      Budget; interest rates can change during the year — check
       against the current guide before relying on it. This page is general
       information, not advice about your circumstances; see the
       <a href="/disclaimer">disclaimer</a>.

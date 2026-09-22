@@ -1,4 +1,11 @@
 node_modules/
+.claude/
+tests/
+dist/
+publish.py
+preview.py
+release-manifest.json
+RELEASE-CHECKLIST.md
 __pycache__/
 .wrangler/
 .git/

@@ -39,6 +39,8 @@ SITE = json.loads((ROOT / "site.json").read_text(encoding="utf-8"))
 PAGES = json.loads((CONTENT / "pages.json").read_text(encoding="utf-8"))
 RATES = json.loads((ROOT / "data" / "tax-rates.json").read_text(encoding="utf-8"))
 
+INTEREST = json.loads((ROOT / "data" / "interest-rates.json").read_text(encoding="utf-8"))
+
 CURRENT_YEAR = RATES["current"]
 YEAR = RATES["years"][CURRENT_YEAR]
 
@@ -439,6 +441,8 @@ def write_tag_loaders() -> None:
             "    wait_for_update: 500\n"
             "  });\n\n"
             '  KAConsent.onChange(function (consent) {\n'
+            + ''.join('    window[\"ga-disable-%s\"] = !consent.%s;\n' % (ANALYTICS[v['id_key']], v['category']) for v in google)
+            +
             '    gtag("consent", "update", {\n'
             '      analytics_storage: consent.analytics ? "granted" : "denied",\n'
             '      ad_storage: consent.marketing ? "granted" : "denied",\n'
@@ -913,6 +917,13 @@ TOKENS = {
     # the form and shows the phone/email instead of posting into the void.
     "{{WEB3FORMS_KEY}}": SITE["forms"]["web3forms_key"] or "UNCONFIGURED",
 }
+
+
+# Effective-dated interest changes between annual Budgets.
+for _kind in ("tax", "refund", "loan"):
+    for _field, _value in INTEREST[_kind].items():
+        TOKENS["{{interest_" + _kind + "_" + _field + "}}"] = _value
+TOKENS["{{interest_verified_on}}"] = INTEREST["verified_on"]
 
 
 def _register_rate_tokens() -> None:
@@ -1501,6 +1512,7 @@ def head_for(page: dict) -> str:
     {font_preloads_for(page)}
     <link rel="stylesheet" href="/css/styles.css?v={CSS_VERSION}" />
 
+    <noscript><link rel="stylesheet" href="/css/no-js.css?v={asset_version("css/no-js.css")}" /></noscript>
     {jsonld_for(page)}"""
 
 
