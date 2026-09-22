@@ -784,8 +784,8 @@ JS_VERSION = asset_version("js/main.js")
 # buy nothing and would compete for bandwidth with the three faces that do
 # paint the header.
 PRELOAD_FONTS = [
-    "ibm-plex-sans-latin.woff2",
-    "fraunces-normal-latin.woff2",
+    "ibm-plex-sans-latin-site.woff2",
+    "fraunces-normal-latin-site.woff2",
     "ibm-plex-mono-400-latin.woff2",
 ]
 
@@ -797,8 +797,8 @@ PRELOAD_FONTS = [
 #
 # It is deliberately NOT in the site-wide list. Everywhere else <em> appears in
 # body prose well below the fold, where `font-display: swap` handles it and a
-# 45KB preload would only compete with the faces that paint the header.
-PRELOAD_FONTS_HOME = PRELOAD_FONTS + ["fraunces-italic-latin.woff2"]
+# extra preload would only compete with the faces that paint the header.
+PRELOAD_FONTS_HOME = PRELOAD_FONTS + ["fraunces-italic-latin-site.woff2"]
 
 
 def font_preloads_for(page: dict) -> str:
