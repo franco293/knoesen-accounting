@@ -2,6 +2,17 @@
 
 Prepared locally following the September 2026 audit. This file records code changes and outstanding operational work; it is not proof that production was deployed.
 
+## Verified follow-up — 22 September 2026
+
+- The audit repair release was pushed as `722a219` and subsequently verified on the live site: direct-contact fallback, consent handling, mobile menu, updated interest guidance and source-file exclusions.
+- **F03:** HTTP redirects to HTTPS; tested homepage and deep paths with query preservation.
+- **F17:** www redirects to the apex with paths and query strings preserved. The older business/email domain remains unchanged.
+- **F05/F06:** Google Analytics Realtime received `contact_call`, `contact_email` and `contact_whatsapp` during owner-operated tests. All three are now key events, counted per event without a default monetary value. These are contact-intent clicks, not delivered or qualified enquiries. Facebook was confirmed as an outbound `click` with `link_domain=facebook.com`.
+- Search Console accepted `/sitemap.xml` with **Success**, last read 22 September, 21 discovered pages. The indexing report (updated 18 September) showed 22 indexed URLs and six exclusions: four disabled tool redirects, one old bonus-calculator duplicate and the sitemap itself. Google reported no manual actions or security issues. Field Core Web Vitals data was unavailable.
+- **F12 remains open:** font update `ea2aa34` reduces the homepage's preloaded font payload from 142,696 to 125,916 bytes while preserving character coverage and layout. All 22 enabled pages passed geometry/overflow checks at 320, 390 and 1440px. Repeated throttled timing results were mixed, so no reliable LCP improvement is claimed. This update was not yet live at the latest pre-deployment check.
+
+The items above supersede the original audit's outstanding-status descriptions. They record point-in-time verification, not continuous monitoring.
+
 ## Prepare and verify
 
 1. Run `python publish.py`. It regenerates pages, checks links/configuration, runs independent factual and publication tests, and builds `dist/` from an explicit allowlist. Python 3.9+ is required. There are no production package dependencies.
@@ -20,7 +31,7 @@ The release manifest is intentionally outside `dist/`. Development metadata, tes
 | F01 | Existing direct email/phone/WhatsApp fallback retained and tested; no inactive form is emitted. |
 | F02, F14 | Effective-dated interest data, source links, previous periods and shared rendered tokens; independent source fixtures. This does not replace practitioner review of every narrative example. |
 | F04, F10 | Allowlisted release folder, explicit build command, reproducible manifest and output-only preview. |
-| F05, F06 | Contact intent events require current analytics permission; vendor consent updates precede loading; Google opt-out flag changes on withdrawal/regrant. Private GA reporting still needs verification. |
+| F05, F06 | Contact intent events require current analytics permission; vendor consent updates precede loading; Google opt-out flag changes on withdrawal/regrant. Owner-operated GA receipt and key-event configuration verified above. |
 | F07 | Cookie reads/decoding/writes/deletion cannot prevent the current in-memory consent choice. If persistence is blocked, the browser may not retain that choice across visits. |
 | F08, F09, F18, F19 | Short-screen settings scroll, focus returns to opener, larger checkbox, verified narrow menu, readable 404 heading and no-script navigation. |
 | F13 | Corrected 2025/26 brackets; independent fixtures and worked-result browser test. Calculators remain disabled. |
@@ -32,8 +43,7 @@ The release manifest is intentionally outside `dist/`. Development metadata, tes
 
 ## Hosting, DNS and owner actions still required
 
-- **F03 — HTTPS:** in the Cloudflare zone enable Always Use HTTPS (or an equivalent edge redirect). Verify HTTP home and deep paths redirect to matching HTTPS URLs with query strings preserved. The existing static `_redirects` file cannot enforce this host/scheme rule. HSTS is already present; it does not replace the redirect.
-- **F17 — www:** if this entry point is supported, add the hostname, valid certificate and one canonical redirect to the apex preserving paths/query. Do not change the older business domain as part of this routine fix.
+- **F03/F17 — preserve verified redirects:** retain the Cloudflare HTTPS and www-to-apex rules. Recheck home and deep paths with query strings after routing changes. Do not change the older business/email domain as part of this routine work.
 - **F11 — mail:** inventory legitimate senders for `knoesenacc.co.za`, verify SPF/DKIM alignment, then introduce monitored DMARC before enforcement. Do not publish a reject policy without that inventory. Preserve MX and domain registration.
 - **F15/F24 — professional/legal facts:** obtain the applicable approved PAIA manual, confirm Information Officer obligations, and supply verifiable registration identifiers or permissioned testimonials. No identifiers, registration status, testimonials or legal documents have been invented.
 - **F26 — domains:** owner decides consolidation versus differentiated coexistence after reviewing Search Console/history. No automatic migration is included.
