@@ -72,10 +72,14 @@
           "Monday",
           "Tuesday",
           "Wednesday",
-          "Thursday",
-          "Friday"
+          "Thursday"
         ],
-        "opens": "08:00",
+        "opens": "09:00",
+        "closes": "17:30"
+      },
+      {
+        "days": ["Friday"],
+        "opens": "09:00",
         "closes": "17:00"
       }
     ]
