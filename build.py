@@ -1383,10 +1383,10 @@ def page_node(page: dict) -> dict:
             "description": page["description"],
             "serviceType": page.get("service_type", page["h1"]),
             "provider": {"@id": f"{DOMAIN}/#organization"},
-            "areaServed": [
+            "areaServed": page.get("area_served", [
                 {"@type": "City", "name": "Gqeberha"},
                 {"@type": "AdministrativeArea", "name": "Nelson Mandela Bay Metropolitan Municipality"},
-            ],
+            ]),
             "audience": {"@type": "BusinessAudience", "name": "Small and medium-sized businesses"},
         }
 

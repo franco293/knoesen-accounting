@@ -114,8 +114,12 @@
       "href": "/services",
       "children": [
         {
-          "label": "Accounting & Financial Statements",
+          "label": "Accounting & Bookkeeping",
           "href": "/services/accounting"
+        },
+        {
+          "label": "Annual Financial Statements",
+          "href": "/services/annual-financial-statements"
         },
         {
           "label": "Tax & SARS",

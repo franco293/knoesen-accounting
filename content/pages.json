@@ -100,6 +100,22 @@
     ]
   },
   {
+    "slug": "services/annual-financial-statements",
+    "file": "service-financial-statements.html",
+    "type": "service",
+    "service_type": "Annual financial statements compilation",
+    "area_served": [{"@type": "Country", "name": "South Africa"}],
+    "breadcrumb": "Annual Financial Statements",
+    "breadcrumbs": [{"name": "Services", "slug": "services"}],
+    "eyebrow": "Financial Year-End",
+    "title": "Annual Financial Statements Gqeberha | Remote SME Service",
+    "description": "Compiled annual financial statements for SMEs in Gqeberha (Port Elizabeth) and across South Africa. Remote service, individual quotes; no audits or reviews.",
+    "h1": "Annual Financial Statements for SMEs",
+    "lead": "Compiled financial statements from our Gqeberha practice, with remote service across South Africa and a quote tailored to your business.",
+    "priority": "0.8",
+    "updated": "2026-09-29"
+  },
+  {
     "slug": "services/tax",
     "file": "service-tax.html",
     "type": "service",
