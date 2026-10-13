@@ -5,5 +5,33 @@ __pycache__/
 .wrangler/
 node_modules/
 release-stage-*/
+release-test-*/
 .env
 .env.*
+
+# Local previews, browser evidence and publishing staging copies.
+output/
+debug.log
+*.log
+playwright-report/
+test-results/
+audit-evidence/
+audit-20*/
+
+# Private operational and client records must not enter the public repository.
+private/
+private-*/
+*.private.*
+enquiry-ledger*.csv
+enquiry-ledger*.xlsx
+client-ledger*.csv
+client-ledger*.xlsx
+lead-ledger*.csv
+lead-ledger*.xlsx
+account-review*.md
+account-review*.json
+
+# Local editor and assistant session metadata.
+.claude/
+.codex/
+.agents/

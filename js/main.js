@@ -65,9 +65,10 @@
 
   /* Conversion tracking.
 
-     The three things that are actually worth measuring on this site are a
-     phone tap, a WhatsApp tap and a sent enquiry. Sessions and bounce rate say
-     nothing about whether the site is earning work.
+     Phone, WhatsApp, email and Facebook activations measure contact intent.
+     A form provider accepting a message is a separate event. Neither proves
+     an enquiry was received, qualified, quoted or became a paying client;
+     reconcile those outcomes separately with the practice's enquiry record.
 
      Done with one delegated listener rather than by tagging every link, because
      the phone number appears in five places (hero, sticky bar, mobile menu,
@@ -101,6 +102,15 @@
     if (href.indexOf("tel:") === 0) track("contact_call", link);
     else if (href.indexOf("wa.me") !== -1) track("contact_whatsapp", link);
     else if (href.indexOf("mailto:") === 0) track("contact_email", link);
+    else {
+      try {
+        /* Match the actual Facebook host, never a substring in another
+           destination's path or query. Send placement/page only, not the URL. */
+        if (new URL(href, location.href).hostname === "www.facebook.com") {
+          track("contact_facebook", link);
+        }
+      } catch (error) { /* Malformed links do not affect other navigation. */ }
+    }
   });
 
   /* Footer year */
@@ -111,13 +121,38 @@
   var mapFrame = document.getElementById("map-frame");
   var mapBtn = document.getElementById("map-load-btn");
   if (mapFrame && mapBtn) {
+    var mapStatus = document.getElementById("map-status");
+    var mapTimer;
+    var reportMap = function (message) {
+      if (!mapStatus) return;
+      mapStatus.textContent = message;
+      mapStatus.hidden = false;
+    };
     mapBtn.addEventListener("click", function () {
       var iframe = mapFrame.querySelector("iframe[data-src]");
-      if (iframe) {
-        iframe.src = iframe.getAttribute("data-src");
-        iframe.removeAttribute("data-src");
-      }
-      mapFrame.classList.add("is-loaded");
+      if (!iframe) return;
+      mapFrame.setAttribute("aria-busy", "true");
+      reportMap("Requesting Google Maps… You can also use the Open in Google Maps link below for directions.");
+      /* A cross-origin iframe's load event can also fire for an error page.
+         It tells us the navigation finished, not that a map rendered. Keep
+         the alternative directions visible and never announce success. */
+      iframe.addEventListener("load", function () {
+        clearTimeout(mapTimer);
+        mapFrame.setAttribute("aria-busy", "false");
+        reportMap("If the map is blank or unavailable, use Open in Google Maps below or contact us for directions.");
+      }, { once: true });
+      iframe.addEventListener("error", function () {
+        clearTimeout(mapTimer);
+        mapFrame.setAttribute("aria-busy", "false");
+        reportMap("The map request could not complete. Use Open in Google Maps below or contact us for directions.");
+      }, { once: true });
+      mapTimer = setTimeout(function () {
+        mapFrame.setAttribute("aria-busy", "false");
+        reportMap("Google Maps may be slow or unavailable. If it has not appeared, use Open in Google Maps below or contact us for directions.");
+      }, 8000);
+      iframe.src = iframe.getAttribute("data-src");
+      iframe.removeAttribute("data-src");
+      mapFrame.classList.add("is-requested");
     });
   }
 

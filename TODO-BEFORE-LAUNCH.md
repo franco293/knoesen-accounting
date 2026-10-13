@@ -1,191 +1,66 @@
-> Current release procedure: [RELEASE-CHECKLIST.md](RELEASE-CHECKLIST.md).
-> Run `python publish.py` and publish only `dist/`. The contact form remains
-> disabled while the provider key is blank; direct contact is the supported path.
-> Older checklist wording below does not establish that production is verified.
+# Owner checks and operational follow-up
 
-# Before this goes live
+The website is already live. This is a current owner checklist, not a claim that the practice has failed the checks below. Use [RELEASE-CHECKLIST.md](RELEASE-CHECKLIST.md) for release validation and [SEO-PLAYBOOK.md](SEO-PLAYBOOK.md) for the no-cost growth plan.
 
-Everything on this list needs a decision, a login, or a fact I could not
-verify. I deliberately left unverified details **out** of the site rather than
-guessing — a fabricated SAIPA number or street address is worse than a missing
-one, both for trust and because invented details in structured data are exactly
-what Google penalises.
+## Confirmed scope and preferences
 
-Each item below tells you where to put the value. All of them live in
-`site.json`; edit it, run `python build.py`, and every one of the 20 pages
-updates at once.
+- Serve South African SMEs, including remote engagements. Prioritise recurring bookkeeping, payroll and tax clients.
+- Provide **compiled annual financial statements only**, quoted individually. Do not advertise audits or independent reviews.
+- Visits in Walmer Heights, Gqeberha / Port Elizabeth are by appointment. The owner confirmed the published hours: Monday–Thursday 09:00–17:30; Friday 09:00–17:00; weekends closed.
+- The existing Google Business Profile was recovered and updated by the owner. Do not create a duplicate.
+- The owner does not want professional registration identifiers or a house number published. Do not invent them or treat their public omission as a technical defect.
+- Obtain real client feedback later; do not add fictional testimonials, client counts or outcomes.
+- Keep spending at zero, with approximately one hour a day available for growth work.
+- The older `knoesenacc.co.za` domain remains an undecided business choice. Email administration was deferred and is not part of routine website fixes.
 
----
+## 1. Review factual and operational claims
 
-## 1. The two-domain problem — read this first
+Have a competent practitioner review corrected CIPC and employer-registration guidance, including conditions, visible FAQs, source links and structured data. A successful build cannot approve professional advice. Date only the content actually reviewed.
 
-You now have the same practice on two domains:
+Confirm that published business statements reflect actual practice: experience, qualifications, services, remote delivery, record handover and any security or response promises. Keep only supportable claims. Public registration numbers remain the owner's choice; a prospect can be given an appropriate verification route privately when needed.
 
-| | |
-|---|---|
-| `knoesenacc.co.za` | the original site |
-| `knoesen-accounting.co.za` | this one |
+Review the tax calendar and homepage notice after 23 October 2026. At the next Budget, check official figures, eligibility rules, examples and narrative wording together. Interest changes can occur between Budgets and need a separate check.
 
-**Google will see near-duplicate businesses.** Same name, same phone, same
-address, same services. When two sites compete for the same query, Google
-usually picks one and suppresses the other — and it normally picks the older,
-more-linked domain. That is the one thing that could stop this site ranking no
-matter how good it is.
+## 2. Check privacy and client-document practice
 
-What I have already done about it:
+The privacy notice, disclaimer and technical consent controls are present. Their presence does not establish compliance with every legal or operational duty.
 
-- Every canonical, `og:url`, sitemap entry and JSON-LD URL now points at
-  `knoesen-accounting.co.za`. **This was broken** — the live site was telling
-  Google "the real version of this page is on knoesenacc.co.za", which alone
-  would have prevented it from ever ranking.
-- The content is now substantially different and roughly 8× larger, so the two
-  sites are no longer near-duplicates of each other. That is the honest way to
-  win this: not a prettier copy, a genuinely better resource.
+The owner or adviser should confirm applicable POPIA/PAIA responsibilities, Information Officer requirements, operator arrangements, retention/deletion rules, access procedures and incident response. Match the notice to actual operations and use an approved manual or exemption where applicable. Do not invent registration references or assert that duties were completed without evidence. Begin with the [Information Regulator's official guidance](https://inforegulator.org.za/document/).
 
-What is still worth deciding:
+Agree a suitable process for exchanging client records privately. Do not ask prospects to post identity documents, tax numbers, bank statements or passwords into public marketing tools. Legal/professional review is an owner task; account settings were not changed as part of this checklist.
 
-- **If you control both domains and the goal is one winning site**, 301-redirect
-  the old one here once you are happy. That moves its accumulated authority
-  across and removes the competition entirely. This is by far the strongest move.
-- **If the old site must stay up** (it is your boss's call), accept that you are
-  competing with it and lean on the difference: the resource guides, the service
-  pages and the local page have no equivalent over there. Those are what you
-  will rank for first.
-- Either way, **do not copy text between the two sites** from here on.
+## 3. Verify access and recovery privately
 
----
+Check who owns the hosting, GitHub and registrar accounts, who can publish, whether multi-factor authentication and recovery contacts work, and whether a usable source/release copy can be restored. Check actual bills and free-plan limits before buying an upgrade.
 
-## 1b. Point `www` at the apex (2 minutes, in the Cloudflare dashboard)
+These controls were not fully accessible during the audit. Missing audit access is an evidence gap, not proof of missing backups or insecure accounts. Keep secrets and recovery codes out of this repository and screenshots.
 
-The site deploys as a Cloudflare **Worker**, and Workers Assets only accepts
-relative URLs in `_redirects` — so unlike Cloudflare Pages, the `www` → apex
-redirect cannot be committed to this repo. An absolute rule there fails the
-whole deploy.
+## 4. Preserve the supported contact and analytics setup
 
-Pick one:
+Direct call, email and WhatsApp links are the supported enquiry path. The website form is intentionally disabled while its provider key is blank. The existing form code does not prove delivery or effective provider-side spam controls.
 
-- **Easiest:** don't attach `www.knoesen-accounting.co.za` to the Worker as a
-  custom domain at all. It then never serves the site, so there is no duplicate
-  to worry about. Every canonical tag already points at the apex.
-- **Better if `www` already resolves:** Cloudflare dashboard → **Rules** →
-  **Redirect Rules** → **Create rule**
-  - When: `http.host eq "www.knoesen-accounting.co.za"`
-  - Then: dynamic redirect, **301**, expression
-    `concat("https://knoesen-accounting.co.za", http.request.uri.path)`
-  - Tick *preserve query string*
+Enable a form only after a deliberate business decision and checks for delivery, privacy wording, provider access, spam controls, failure recovery and sensitive-data handling. Do not activate it merely to clear a checklist item. Disabled calculators similarly need full practitioner validation of calculations and boundary cases before activation.
 
-Redirect Rules are free on every Cloudflare plan.
+Google Analytics is configured and consent-gated. Cloudflare Web Analytics is separately disclosed and may load without a cookie choice. Preserve accept, reject and withdrawal behavior. Verify current event receipt and settings privately; existing call/email/WhatsApp key events measure contact intent rather than delivered or qualified enquiries.
 
-## 2. Register your Information Officer (POPIA — legally required)
+Track anonymised enquiries, quoted work and won recurring clients in a private ledger. Do not place enquiry text, email addresses or other client identifiers into analytics or the public repository.
 
-Every responsible party in South Africa must register an Information Officer
-with the Information Regulator. Lourens is the default as head of the practice.
+## 5. Finish useful search and profile work
 
-- Free, about 10 minutes, at [inforegulator.org.za](https://inforegulator.org.za/)
-- Once you have a registration reference, add it to
-  `content/privacy-policy.html` (search for "Before this site goes live")
+Search Console accepted the sitemap. On 13 October, the financial-statements page was still reported as not indexed despite a working live response, canonical and sitemap entry. A request was recorded on 7 October. After meaningful improvements, inspect once and monitor weekly; Google decides whether and when to index it.
 
-## 3. Turn the contact form on
+Check existing business profiles for accurate facts and the intended website link. Useful no-cost options include [Bing Places](https://www.bing.com/forbusiness/) and [Apple Business](https://business.apple.com/), subject to verification and current South African feature eligibility. Detailed official sources and the current Apple platform name are in SEO-PLAYBOOK.md. Professional membership/profile opportunities need an eligibility check; a free backlink is not promised.
 
-The form is built, styled and spam-protected but has no backend key, so it
-currently shows a friendly "please call or email" notice instead of silently
-losing enquiries.
+Account access and business verification may require the owner. No new listings, external messages, review requests or submissions have been sent. Use only genuine client reviews, without incentives or invented ratings.
 
-1. Get a free access key at [web3forms.com](https://web3forms.com)
-2. Put it in `site.json` → `forms.web3forms_key`
-3. `python build.py`
+## 6. Keep the domain decision separate
 
-Until then, every enquiry has to come by phone, WhatsApp or email.
+The primary website's HTTPS and www-to-apex redirects were verified in the October audit, including path and query-string preservation. Preserve them and recheck after routing changes. Worker assets accept relative `_redirects` entries; the cross-host www rule belongs in the existing Cloudflare routing configuration.
 
-## 3b. Turn analytics on, when you want it
+Before deciding whether the older site should coexist or redirect, inspect its actual traffic, links, ownership and intended role. If it stays, check its contact links and current business information. If consolidation is chosen later, prepare URL-specific redirects and verify results. Preserve the old domain's email service and registration. Deferred email configuration should stay deferred unless the owner reopens it.
 
-The consent layer is built and tested but no tracking tag is configured, so
-right now there is deliberately **no cookie banner** — the site sets nothing
-that anyone could consent to, and the privacy notice says exactly that.
+## 7. Publish a reviewed release
 
-Cloudflare Web Analytics is already running and already answers a lot: page
-views, referrers, top pages and Core Web Vitals, without cookies and without a
-banner. Check that before deciding you need more.
+Run `python publish.py`, preview the resulting `dist/`, and follow RELEASE-CHECKLIST.md. Publish only the allowlisted output, preserve a rollback version and compare live files to the release manifest. Never publish the repository root, audit evidence, account metadata or private client records.
 
-To add Google Analytics (or Google Ads, or the Meta Pixel):
-
-1. Put the ID in `site.json` → `analytics` (`ga4_measurement_id` is the
-   `G-XXXXXXXXXX` from your GA4 property)
-2. Bump `site.json` → `legal.privacy_policy_updated` to today
-3. `python build.py --check`
-
-That one change brings up the cookie banner, the matching consent toggle, the
-CSP origins that tag needs, and the paragraph in the privacy notice that
-discloses it. `--check` fails if any of those four disagree, including if you
-forget step 2. Nothing loads before the visitor accepts.
-
-**A word of caution.** Once a banner exists, roughly a third of visitors say no
-and their visits stop appearing in GA — so GA will show fewer visits than
-Cloudflare does. That is consent working, not a bug. And a banner is a small
-tax on every first visit to a site whose whole selling point is that it does not
-mess visitors around. Worth being sure the extra detail is detail you will act
-on.
-
-## 4. The facts I could not verify
-
-Add whichever of these you can confirm. Each is in `site.json`, and each is
-currently omitted from both the page and the structured data.
-
-| What | Where in `site.json` | Why it matters |
-|---|---|---|
-| SARS tax practitioner (PR) number | `credentials.tax_practitioner_number` | The strongest credibility signal an SA accounting site can carry. Renders in the footer and as a verifiable credential in `Person` schema. |
-| SAIPA membership number | `credentials.saipa_number` | Same, and lets prospects verify Lourens with SAIPA directly. |
-| Full street address | `location.street`, `location.postal_code` | Required for a complete `PostalAddress`. Local ranking depends heavily on address consistency between your site and Google Business Profile. |
-| Latitude / longitude | `location.latitude`, `location.longitude` | Adds `GeoCoordinates`. Right-click your building in Google Maps to copy them. |
-| Trading hours | `hours.spec`, then set `hours.confirmed: true` | Adds `openingHoursSpecification`. Google shows opening hours in local results; a business with none looks less established. |
-| Company registration number | `credentials.company_reg_number` | Optional, but a real trust signal for larger clients and tenders. |
-
-If Lourens is not a registered tax practitioner, leave that row blank and remove
-any wording that implies it — **do not put a number there that is not his.**
-
-## 5. Two things that will move the needle more than anything on the page
-
-1. **Create the Google Business Profile.** You said there isn't one for this
-   site yet. For "accountant near me" in Gqeberha, this matters more than
-   everything in this repository combined. Step-by-step instructions, including
-   exact category and description text, are in `SEO-PLAYBOOK.md`.
-2. **Get a photograph of Lourens.** The About page currently shows an "LK"
-   monogram. A real face on an owner-operated professional services site
-   consistently outperforms a placeholder. Drop the image in `assets/` and
-   follow the comment at the top of `content/about.html`.
-
-## 6. Content that will go stale
-
-Two things are time-sensitive and will actively hurt you if left to rot:
-
-- **The orange banner on the home page** counts down Filing Season 2026
-  (closes 23 October 2026). After that date it is wrong. Edit or delete the
-  `<!-- TIMELY NOTICE -->` block in `content/home.html`.
-- **All tax figures are for the 2026/27 tax year.** After the next Budget,
-  recheck every number against National Treasury's new Tax Guide and update
-  **`data/tax-rates.json`** — add the new year, point `current` at it, and
-  update `site.json` → `tax_year` to match. The rate tables and both
-  calculators are generated from that one file, so there is nothing else to
-  keep in step. Then run `python build.py --check`, which will refuse to build
-  if any bracket, band or threshold is inconsistent. The review date shown on
-  each guide is a promise to your readers — keep it honest.
-
-## 7. Optional: HSTS preload
-
-`_headers` deliberately omits `preload` from the `Strict-Transport-Security`
-line. It is a one-way door — once browsers have it, it is very hard to undo.
-Only add it when you are certain every subdomain you will ever use is
-HTTPS-only.
-
----
-
-## Quick reference
-
-```bash
-python build.py           # rebuild all pages, sitemap.xml and robots.txt
-python build.py --check   # rebuild, then fail on any broken internal link
-python preview.py --port 8000  # preview at http://localhost:8000
-```
-
-`build.py` prints a list of everything it omitted for lack of verification, so
-you can see at a glance what is still outstanding.
+Keep source files, regenerated output and factual review records together in the approved repository. GitHub and production can differ, so a successful push is not proof of a successful deployment. Confirm the actual release and its live behavior.

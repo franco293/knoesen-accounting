@@ -1,6 +1,11 @@
 node_modules/
 .claude/
+.codex/
+.agents/
+output/
+debug.log
 tests/
+release-test-*/
 dist/
 publish.py
 preview.py
@@ -10,8 +15,11 @@ __pycache__/
 .wrangler/
 .git/
 .gitignore
+.github/
 README.md
 SEO-PLAYBOOK.md
+LEAD-MEASUREMENT.md
+AUDIT-FIXES-2026-10-13.md
 TODO-BEFORE-LAUNCH.md
 package.json
 package-lock.json

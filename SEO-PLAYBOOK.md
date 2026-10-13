@@ -1,260 +1,95 @@
-# Ranking playbook — Gqeberha → Eastern Cape → South Africa
+# Organic growth playbook — recurring SME clients
 
-The site is now built to rank. What follows is the work that happens *off* the
-site, because at this point that is where the remaining gains are.
+This playbook reflects the owner's confirmed services and the audit of 13 October 2026. The goal is qualified recurring bookkeeping, payroll and tax enquiries from South African SMEs, with Gqeberha / Port Elizabeth as the first local market. Compiled annual financial statements are a separate, individually quoted service. Audit and independent-review engagements are not offered.
 
-Be realistic about the timeline. On-page work is visible to Google in days.
-Local pack rankings move in weeks. Competitive commercial terms take months.
-Anyone who tells you otherwise is selling something.
+The available budget is **no paid tools or advertising, with one hour a day**. Three new clients in a month is a business target; search rankings, clicks and client acquisition cannot be guaranteed.
 
----
+## Current evidence
 
-## Where you actually stand
+- The owner recovered and updated the existing Google Business Profile. Maintain that profile rather than creating a duplicate. Hours are owner-confirmed; visits are by appointment.
+- Use the private dated audit as the Search Console baseline. Compare equal periods and relevant page/query combinations; overall average position is not the ranking of a particular commercial query. Keep report exports outside this public repository.
+- The financial-statements page's live response, canonical and sitemap entry worked. Inspect its current Google indexing status with owner access after publication. An indexing request does not guarantee indexing.
+- Inspect the Links report when prioritising legitimate local/professional profiles. Google provides an incomplete link report, so absence from that report does not establish that a link cannot exist elsewhere.
+- The site has consent-gated Google Analytics and disclosed Cloudflare Web Analytics. Call, email and WhatsApp events measure contact intent. They do not establish delivery, a qualified enquiry or a paying client.
 
-**The competition in Gqeberha** — Francis Reed & Co (20+ years, chartered
-accountants), LVR Accountants (established 1984, Newton Park), PWM Accounting
-(SAICA + SAIPA), MAPD Accounting, Esti MaGuire Tax & Accounting.
+Repeat the same report filters before comparing results. Keep owner tests separate from customer activity and compare equal periods. Private client and enquiry details belong outside this public repository and analytics.
 
-Most of them have three things you don't: age, backlinks, and Google reviews.
-What they mostly *don't* have is depth of genuinely useful, current content.
-Several South African accounting sites are still publishing the R1 million VAT
-threshold that changed on 1 April 2026.
+## First month: spend the hour on useful work
 
-That is the gap this site is built to exploit. You will not out-authority a
-1984 firm this year. You can out-*inform* them starting immediately.
+| Work | Time allowance | Expected value | How to assess it |
+|---|---|---|---|
+| Verify corrected tax/CIPC wording against linked official guidance, including visible FAQs and metadata | Initial 1–2 hours; then 15 minutes weekly | High trust and risk-reduction value | Record the actual scope and date of review; do not change a review date without reviewing |
+| Clarify the bookkeeping page's monthly scope, record handover, quote inputs and connection to payroll/tax | Initial 1–2 hours | Medium to high enquiry-fit potential | Compare relevant page/query impressions and qualified enquiries over equal periods |
+| Maintain the recovered Business Profile's name, website, services, hours and appointment information | 20 minutes weekly | Medium local discovery potential | Profile website clicks and calls, then actual enquiry source |
+| Check existing Facebook, professional and business profiles for accurate contact details and website links | 30–60 minutes per profile | Medium referral/discovery potential | Record the profile URL, status and any actual referral traffic |
+| Examine financial-statements indexing and commercial query/page combinations | 20 minutes weekly | Medium potential; depends on Google | URL inspection and relevant query impressions, without daily repeat requests |
+| Record anonymised enquiries, quotes, won clients and recurring-service fit privately | 10 minutes daily | High decision value | Weekly counts and reasons for unsuitable/lost enquiries |
 
-**Realistic sequencing:**
+These impact estimates are planning judgements, not measured uplift. Begin with the existing pages and profiles. A new page is useful when it answers a distinct customer need with verified, substantial information.
 
-1. **Now → 6 weeks.** Long-tail informational queries — "turnover tax vs SBC",
-   "VAT threshold South Africa 2026", "when is EMP501 due", "CIPC annual return
-   deadline". Low competition, and the guides are already better than most of
-   what ranks.
-2. **6 weeks → 6 months.** Local commercial terms — "accountant Gqeberha",
-   "tax practitioner Port Elizabeth". This is won mainly through Google Business
-   Profile and reviews, not through the website.
-3. **6 months+.** Provincial and national terms. Needs accumulated authority:
-   links, mentions, and a track record of ranking content.
+## Google Business Profile and genuine reviews
 
----
+Use the existing recovered profile. Ensure the website link points to the intended business site and that services accurately describe recurring SME work and compilation-only financial statements. The practice is in Walmer Heights, Gqeberha, and supports remote South African clients. Do not invent offices or imply physical locations elsewhere.
 
-## Step 1 — Google Business Profile (do this first, today)
+Keep appointment information and holiday hours accurate. The owner does not want a house number published on the website. If a platform requires private verification or imposes address-display rules, review its current eligibility requirements with the owner before changing the listing. Appointment-only visits do not by themselves resolve every platform rule.
 
-For "accountant near me" in Gqeberha, this single asset outranks everything in
-this repository. You have no profile for this site yet, so this is the highest
-priority item on the list.
+Ask real clients for an honest review when appropriate, without incentives, selective requests based on expected ratings, or invented testimonials. The owner plans to obtain real client feedback later. No fixed review count or posting schedule guarantees a ranking. Replies should respect client confidentiality.
 
-**Create it:** [business.google.com](https://business.google.com) → Add business
+Google says local results depend mainly on relevance, distance and prominence. National remote service does not create a local map presence in every South African city. [Google's local ranking guidance](https://support.google.com/business/answer/7091?hl=en) and [review contribution policy](https://support.google.com/contributionpolicy/answer/7400114?hl=en).
 
-**Exact settings to use:**
+## Legitimate profiles and links
 
-- **Name:** `Knoesen Accounting, Tax & Payroll`
-  Use exactly this — matching the name on the site and everywhere else. Do not
-  stuff keywords into it ("Knoesen Accounting Gqeberha Tax Experts"). It is
-  against Google's guidelines and is a common cause of suspension.
-- **Primary category:** `Accountant`
-- **Secondary categories:** `Tax preparation service`, `Payroll service`,
-  `Bookkeeping service`, `Tax consultant`
-- **Service area:** if you do not have a public office, set it as a
-  service-area business covering Gqeberha, Kariega and Despatch, and hide the
-  street address. Do not list a residential address publicly if you would
-  rather not.
-- **Phone:** `+27 84 793 2990` — identical formatting to the site
-- **Website:** `https://knoesen-accounting.co.za` — the new domain, not the old
-  one. This is the single most important field for the purpose you described.
-- **Hours:** fill them in. A profile with no hours looks dormant.
+Keep business facts consistent across profiles: the same practice, contact methods, locality, hours and intended website. Normal punctuation and phone-number formatting variations are acceptable; facts need to agree, not be byte-identical.
 
-**Description** (750 char limit — this fits and reads naturally):
+Prioritise existing profiles before adding accounts:
 
-> Knoesen Accounting, Tax & Payroll is a SAIPA-registered accounting practice
-> in Walmer Heights, Gqeberha, serving small and medium-sized businesses across
-> the Nelson Mandela Bay Metro. Established in 2021 by Lourens Knoesen,
-> Professional Accountant (SA), with over ten years of experience in the
-> accounting industry.
->
-> We handle monthly bookkeeping, annual financial statements, management
-> accounts, income tax and provisional tax, VAT returns, payroll including
-> EMP201 and EMP501 submissions, UIF and SDL, and CIPC annual returns and
-> beneficial ownership filings.
->
-> You deal directly with the principal accountant — no call centre, no
-> hand-offs. Serving Walmer, Newton Park, Summerstrand, Lorraine, Kariega and
-> Despatch.
+1. **Existing Google Business Profile and Facebook page.** Check the website link, service information and appointment wording. Do not assume their current values without inspecting them.
+2. **Bing Places for Business.** Its current portal is [bing.com/forbusiness](https://www.bing.com/forbusiness/). Microsoft describes listing management as free. Claim an existing listing where available rather than creating a duplicate; verification and regional availability still need to be checked. [Official migration announcement](https://blogs.bing.com/search/2025/10/Introducing-the-New-Bing-Places-for-Business-Built-for-Business-Owners%2C-Powered-by-Research/).
+3. **Apple Business.** Apple Business replaced Business Connect on 14 April 2026. Begin at [business.apple.com](https://business.apple.com/). Its core service is free, and Apple lists brand/location management for South Africa, subject to feature availability and verification. Avoid optional purchases. [Official announcement](https://www.apple.com/newsroom/2026/03/introducing-apple-business-a-new-all-in-one-platform-for-businesses-of-all-sizes/), [support](https://business.apple.com/support), [regional availability](https://support.apple.com/en-in/guide/business/axmef1c47twq/web).
+4. **Existing professional or local business memberships.** Ask the owner to check whether the current membership includes an accurate public profile and website link. SAIPA's public [Find an Accountant page](https://www.saipa.co.za/find-an-accountant/) currently provides an enquiry form; a free self-service backlink listing was not verified. Do not purchase membership just for a link.
+5. **Real business relationships.** Relevant suppliers, associations or clients may naturally reference useful guidance or the practice. Request permission before any outreach. A link should serve their readers; do not buy links, exchange them at scale or promise reciprocal benefits.
 
-**Then, every fortnight:**
+No listings, account changes, review requests or external messages have been submitted as part of this playbook. Those steps require the appropriate account access and the owner's approved business information.
 
-- Add a Google Post linking to one of your guides. Deadline reminders work
-  particularly well ("Filing Season closes 23 October").
-- Answer a question in the Q&A section. You may ask and answer your own — use
-  the FAQs already on the site.
-- Add photos. Office, desk, you at work. Profiles with photos get materially
-  more engagement, and engagement feeds ranking.
+## Content and on-page priorities
 
----
+Focus commercial pages on customer tasks: monthly books kept up to date, payroll administration, tax compliance and separately quoted compiled financial statements. Explain what records are needed, what the engagement can cover and how scope is agreed. Publish a turnaround, fee or outcome only after the business confirms it can deliver that promise.
 
-## Step 2 — Reviews
+Use the existing bookkeeping, payroll, tax and financial-statements pages to cover distinct needs. Link from relevant guides to the matching service in context. Preserve useful URLs. Avoid interchangeable suburb pages, keyword repetition, manufactured author credentials and mass-produced tax articles.
 
-After the profile itself, reviews are the strongest local ranking factor, and
-the strongest conversion factor. A firm with 20 reviews at 4.8 beats a firm
-with 2 at 5.0, both in ranking and in whether someone calls.
+Choose the next guide from actual customer questions and Search Console query/page evidence. Search volume and competition for proposed topics were not independently established. One useful, reviewed answer can be more valuable than several loosely related pages.
 
-**How to actually get them:**
+For tax and compliance content:
 
-- Ask right after a win — a refund landed, a long-overdue filing cleared, a
-  first clean year-end. Not at random.
-- Ask by WhatsApp with the direct review link. Every extra tap loses people.
-  Get the short link from your GBP dashboard.
-- Ask in person or by voice note, then send the link. A cold bulk email gets
-  almost nothing.
-- Target roughly two a month, steadily. Twenty reviews appearing in one week
-  looks exactly like what it is, and Google filters them.
+- Verify time-sensitive rules with SARS, National Treasury and CIPC. Keep review responsibility and scope explicit.
+- Separate the tax year, a rule's effective date, factual review date and technical modification date.
+- Check examples and narrative conditions as well as numeric tables. A successful build checks consistency, not authoritative truth.
+- Review the homepage filing-season notice after 23 October 2026 and before publishing a later reminder.
+- Keep historical interest periods where needed and check changes between annual Budgets.
 
-**Reply to every single one**, positive or negative, within a few days. Replies
-are visible to prospects and signal an active business.
+Google's guidance emphasises helpful content and clear, accurate authorship; E-E-A-T is not a single ranking factor or a score to buy. Do not update dates merely to suggest freshness. [Helpful content guidance](https://developers.google.com/search/docs/fundamentals/creating-helpful-content).
 
-Never offer anything in exchange for a review. It violates Google's policies
-and, for a professional accountant, it is a bad look that outlasts the benefit.
+## Indexing, performance and measurement
 
----
+The financial-statements URL already has a working technical foundation. After a meaningful content or internal-link improvement, inspect the live URL and request indexing once if appropriate. Then monitor weekly. Repeated requests do not accelerate crawling. [Google's recrawl guidance](https://developers.google.com/search/docs/crawling-indexing/ask-google-to-recrawl).
 
-## Step 3 — Citations (NAP consistency)
+Retain the static architecture, self-hosted fonts, consent choices, secure headers and allowlisted release. Investigate the slow throttled-mobile laboratory results with repeatable before/after tests. Search Console had insufficient field Core Web Vitals data; neither a laboratory result nor an absence of field data proves a field ranking penalty.
 
-Your Name, Address and Phone must be **byte-identical** everywhere. Google uses
-consistency across the web to decide how confident it is that your business is
-real and where it is.
+Weekly, record:
 
-Decide the canonical format once and never vary it:
+- Commercial query/page impressions, clicks and position using the same filters and equal periods.
+- Indexing status of important service pages, including financial statements.
+- Business Profile website/call actions and legitimate referral sources.
+- Anonymised qualified enquiries, quotes and won recurring clients in a private ledger.
 
-```
-Knoesen Accounting, Tax & Payroll
-Walmer Heights, Gqeberha, 6070, Eastern Cape
-+27 84 793 2990
-https://knoesen-accounting.co.za
-```
+At this traffic level, avoid interpreting daily movement or tiny A/B samples as reliable evidence. Review the month as a whole and act on customer fit and actual enquiries. No paid rank tracker or backlink subscription is required.
 
-Worth claiming, roughly in order of value:
+## The older domain
 
-- Google Business Profile *(step 1)*
-- Bing Places
-- Apple Business Connect
-- Facebook — the page already exists at
-  [Knoesen Accounting Tax & Payroll](https://www.facebook.com/Knoesenaccountingtaxandpayroll/);
-  **update the website link on it to the new domain**
-- LinkedIn company page — currently missing, and it is a genuine gap for a
-  B2B professional practice
-- SAIPA member directory — free, highly relevant, and an authoritative link
-- Nelson Mandela Bay Business Chamber
-- Yellow Pages / Brabys / Snupit / Procompare / infoisinfo — the existing
-  Procompare listing needs its website link updated too
+`knoesenacc.co.za` remains an undecided business choice and continues to support the existing email identity. Coexistence and consolidation both require a business decision; neither is assumed here.
 
-**Fix the old listings.** Any directory currently pointing at
-`knoesenacc.co.za` is sending authority to the site you are trying to beat.
+If both sites remain, keep each one's role and contact information clear and check actual traffic and links before changing profile destinations. If consolidation is later chosen, map useful URLs, plan redirects and verify results while preserving email and domain registration. Do not claim that two sites automatically prevent ranking or that a redirect guarantees transferred rankings. Email administration remains deferred.
 
----
+## Longer-term work
 
-## Step 4 — Links
-
-You need relatively few, and they need to be real. Ignore anyone selling
-"500 backlinks for R500" — at best it does nothing.
-
-Realistic sources for a practice like this:
-
-- **SAIPA directory** — free, relevant, authoritative
-- **Business Chamber membership** — usually includes a member profile link
-- **Clients' websites** — many small businesses list their accountant. Ask; it
-  costs nothing and these are topically perfect links.
-- **Local media** — *Herald Live*, *Algoa FM*, community papers. Offer commentary
-  when tax news breaks: Budget day, filing season opening, the VAT threshold
-  change. Journalists need a local expert to quote, and accountants who answer
-  the phone quickly get quoted repeatedly.
-- **Guest content** — a piece on a local business association or industry blog
-  aimed at a specific sector you serve.
-- **Speaking** — a "tax basics for small business" session with a chamber or a
-  co-working space. Nearly always produces a link and often produces clients.
-
-The strongest asset you have is the guide library. Deadline calendars and rate
-tables get referenced and linked by other people, which is precisely why they
-are on the site.
-
----
-
-## Step 5 — Keep the content moving
-
-Google rewards sites that stay current, and tax content decays fast.
-
-**A realistic cadence:**
-
-- **Monthly** — check the home page banner still shows a live deadline.
-- **Quarterly** — re-verify the figures in `guide-rates.html` and update the
-  review date. If nothing changed, still bump the date, because you checked.
-- **At each Budget (February)** — full rate refresh. This is the single biggest
-  content opportunity of the year: publish updated tables the same week, while
-  most competitors take months.
-- **Ongoing** — add a guide whenever you answer the same client question three
-  times. That is the signal it is worth a page.
-
-**Guide ideas with real search demand and weak competition:**
-
-- Home office deduction — who actually qualifies
-- Independent contractor vs employee — the SARS tests
-- Company car vs travel allowance — worked comparison
-- Trust taxation after the 2021 reporting changes
-- Section 18A donations and what a valid certificate looks like
-- Deregistered by CIPC — how to get reinstated
-- SARS verification — what to send and what not to
-- Crypto and SARS
-- Buying a business — the tax due diligence checklist
-
-Write these the way the existing guides are written: primary sources, real
-figures, review dates, and an honest answer even when the honest answer is
-"it depends, and here is what it depends on."
-
----
-
-## What to measure
-
-Set up **Google Search Console** (`search.google.com/search-console`) on day
-one — before anything else, because it only collects data from the moment it is
-verified. Submit `https://knoesen-accounting.co.za/sitemap.xml`.
-
-Then watch, in this order of importance:
-
-1. **Pages indexed** — if pages are not indexed, nothing else matters. Check
-   this in week one.
-2. **Impressions** — the earliest signal that rankings are moving, and it moves
-   long before clicks do.
-3. **Average position for target queries** — "accountant gqeberha", "accountant
-   port elizabeth", "tax practitioner gqeberha", "payroll services port
-   elizabeth", "SAIPA accountant Nelson Mandela Bay".
-4. **GBP insights** — calls, direction requests, website clicks. For a local
-   practice this is closer to revenue than anything in Search Console.
-5. **Actual enquiries.** Ask every new client how they found you. It is the only
-   metric that pays.
-
-**Analytics:** the project configures Cloudflare Web Analytics and consent-gated
-Google Analytics. Verify the actual deployed version and private reports before
-claiming collection works or interpreting missing data. `site.json` drives the
-generated tags, CSP origins and privacy disclosures. Contact events measure
-intent, not delivered or qualified leads. Test reject, grant and withdrawal
-before deployment; never send enquiry text or personal identifiers to analytics.
-Changing providers or adding tags requires a processing/notice review, not just
-pasting a script. See RELEASE-CHECKLIST.md for release and account checks.
-
----
-
-## A note on expectations
-
-You said the goal is to prove this site can outrank the original. Here is the
-honest assessment:
-
-**Very achievable within weeks:** outranking the old site for every
-informational query — tax rates, deadlines, VAT thresholds, payroll compliance.
-The old site has no content of that kind at all, so there is nothing to beat.
-
-**Achievable within months:** competing for "accountant Gqeberha" — but this is
-won or lost on Google Business Profile and reviews, not on the website. If the
-old domain holds the GBP listing and this one has none, it will keep winning the
-map pack regardless of which site is better.
-
-**The honest risk:** two sites for one business split your authority and can
-suppress each other. The strongest possible move remains consolidating onto one
-domain and 301-redirecting the other. If you get that decision, take it.
+Over the next 60–90 days, improve pages using query and enquiry evidence, finish legitimate profile checks and build a sustainable review process when real clients are ready. Over 6–12 months, publish useful niche SME guidance only where the practice can provide verified expertise. Review national remote-service visibility separately from local map rankings. Reassess the plan against qualified leads, available capacity and the one-hour daily limit.

@@ -2,9 +2,11 @@
   <div class="container">
     <div class="prose reveal">
       <p class="lead-note">
-        Every figure on this page comes from
+        Annual tax tables on this page use
         <a href="https://www.treasury.gov.za/documents/national%20budget/2026/sars/Budget%202026%20Tax%20guide.pdf" target="_blank" rel="noopener noreferrer">National Treasury's Budget 2026 Tax Guide</a>,
-        which sets out the rates for {{tax_period}}. Reviewed {{verified_on}}.
+        which sets out the rates for {{tax_period}}. Annual tax sources checked
+        {{verified_on}}. Interest rates use the separate effective-dated SARS
+        sources cited below.
       </p>
     </div>
   </div>
@@ -252,8 +254,8 @@
           <tbody>
             <tr><td>UIF — employer</td><td>1% of remuneration</td></tr>
             <tr><td>UIF — employee</td><td>1% of remuneration</td></tr>
-            <tr><td>Skills Development Levy</td><td>1% of total remuneration</td></tr>
-            <tr><td>SDL exemption</td><td>Annual remuneration under R500 000</td></tr>
+            <tr><td>Skills Development Levy</td><td>1% of remuneration subject to SDL</td></tr>
+            <tr><td>SDL exemption</td><td>Anticipated remuneration subject to SDL does not exceed R500 000 over the next 12 months</td></tr>
           </tbody>
         </table>
       </div>
@@ -292,10 +294,15 @@
     </div>
 
     <p class="source-note reveal">
-      Source: National Treasury, <em>Budget 2026 Tax Guide</em>, covering
-      {{tax_period}}. Reviewed {{verified_on}}. Rates change with each annual
-      Budget; interest rates can change during the year — check
-      against the current guide before relying on it. This page is general
+      Annual tax tables: National Treasury, <em>Budget 2026 Tax Guide</em>, covering
+      {{tax_period}}; sources checked {{verified_on}}. SDL exemption wording:
+      <a href="https://www.sars.gov.za/types-of-tax/skills-development-levy/" target="_blank" rel="noopener noreferrer">SARS SDL guidance</a>, checked 13 October 2026.
+      Interest rates:
+      <a href="{{interest_tax_source}}" target="_blank" rel="noopener noreferrer">SARS Table 1</a>,
+      <a href="{{interest_refund_source}}" target="_blank" rel="noopener noreferrer">Table 2</a> and
+      <a href="{{interest_loan_source}}" target="_blank" rel="noopener noreferrer">Table 3</a>;
+      sources checked {{interest_verified_on}}. Check the applicable source and
+      effective date before relying on a figure. This page is general
       information, not advice about your circumstances; see the
       <a href="/disclaimer">disclaimer</a>.
     </p>

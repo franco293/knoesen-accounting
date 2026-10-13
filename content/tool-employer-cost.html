@@ -57,12 +57,15 @@
           <legend>Your payroll</legend>
           <div class="form-field">
             <label for="ec-payroll">
-              Total annual payroll for the business <span class="calc-optional">(optional)</span>
+              Anticipated remuneration subject to SDL over the next 12 months <span class="calc-optional">(optional)</span>
             </label>
             <input type="text" inputmode="decimal" id="ec-payroll" autocomplete="off" placeholder="0" />
             <p class="calc-hint">
               Only used to work out whether you are exempt from the Skills
-              Development Levy. Leave it blank and the levy is charged.
+              Development Levy under the R500 000 threshold exemption. Include
+              the whole business, not only this employee. Leave it blank and
+              the calculator assumes the levy applies; other exemptions are
+              not assessed here.
             </p>
           </div>
         </fieldset>
@@ -188,19 +191,21 @@
           </p>
 
           <p class="calc-threshold" id="ec-note-sdl-exempt" hidden>
-            Your total payroll is below
+            Your anticipated remuneration subject to SDL over the next
+            12 months does not exceed
             <strong id="ec-out-sdl-limit">R500 000</strong>, so you are exempt
             from the Skills Development Levy and it shows as nil. Watch that
-            line: the exemption is tested on the <em>whole</em> payroll, so the
+            line: the exemption is tested on the <em>whole</em> leviable amount, so the
             hire that takes you over it makes the levy payable on everybody,
             not just on them.
           </p>
 
           <p class="calc-hint" id="ec-note-sdl-assumed" hidden>
-            The Skills Development Levy is charged here because no total
-            payroll was given. If your annual payroll is under
-            <strong>R500 000</strong> you are exempt &mdash; enter it above to
-            see that.
+            The Skills Development Levy is charged here because no anticipated
+            leviable remuneration was given. If that amount does not exceed
+            <strong>R500 000 over the next 12 months</strong>, the threshold
+            exemption applies. Enter it above; other exemptions require a
+            separate assessment.
           </p>
         </div>
 
@@ -235,11 +240,18 @@
       </p>
       <p>
         <strong>The Skills Development Levy</strong> is 1% with no ceiling at
-        all, but the whole business is exempt while its annual payroll stays
-        under R500 000. That produces a genuine cliff: the hire that takes you
-        past the threshold makes the levy payable on your entire payroll, not
-        just on the new person. A business at R490 000 of payroll adding a
-        R60 000 role does not pick up R600 of levy &mdash; it picks up R5 500.
+        all, but an employer whose anticipated remuneration subject to SDL
+        does not exceed R500 000 over the next 12 months is exempt. Above this
+        threshold, the levy applies to the leviable remuneration rather than
+        only the excess, unless another exemption applies. Assuming no other
+        exemption, R490 000 plus a new role adding R60 000 of leviable
+        remuneration over those 12 months produces R5 500 of SDL, not R600.
+      </p>
+      <p class="source-note">
+        SDL exemption guidance checked 13 October 2026 against
+        <a href="https://www.sars.gov.za/types-of-tax/skills-development-levy/" target="_blank" rel="noopener noreferrer">SARS SDL guidance</a>.
+        The test uses anticipated remuneration subject to SDL over the next
+        12 months and includes exactly R500 000 in the exemption.
       </p>
       <p>
         <strong>COIDA</strong> is an annual assessment, not a monthly

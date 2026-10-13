@@ -1,6 +1,6 @@
 # Audit repair release
 
-Prepared locally following the September 2026 audit. This file records code changes and outstanding operational work; it is not proof that production was deployed.
+Current October work is recorded in [AUDIT-FIXES-2026-10-13.md](AUDIT-FIXES-2026-10-13.md). This file preserves September release history and the release procedure. Finding IDs below belong to the September audit; they are not the IDs in the October report. Preparation is not proof of production deployment.
 
 ## Verified follow-up — 22 September 2026
 
@@ -23,6 +23,16 @@ Prepared locally following the September 2026 audit. This file records code chan
 The items above supersede the original audit's outstanding-status descriptions. They record point-in-time verification, not continuous monitoring.
 
 ## Prepare and verify
+
+### 7 October 2026 — traffic review follow-up
+
+- Deployed manifest `ec793a04cfafbc17` as Cloudflare version `e7395059-ab8c-4abb-9ef5-4ca4f57c58d7`. Previous production/rollback version: `07f6ffa0-e2b1-4372-8f8a-26436111fcf1` (confirmed hours and appointment-only visits).
+- Reduced desktop consent-banner height and adjusted short-desktop hero spacing. Live check at 1265 x 712 placed the consultation button bottom at 524px, above the banner top at 587px. Equal accept/reject styling and existing consent gating remain intact.
+- Changed consultation CTAs from “Book” to “Request” to match direct contact. Improved small-business-guide navigation, description, headings and enquiry preparation. Corrected VAT/turnover-tax compatibility and eligibility wording against linked SARS sources; updated matching visible/schema FAQs. Numeric rates were not changed or comprehensively re-reviewed in this release.
+- Google Search Console confirmed “Indexing requested” for `/services/annual-financial-statements`; this is a priority crawl request, not confirmation of indexing.
+- Build, internal links, tracking configuration and all four existing tests passed. Local responsive checks covered 320, 390, 1000 and 1265px; consent rejection/preferences, mobile menu/Escape, guide anchors and contact routing passed. Live browser checks confirmed homepage/contact and mobile guide/menu. Live CSS and all three shared JavaScript hashes match the release manifest. No automated enquiry was sent.
+- GA contact events are already configured as key events. The September release notes document owner-operated tracking tests within the recent reporting window, so reported clicks must not be treated as confirmed customer enquiries. No event names or analytics account settings were changed. Key-event zero remains a reporting reconciliation item, not an established client-script defect.
+- Windows staging note: `tempfile.mkdtemp` output created by the sandbox account was unreadable to the publishing account. The successful upload used `output/review/wrangler.prebuilt.toml` and an exact, 57-file manifest-verified copy in `output/review/deploy-assets`, inheriting ordinary project permissions. Rebuild and re-copy/re-verify before ever using this configuration again. The normal build/deploy configuration remains unchanged. Screenshots and the read-only live verifier are in `output/review/`, outside the public allowlist.
 
 1. Run `python publish.py`. It regenerates pages, checks links/configuration, runs independent factual and publication tests, and builds `dist/` from an explicit allowlist. Python 3.9+ is required. There are no production package dependencies.
 2. Run `python preview.py` and inspect the preview at `http://127.0.0.1:8081`. It serves only the release output, including clean URLs. `npm start` uses the same preview; no floating download is needed.
@@ -53,8 +63,8 @@ The release manifest is intentionally outside `dist/`. Development metadata, tes
 ## Hosting, DNS and owner actions still required
 
 - **F03/F17 — preserve verified redirects:** retain the Cloudflare HTTPS and www-to-apex rules. Recheck home and deep paths with query strings after routing changes. Do not change the older business/email domain as part of this routine work.
-- **F11 — mail:** inventory legitimate senders for `knoesenacc.co.za`, verify SPF/DKIM alignment, then introduce monitored DMARC before enforcement. Do not publish a reject policy without that inventory. Preserve MX and domain registration.
-- **F15/F24 — professional/legal facts:** obtain the applicable approved PAIA manual, confirm Information Officer obligations, and supply verifiable registration identifiers or permissioned testimonials. No identifiers, registration status, testimonials or legal documents have been invented.
+- **Mail administration is deferred by the owner:** preserve MX and domain registration. If revisited with account access, identify legitimate senders and alignment before changing SPF/DKIM/DMARC. This is not a prerequisite to the October website fixes.
+- **Professional/legal facts:** privately confirm applicable information-officer/PAIA duties and the accuracy of public professional claims. The owner declines public registration identifiers and a house number; neither is required by this checklist. Genuine testimonials can wait until clients provide permission. No identifiers, testimonials or legal documents have been invented.
 - **F26 — domains:** owner decides consolidation versus differentiated coexistence after reviewing Search Console/history. No automatic migration is included.
 - Verify hosting permissions/MFA, rollback retention and account ownership privately. None were accessible in the audit.
 - F12 performance: use the retained matched experiment and field data where available; no field Core Web Vitals improvement is claimed from a code change alone.

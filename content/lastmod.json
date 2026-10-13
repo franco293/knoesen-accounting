@@ -1,94 +1,94 @@
 {
   "": {
-    "date": "2026-09-29",
-    "hash": "e15cb83f0f572ce0"
+    "date": "2026-10-13",
+    "hash": "80e173dc7f36dad1"
   },
   "404": {
     "date": "2026-08-27",
     "hash": "06e275984cb2b5ab"
   },
   "about": {
-    "date": "2026-08-27",
-    "hash": "4cad0929af51b311"
+    "date": "2026-10-13",
+    "hash": "21fe0a5c36bae408"
   },
   "areas-we-serve": {
-    "date": "2026-09-22",
-    "hash": "65c32355c3c0819d"
+    "date": "2026-10-13",
+    "hash": "48114a3c44b0c949"
   },
   "contact": {
-    "date": "2026-09-29",
-    "hash": "8b5ce324c37d0cd7"
+    "date": "2026-10-13",
+    "hash": "f2bee7f0b7011af4"
   },
   "disclaimer": {
     "date": "2026-08-03",
     "hash": "168a69e4ce723f8d"
   },
   "privacy-policy": {
-    "date": "2026-09-22",
-    "hash": "98f135b1dbae6e1d"
+    "date": "2026-10-13",
+    "hash": "75d02f3dfd316bd5"
   },
   "resources": {
-    "date": "2026-08-03",
-    "hash": "8cbf3e81488cc333"
+    "date": "2026-10-13",
+    "hash": "77032a498788d374"
   },
   "resources/cipc-reinstatement": {
-    "date": "2026-08-06",
-    "hash": "923b3c04bbcc3ba9"
+    "date": "2026-10-13",
+    "hash": "c4538d0dff324590"
   },
   "resources/independent-contractor-or-employee": {
-    "date": "2026-08-04",
-    "hash": "6824433be3ea9fab"
+    "date": "2026-10-13",
+    "hash": "af0677dc0237fd97"
   },
   "resources/payroll-compliance-guide": {
-    "date": "2026-09-22",
-    "hash": "e2ff98f6d2e39c84"
+    "date": "2026-10-13",
+    "hash": "c2062df84cd12de9"
   },
   "resources/sars-filing-season-2026": {
-    "date": "2026-09-22",
-    "hash": "43513db9aa8bf921"
+    "date": "2026-10-13",
+    "hash": "12150120612d9f33"
   },
   "resources/small-business-tax-guide": {
-    "date": "2026-08-03",
-    "hash": "5f46123c5da3cffb"
+    "date": "2026-10-13",
+    "hash": "8631b3a7acf5565c"
   },
   "resources/starting-a-business-in-south-africa": {
-    "date": "2026-09-29",
-    "hash": "21ce1cd593cec75c"
+    "date": "2026-10-13",
+    "hash": "f083cb0d2450efd7"
   },
   "resources/tax-deadlines-calendar": {
-    "date": "2026-09-22",
-    "hash": "66a9ac5bd9c5a5ea"
+    "date": "2026-10-13",
+    "hash": "676d8e3db35ed459"
   },
   "resources/tax-rates-2026-2027": {
-    "date": "2026-09-22",
-    "hash": "5ff5f16fe9c3ea40"
+    "date": "2026-10-13",
+    "hash": "9744a868384b322b"
   },
   "resources/vat-registration-threshold": {
-    "date": "2026-08-03",
-    "hash": "75f622fd4de3816a"
+    "date": "2026-10-13",
+    "hash": "985b00163d7c89ed"
   },
   "services": {
-    "date": "2026-09-29",
-    "hash": "0a056f08bf4c99c1"
+    "date": "2026-10-13",
+    "hash": "dafea6f2e602bb48"
   },
   "services/accounting": {
-    "date": "2026-09-29",
-    "hash": "418042bed2f1e5d9"
+    "date": "2026-10-13",
+    "hash": "38cdf61f3bfea1af"
   },
   "services/annual-financial-statements": {
-    "date": "2026-09-29",
-    "hash": "2d1c0b5c49ce7696"
+    "date": "2026-10-07",
+    "hash": "b171e474066330e7"
   },
   "services/company-secretarial": {
-    "date": "2026-09-29",
-    "hash": "4760e0b8932342a0"
+    "date": "2026-10-13",
+    "hash": "f1bd89753c343bd4"
   },
   "services/payroll": {
-    "date": "2026-09-22",
-    "hash": "5f744fdb141e7180"
+    "date": "2026-10-13",
+    "hash": "73cd5ef3329d71ba"
   },
   "services/tax": {
-    "date": "2026-09-22",
-    "hash": "4799f25d955e21a9"
+    "date": "2026-10-07",
+    "hash": "dd43383c6f953dfa"
   }
 }

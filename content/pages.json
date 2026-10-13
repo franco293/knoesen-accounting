@@ -5,11 +5,11 @@
     "type": "page",
     "breadcrumb": "Home",
     "title": "Accountants in Gqeberha (Port Elizabeth) | Knoesen Accounting",
-    "description": "SAIPA-registered accountant in Gqeberha. Bookkeeping, financial statements, tax, VAT, payroll and CIPC returns for Nelson Mandela Bay businesses.",
+    "description": "Monthly bookkeeping, payroll, tax and CIPC support for SMEs in Gqeberha (Port Elizabeth), with remote service across South Africa. Individual quotes.",
     "h1": "Knoesen Accounting, Tax & Payroll",
     "changefreq": "weekly",
     "priority": "1.0",
-    "updated": "2026-08-03",
+    "updated": "2026-10-13",
     "faq": [
       {
         "q": "Do you work with small businesses and sole proprietors?",
@@ -25,7 +25,7 @@
       },
       {
         "q": "What makes your service different from a larger firm?",
-        "a": "You deal directly with Lourens Knoesen, the principal accountant, rather than being passed between junior staff. That means one person who knows your business, answers your calls, and explains things without jargon."
+        "a": "Contact Lourens Knoesen, the principal accountant, directly to discuss your records, the services you need and questions about the agreed work."
       },
       {
         "q": "I have not filed tax returns in years. Can you still help?",
@@ -41,11 +41,11 @@
     "breadcrumbs": [],
     "eyebrow": "About the Practice",
     "title": "About Lourens Knoesen | Professional Accountant, Gqeberha",
-    "description": "Lourens Knoesen is a SAIPA-registered Professional Accountant (SA) with 10+ years' experience, running an accounting practice in Walmer Heights, Gqeberha.",
+    "description": "Meet Lourens Knoesen, SAIPA-registered Professional Accountant (SA), providing SME accounting, tax and payroll from Walmer Heights, Gqeberha.",
     "h1": "The accountant behind the ledger",
     "lead": "Knoesen Accounting, Tax &amp; Payroll is a one-accountant practice by design. When you call, you speak to the person who does the work.",
     "priority": "0.8",
-    "updated": "2026-08-03"
+    "updated": "2026-10-13"
   },
   {
     "slug": "services",
@@ -56,17 +56,17 @@
     "eyebrow": "What We Do",
     "title": "Accounting, Tax & Payroll Services in Gqeberha | Knoesen",
     "description": "Bookkeeping, annual financial statements, income tax and VAT returns, payroll and CIPC filings for small businesses in Gqeberha and Nelson Mandela Bay.",
-    "h1": "Four ledgers, one accountant",
-    "lead": "From the first bookkeeping entry to the final statutory return, every service below is handled directly by {{principal_first}} — no call centre, no hand-offs, no junior learning on your file.",
+    "h1": "Accounting, payroll and tax for your SME",
+    "lead": "Monthly support for your books and payroll, tax returns and CIPC work, with the scope agreed around your business. Contact {{principal_first}} to discuss what you need.",
     "priority": "0.9",
-    "updated": "2026-08-03"
+    "updated": "2026-10-13"
   },
   {
     "slug": "services/accounting",
     "file": "service-accounting.html",
     "type": "service",
     "service_type": "Accounting and bookkeeping services",
-    "breadcrumb": "Accounting & Financial Statements",
+    "breadcrumb": "Accounting & Bookkeeping",
     "breadcrumbs": [
       {
         "name": "Services",
@@ -74,16 +74,16 @@
       }
     ],
     "eyebrow": "The General Ledger",
-    "title": "Bookkeeping & Financial Statements Gqeberha | Knoesen",
-    "description": "Monthly bookkeeping, management accounts and compiled annual financial statements for companies, sole proprietors, trusts and NPOs in Gqeberha.",
-    "h1": "Accounting & Financial Statements",
-    "lead": "Books that are actually up to date, and financial statements you can hand to a bank, a funder or SARS with confidence.",
+    "title": "Monthly Bookkeeping Gqeberha | Remote SME Accounting",
+    "description": "Monthly bookkeeping, bank reconciliations and management accounts for SMEs in Gqeberha (Port Elizabeth) and remotely across South Africa. Individual quotes.",
+    "h1": "Accounting & Bookkeeping for SMEs",
+    "lead": "Current books and useful management accounts, with monthly support agreed for your business. Based in Gqeberha (Port Elizabeth), available remotely across South Africa.",
     "priority": "0.8",
-    "updated": "2026-08-03",
+    "updated": "2026-10-13",
     "faq": [
       {
         "q": "What is the difference between an audit, a review and a compilation?",
-        "a": "A compilation means the accountant prepares the annual financial statements from your records without expressing an assurance opinion. An independent review and an audit are assurance engagements with progressively more testing. Which one your company needs depends on its Public Interest Score and its Memorandum of Incorporation. Most owner-managed small companies in South Africa require only a compilation."
+        "a": "A compilation means the accountant prepares the annual financial statements from your records without expressing an assurance opinion. An independent review and an audit are assurance engagements with progressively more testing. The required engagement depends on the applicable law, the company's circumstances and its Memorandum of Incorporation. We provide compilations only; an audit or independent review requires a suitable assurance provider."
       },
       {
         "q": "How often should bookkeeping be done?",
@@ -91,11 +91,11 @@
       },
       {
         "q": "Do you work with Xero, Sage, QuickBooks or spreadsheets?",
-        "a": "We work with whatever you already use, including well-kept spreadsheets. If your current system is causing more problems than it solves, we will say so and help you move — but changing software is never a precondition for working together."
+        "a": "Tell us your current software or spreadsheet setup so we can confirm how to work with it and whether any changes are needed for the agreed service."
       },
       {
         "q": "My books are years behind. Is that a problem?",
-        "a": "It is common and it is fixable. We reconstruct the records period by period, bring the filings up to date, and then set up a routine so it does not happen again."
+        "a": "Tell us which periods are outstanding and what records are available. We can assess the reconstruction and filing work, agree its scope, and discuss a monthly routine going forward. Missing records may affect what can be completed and how long it takes."
       }
     ]
   },
@@ -104,9 +104,19 @@
     "file": "service-financial-statements.html",
     "type": "service",
     "service_type": "Annual financial statements compilation",
-    "area_served": [{"@type": "Country", "name": "South Africa"}],
+    "area_served": [
+      {
+        "@type": "Country",
+        "name": "South Africa"
+      }
+    ],
     "breadcrumb": "Annual Financial Statements",
-    "breadcrumbs": [{"name": "Services", "slug": "services"}],
+    "breadcrumbs": [
+      {
+        "name": "Services",
+        "slug": "services"
+      }
+    ],
     "eyebrow": "Financial Year-End",
     "title": "Annual Financial Statements Gqeberha | Remote SME Service",
     "description": "Compiled annual financial statements for SMEs in Gqeberha (Port Elizabeth) and across South Africa. Remote service, individual quotes; no audits or reviews.",
@@ -167,11 +177,11 @@
     ],
     "eyebrow": "The Payroll Book",
     "title": "Payroll Services Gqeberha | PAYE, UIF & SDL Compliance",
-    "description": "Outsourced payroll in Gqeberha: payslips, EMP201 and EMP501 submissions, IRP5 certificates, UIF and SDL. For teams of one to a hundred.",
+    "description": "Payroll support for SMEs in Gqeberha and remotely across South Africa: payslips, EMP201, EMP501, IRP5 certificates, UIF and SDL within the agreed scope.",
     "h1": "Payroll Services",
-    "lead": "Staff paid correctly, PAYE and UIF submitted on time, and IRP5s that reconcile at year-end without drama.",
+    "lead": "Payroll processing and applicable employer submissions, with scope and record deadlines agreed for your business.",
     "priority": "0.8",
-    "updated": "2026-08-03",
+    "updated": "2026-10-13",
     "faq": [
       {
         "q": "When must PAYE, UIF and SDL be paid over to SARS?",
@@ -179,11 +189,11 @@
       },
       {
         "q": "Does my business have to pay the Skills Development Levy?",
-        "a": "SDL is levied at 1% of total remuneration paid to employees. Employers whose total annual remuneration is less than R500 000 are exempt from paying SDL."
+        "a": "SDL is levied at 1% of remuneration subject to SDL. An employer whose anticipated remuneration subject to SDL does not exceed R500 000 over the next 12 months is exempt and does not need to register to pay SDL on that basis. Other exemptions may apply."
       },
       {
         "q": "How much UIF must be contributed?",
-        "a": "Unemployment insurance contributions are payable monthly, made up of 1% contributed by the employer and 1% by the employee, based on the employee's remuneration below a prescribed ceiling."
+        "a": "For covered employees, monthly UIF contributions are 1% from the employer and 1% from the employee, based on remuneration up to the prescribed ceiling. Coverage exclusions include an employee working for that employer for less than 24 hours a month. Contributions are paid through SARS or the UIF Commissioner, as applicable; check which registration and payment route applies to your business."
       },
       {
         "q": "When are the EMP501 reconciliations due?",
@@ -207,17 +217,17 @@
     "title": "CIPC Annual Returns & Company Registration | Gqeberha",
     "description": "CIPC annual returns, beneficial ownership filings, company registrations and deregistrations, handled from Gqeberha for Nelson Mandela Bay businesses.",
     "h1": "Company Secretarial & CIPC",
-    "lead": "The statutory filings that quietly accumulate in the background — kept current, so your company never drifts into deregistration.",
+    "lead": "CIPC annual returns, beneficial ownership information and company changes, to help you meet filing deadlines and address outstanding requirements.",
     "priority": "0.8",
-    "updated": "2026-08-03",
+    "updated": "2026-10-13",
     "faq": [
       {
         "q": "What happens if I do not file my CIPC annual return?",
-        "a": "CIPC may place the company in deregistration process and ultimately deregister it. A deregistered company loses its legal existence: its bank accounts can be frozen, it cannot contract lawfully, and directors lose the protection of separate legal personality. Reinstatement is possible but slower and more expensive than simply filing on time."
+        "a": "Late filing can lead to penalties and compliance action. Continued non-compliance can lead to deregistration, which withdraws the entity's legal personality and can affect its bank accounts and ability to trade. Reinstatement may be possible subject to CIPC's requirements; it should not be treated as an automatic remedy."
       },
       {
         "q": "When is my CIPC annual return due?",
-        "a": "Companies must file within 30 business days after the anniversary of their date of incorporation. Close corporations file within the anniversary month of incorporation and the two months following. The fee is based on turnover, and it is separate from your SARS income tax return — the two are often confused."
+        "a": "CIPC's current notice says companies and close corporations must file their annual return and accompanying beneficial ownership information {{cipc_annual_return_deadline}}. Confirm the entity's current filing requirements with CIPC. The annual return is separate from your SARS income tax return."
       },
       {
         "q": "What is a beneficial ownership declaration?",
@@ -241,7 +251,7 @@
     "h1": "An accountant for Nelson Mandela Bay",
     "lead": "Based in {{suburb}}, {{city}}. Close enough to meet over coffee, set up to work with you wherever you are.",
     "priority": "0.7",
-    "updated": "2026-08-03"
+    "updated": "2026-10-13"
   },
   {
     "slug": "contact",
@@ -253,10 +263,10 @@
     "title": "Contact Knoesen Accounting | Accountant in Gqeberha",
     "description": "Call or WhatsApp +27 84 793 2990 for accounting, tax and payroll help in Gqeberha. The first conversation is free, with no obligation attached.",
     "h1": "Let's talk about your numbers",
-    "lead": "A first conversation costs nothing and usually saves more than it costs. Tell {{principal_first}} what you need and he'll tell you straight whether he can help.",
+    "lead": "Tell {{principal_first}} whether you need monthly bookkeeping, payroll, tax support or a specific task. We can discuss the scope and prepare an individual quote.",
     "priority": "0.9",
     "cta": false,
-    "updated": "2026-08-03"
+    "updated": "2026-10-13"
   },
   {
     "slug": "resources",
@@ -268,15 +278,16 @@
     "title": "Free SA Tax & Payroll Guides for Small Business | Knoesen",
     "description": "Plain-English South African tax guides for business owners: deadline calendars, 2026/27 rates, VAT thresholds, payroll compliance and company registration.",
     "h1": "Guides for South African business owners",
-    "lead": "No sign-up, no email wall. Every figure on these pages is checked against SARS and National Treasury publications, and each guide carries the date it was last reviewed.",
+    "lead": "Free explanations of South African tax, payroll and company-compliance topics. Reference sources and dates are shown so you can check the guidance relevant to your circumstances.",
     "priority": "0.8",
     "changefreq": "weekly",
-    "updated": "2026-08-03"
+    "updated": "2026-10-13"
   },
   {
     "slug": "resources/tax-deadlines-calendar",
     "file": "guide-deadlines.html",
     "type": "article",
+    "sources": "SARS, National Treasury and CIPC",
     "breadcrumb": "Tax Deadline Calendar",
     "breadcrumbs": [
       {
@@ -292,7 +303,7 @@
     "priority": "0.8",
     "changefreq": "monthly",
     "published": "2026-08-03",
-    "updated": "2026-08-03"
+    "updated": "2026-10-13"
   },
   {
     "slug": "resources/sars-filing-season-2026",
@@ -348,7 +359,7 @@
     "priority": "0.8",
     "changefreq": "monthly",
     "published": "2026-08-03",
-    "updated": "2026-08-03"
+    "updated": "2026-10-13"
   },
   {
     "slug": "resources/vat-registration-threshold",
@@ -402,13 +413,13 @@
     ],
     "eyebrow": "Small Business",
     "title": "Small Business Tax South Africa 2026/27 | SBC vs Turnover Tax",
-    "description": "How South African small businesses are taxed in 2026/27: 27% company tax, Small Business Corporation rates from 0%, and turnover tax under R2.3 million.",
+    "description": "Compare small business tax in South Africa for 2026/27: SBC requirements and rates, turnover tax, sole proprietor tax and worked examples.",
     "h1": "How small businesses are taxed in South Africa",
-    "lead": "There are three different ways a small South African business can be taxed, and the gap between them is worth real money. Here is how to tell which one applies to you.",
+    "lead": "Compare company tax, Small Business Corporation rates, turnover tax and tax for sole proprietors. Start with eligibility, then compare the tax on your actual turnover and profit.",
     "priority": "0.8",
     "changefreq": "monthly",
     "published": "2026-08-03",
-    "updated": "2026-08-03",
+    "updated": "2026-10-13",
     "faq": [
       {
         "q": "What is the company tax rate in South Africa?",
@@ -420,11 +431,11 @@
       },
       {
         "q": "Who qualifies for turnover tax?",
-        "a": "Micro businesses with a qualifying annual turnover of R2.3 million or less may elect turnover tax. It replaces income tax, VAT, provisional tax, capital gains tax and dividends tax with a single simplified calculation on turnover rather than profit."
+        "a": "Micro businesses, including qualifying sole proprietors, with qualifying annual turnover of R2.3 million or less may elect turnover tax if they meet the other eligibility requirements. Professional-service and investment-income restrictions also apply. Turnover tax is calculated on taxable turnover rather than profit, and a registered micro business may also be registered for VAT."
       },
       {
         "q": "Is turnover tax always cheaper?",
-        "a": "No. Turnover tax is calculated on turnover, not profit, so a business with thin margins or a loss-making year can pay turnover tax while owing no income tax at all. It suits high-margin, low-cost businesses with simple affairs. It is a calculation worth doing rather than a rule of thumb."
+        "a": "No. Turnover tax is calculated on taxable turnover, not profit. Above the tax-free band, a business can owe turnover tax even in a loss-making year. Compare eligibility, profit margins and the available tax regimes using the figures for your business before choosing."
       }
     ]
   },
@@ -443,11 +454,11 @@
     "title": "Payroll Compliance South Africa | PAYE, UIF, SDL & EMP501",
     "description": "What South African employers owe: registering for PAYE, UIF and SDL, monthly EMP201 deadlines, EMP501 reconciliations, IRP5s and the cost of getting it wrong.",
     "h1": "Payroll compliance for South African employers",
-    "lead": "The moment you hire your first employee, a set of monthly and bi-annual obligations starts. Here is the complete picture.",
+    "lead": "PAYE, UIF and SDL obligations depend on the employer and employees. Check registration, coverage, exemptions and recurring deadlines separately.",
     "priority": "0.8",
     "changefreq": "monthly",
     "published": "2026-08-03",
-    "updated": "2026-08-03"
+    "updated": "2026-10-13"
   },
   {
     "slug": "resources/starting-a-business-in-south-africa",
@@ -467,7 +478,7 @@
     "lead": "Every registration a new South African business needs, in the order you actually need them, and the ongoing obligations each one creates.",
     "priority": "0.7",
     "published": "2026-08-03",
-    "updated": "2026-08-03"
+    "updated": "2026-10-13"
   },
   {
     "slug": "resources/independent-contractor-or-employee",
@@ -871,7 +882,7 @@
     "lead": "What CIPC will charge for your annual returns — including the years you have missed, which is usually the number people actually need.",
     "changefreq": "monthly",
     "priority": "0.8",
-    "updated": "2026-08-06",
+    "updated": "2026-10-13",
     "scripts": [
       "tax-rates.js",
       "sa-tax-core.js",
@@ -892,7 +903,7 @@
       },
       {
         "q": "When is my CIPC annual return due?",
-        "a": "A company must file within 30 business days of the anniversary of its registration date. A close corporation has from the start of its anniversary month until the end of the following month. Missing that window moves you onto the late fee."
+        "a": "CIPC's current notice says companies and close corporations must file their annual return and accompanying beneficial ownership information {{cipc_annual_return_deadline}}. Confirm the entity's current filing requirements with CIPC. The annual return is separate from your SARS income tax return."
       },
       {
         "q": "Do dormant companies have to file annual returns?",
@@ -967,7 +978,7 @@
     "lead": "What a hire actually costs the business, not what appears on the contract — gross salary plus employer UIF, the Skills Development Levy and your COIDA assessment.",
     "changefreq": "monthly",
     "priority": "0.8",
-    "updated": "2026-08-06",
+    "updated": "2026-10-13",
     "scripts": [
       "tax-rates.js",
       "sa-tax-core.js",
@@ -980,7 +991,7 @@
       },
       {
         "q": "Who is exempt from the Skills Development Levy?",
-        "a": "An employer whose total annual remuneration is below R500 000 is exempt. The test is on the whole payroll, not on each employee, so the hire that takes a business past the threshold makes the levy payable on everybody — a business at R490 000 of payroll adding a R60 000 role picks up about R5 500 of levy, not R600."
+        "a": "An employer whose anticipated remuneration subject to SDL does not exceed R500 000 over the next 12 months is exempt. The test applies to the employer's leviable payroll rather than each employee separately. Other exemptions may apply; confirm the remuneration included and expected payroll before relying on the estimate."
       },
       {
         "q": "How is the COIDA assessment calculated?",

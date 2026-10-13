@@ -11,7 +11,7 @@
                     a senior salary and a real one on a junior.
 
      SDL            1% of total remuneration, with NO ceiling — but the whole
-                    business is exempt while its annual payroll stays under the
+                    business is exempt while anticipated leviable payroll does not exceed the
                     threshold. So it is nil until the payroll crosses that
                     line, then it applies to everything, which is why hiring
                     one more person can add more cost than that person's own
@@ -80,13 +80,14 @@
     var uif = Math.min(input.monthlySalary, payroll.uif_monthly_ceiling) *
               payroll.uif_employer_rate * 12;
 
-    /* SDL is an employer-level test: exempt entirely while total annual
-       payroll stays under the threshold. If the visitor has not told us the
+    /* SDL is an employer-level test: exempt while anticipated leviable
+       remuneration over the next 12 months does not exceed the threshold.
+       If the visitor has not told us the
        payroll, assume this employee is not the whole of it and charge it —
        understating a levy is the worse error when costing a hire. */
     var exemptionLimit = payroll.sdl_exemption_annual_remuneration;
     var payrollKnown = input.totalPayroll > 0;
-    var sdlExempt = payrollKnown && input.totalPayroll < exemptionLimit;
+    var sdlExempt = payrollKnown && input.totalPayroll <= exemptionLimit;
     var sdl = sdlExempt ? 0 : annualCash * payroll.sdl_rate;
 
     /* COIDA: industry rate on earnings capped at the annual ceiling. */

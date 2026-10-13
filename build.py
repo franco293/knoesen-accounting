@@ -40,6 +40,7 @@ PAGES = json.loads((CONTENT / "pages.json").read_text(encoding="utf-8"))
 RATES = json.loads((ROOT / "data" / "tax-rates.json").read_text(encoding="utf-8"))
 
 INTEREST = json.loads((ROOT / "data" / "interest-rates.json").read_text(encoding="utf-8"))
+EDITORIAL_FACTS = json.loads((ROOT / "data" / "editorial-facts.json").read_text(encoding="utf-8"))
 
 CURRENT_YEAR = RATES["current"]
 YEAR = RATES["years"][CURRENT_YEAR]
@@ -784,8 +785,8 @@ JS_VERSION = asset_version("js/main.js")
 # buy nothing and would compete for bandwidth with the three faces that do
 # paint the header.
 PRELOAD_FONTS = [
-    "ibm-plex-sans-latin-site.woff2",
-    "fraunces-normal-latin-site.woff2",
+    "ibm-plex-sans-w400-latin-site.woff2",
+    "fraunces-normal-w600-latin-site.woff2",
     "ibm-plex-mono-400-latin.woff2",
 ]
 
@@ -798,7 +799,7 @@ PRELOAD_FONTS = [
 # It is deliberately NOT in the site-wide list. Everywhere else <em> appears in
 # body prose well below the fold, where `font-display: swap` handles it and a
 # extra preload would only compete with the faces that paint the header.
-PRELOAD_FONTS_HOME = PRELOAD_FONTS + ["fraunces-italic-latin-site.woff2"]
+PRELOAD_FONTS_HOME = PRELOAD_FONTS + ["fraunces-italic-w300-latin-site.woff2"]
 
 
 def font_preloads_for(page: dict) -> str:
@@ -924,6 +925,14 @@ for _kind in ("tax", "refund", "loan"):
     for _field, _value in INTEREST[_kind].items():
         TOKENS["{{interest_" + _kind + "_" + _field + "}}"] = _value
 TOKENS["{{interest_verified_on}}"] = INTEREST["verified_on"]
+
+# Consequential narrative facts shared by visible copy and FAQ structured data.
+# Source-check dates describe the specific guidance checked, not a whole-page
+# practitioner sign-off. Keep this separate from annual tax figures.
+_cipc = EDITORIAL_FACTS["cipc_annual_return"]
+TOKENS["{{cipc_annual_return_deadline}}"] = _cipc["deadline"]
+TOKENS["{{cipc_source_checked_on}}"] = pretty_date(_cipc["source_checked_on"])
+TOKENS["{{cipc_source_url}}"] = _cipc["source"]
 
 
 def _register_rate_tokens() -> None:
@@ -1613,16 +1622,13 @@ def hero_for(page: dict) -> str:
     stamp = ""
     if page.get("type") == "article" and updated:
         pretty = pretty_date(updated)
-        # Which primary sources this page was actually checked against. Most
-        # guides are tax and so default to SARS and Treasury, but not all of
-        # them are — the CIPC reinstatement guide is checked against CIPC, and
-        # a stamp claiming otherwise is a false statement about provenance on a
-        # site whose whole argument is that its figures are properly sourced.
-        # Override per page with "sources" in pages.json.
+        # Reference sources and last editorial change are distinct from a
+        # practitioner review. Specific fact/source checks are dated in the
+        # article itself. Override sources per page in pages.json.
         sources = page.get("sources", "SARS and National Treasury")
         stamp = (
-            f'<p class="page-stamp">Last reviewed <time datetime="{updated}">{pretty}</time>'
-            f" against {esc(sources)} sources.</p>"
+            f'<p class="page-stamp">Last updated <time datetime="{updated}">{pretty}</time>.'
+            f" Reference sources: {esc(sources)}.</p>"
         )
     return f"""<section class="page-hero">
         <div class="container">
@@ -1647,7 +1653,7 @@ def cta_band() -> str:
             professional service, with no jargon and no surprises.
           </p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="/contact">Book a free consultation<span class="btn-arrow" aria-hidden="true">&rarr;</span></a>
+            <a class="btn btn-primary" href="/contact">Request a free consultation<span class="btn-arrow" aria-hidden="true">&rarr;</span></a>
             <a class="btn btn-outline" href="{CONTACT['whatsapp_url']}" target="_blank" rel="noopener noreferrer">WhatsApp {esc(PRINCIPAL['name'].split()[0])}</a>
           </div>
         </div>

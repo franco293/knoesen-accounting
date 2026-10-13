@@ -2,11 +2,32 @@
 import json
 from pathlib import Path
 import unittest
+from unittest.mock import patch
+import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 class ReleaseTests(unittest.TestCase):
+    def test_unreadable_previous_release_is_never_deleted(self):
+        import publish
+        with tempfile.TemporaryDirectory(prefix='release-test-', dir=ROOT) as folder:
+            root = Path(folder)
+            output = root / 'dist'
+            output.mkdir()
+            marker = output / 'index.html'
+            marker.write_text('previous release', encoding='utf-8')
+            (root / 'release-manifest.json').write_text(json.dumps({'files': {'index.html': 'previous'}}), encoding='utf-8')
+
+            def denied_walk(directory, onerror):
+                onerror(PermissionError('Unreadable previous release'))
+
+            with patch.object(publish, 'ROOT', root), patch.object(publish.subprocess, 'run'), patch.object(publish, 'selected_files', return_value=[]), patch.object(publish.os, 'walk', side_effect=denied_walk), patch.object(publish.shutil, 'rmtree') as remove:
+                with self.assertRaisesRegex(ValueError, 'Cannot inspect'):
+                    publish.main()
+                remove.assert_not_called()
+            self.assertEqual(marker.read_text(encoding='utf-8'), 'previous release')
+
     def test_historical_tax_schedule(self):
         # Independently transcribed from SARS individual rates on 21 Sep 2026.
         # https://www.sars.gov.za/tax-rates/income-tax/rates-of-tax-for-individuals/
@@ -33,6 +54,10 @@ class ReleaseTests(unittest.TestCase):
         self.assertFalse(any(p.startswith(('.claude/', 'data/', 'content/', 'tests/', 'tools/')) for p in files))
         self.assertNotIn('tools.html', files)
         self.assertNotIn('js/sa-tax-core.js', files)
+        self.assertIn('assets/fonts/ibm-plex-sans-w400-latin-site.woff2', files)
+        self.assertNotIn('assets/fonts/ibm-plex-sans-latin-site.woff2', files)
+        for notice in ('OFL-Fraunces.txt', 'OFL-IBM-Plex-Sans.txt', 'OFL-IBM-Plex-Mono.txt'):
+            self.assertIn('assets/fonts/' + notice, files)
 
     def test_inactive_form_is_not_rendered(self):
         config = json.loads((ROOT / 'site.json').read_text(encoding='utf-8'))
