@@ -17,6 +17,7 @@ These changes implement the actionable source findings from the post-release aud
 
 - Workers assets use the prepared 404 page while retaining HTTP 404. Verify status and recovery content on the provider after publication.
 - A measured mobile candidate defers offscreen content sections and discovers the stylesheet before font preloads. Fonts, licence notices, layout and direct contact choices are retained. Print and no-JavaScript use ordinary full layout.
+- Printed pages omit the site navigation footer, preserving article content and avoiding unnecessary navigation sheets.
 - The existing Python checks remain; Chromium acceptance now covers rendered page geometry, keyboard menu/focus, consent grant/withdrawal, map fallback, source exclusions, disabled tools and readable no-JavaScript content.
 - Browser tooling is development-only, version-pinned and locked. Vendor requests are intercepted; no automated enquiry is sent.
 - The post-release checker compares prepared HTML/assets and tests actual missing-page recovery, private-path exclusions and redirects. Preview routing alone does not establish Workers routing.

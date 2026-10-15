@@ -2865,6 +2865,7 @@ body {
    save to PDF. Strip the furniture, keep the data, and surface link targets. */
 @media print {
   .site-header,
+  .site-footer,
   .sticky-contact,
   .consent,
   .notice-band,
