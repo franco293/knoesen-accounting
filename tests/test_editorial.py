@@ -1,4 +1,4 @@
-"""Prevent the observed CIPC deadline drift across published content sources.
+"""Guard consequential financial and company-administration content qualifiers.
 
 The deadline fixture is independently transcribed from the current CIPC notice
 checked on 13 October 2026: https://www.cipc.co.za/?p=21067. Change this fixture
@@ -8,8 +8,43 @@ import json
 from pathlib import Path
 import re
 import unittest
+from html.parser import HTMLParser
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def plain(markup):
+    return re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', '', markup)).strip()
+
+
+class FAQText(HTMLParser):
+    """Read the visible question/answer so metadata cannot hide a qualifier."""
+    def __init__(self):
+        super().__init__()
+        self.active = self.summary = False
+        self.question = self.answer = ''
+        self.items = {}
+
+    def handle_starttag(self, tag, attrs):
+        if tag == 'details':
+            self.active = True
+            self.question = self.answer = ''
+        elif self.active and tag == 'summary':
+            self.summary = True
+
+    def handle_endtag(self, tag):
+        if tag == 'summary':
+            self.summary = False
+        elif tag == 'details' and self.active:
+            self.items[plain(self.question)] = plain(self.answer)
+            self.active = False
+
+    def handle_data(self, text):
+        if self.active:
+            if self.summary:
+                self.question += text
+            else:
+                self.answer += text
 
 
 class EditorialTests(unittest.TestCase):
@@ -52,6 +87,62 @@ class EditorialTests(unittest.TestCase):
             self.assertIn('next 12 months', text, label)
             self.assertNotIn('less than r500 000', text, label)
             self.assertNotIn('under r500 000', text, label)
+
+    def test_provisional_exclusion_qualifiers_match_visible_and_schema(self):
+        # SARS provisional-tax definition: the R30,000 alternative applies to
+        # a natural person with no income from carrying on any business.
+        # https://www.sars.gov.za/types-of-tax/provisional-tax/
+        parser = FAQText()
+        parser.feed((ROOT / 'content/service-tax.html').read_text(encoding='utf-8'))
+        question = 'Am I a provisional taxpayer?'
+        pages = json.loads((ROOT / 'content/pages.json').read_text(encoding='utf-8'))
+        page = next(p for p in pages if p['slug'] == 'services/tax')
+        schema = next(item['a'] for item in page['faq'] if item['q'] == question)
+        self.assertEqual(parser.items[question], schema)
+        for qualifier in ('natural person', 'no income from carrying on a business',
+                          'total taxable income', 'age-related tax threshold',
+                          'taxable income from interest, foreign dividends', 'not more than R30 000'):
+            self.assertIn(qualifier, schema)
+
+    def test_cipc_completion_window_keeps_trigger_and_consequence(self):
+        # Practice Note 3 of 2025: the 30 business days begin after processing
+        # AND payment, not from the incorporation anniversary or first enquiry.
+        source = (ROOT / 'content/guide-cipc-reinstatement.html').read_text(encoding='utf-8')
+        pages = json.loads((ROOT / 'content/pages.json').read_text(encoding='utf-8'))
+        page = next(p for p in pages if p['slug'] == 'resources/cipc-reinstatement')
+        answer = next(item['a'] for item in page['faq'] if item['q'] == 'Is the company back in business once the CoR40.5 is processed?')
+        for text in (plain(source), answer):
+            self.assertIn('within 30 business days after the reinstatement application has been processed and paid', text)
+            self.assertIn('previous deregistered status', text)
+            self.assertIn('must start again', text)
+        self.assertIn('Practice-note-3-of-2025_Government-Gazette-publication-pages-1.pdf', source)
+        self.assertNotIn('following Practice Note 1 of 2022', json.dumps(page['faq']))
+
+    def test_vat_cancellation_warning_and_eligible_inputs_survive(self):
+        # SARS VAT201/Budget guidance: cancellation is formal, and not all
+        # purchases carry standard-rated, deductible input VAT (fuel is one
+        # counterexample to the previous universal 15% claim).
+        source = (ROOT / 'content/guide-vat.html').read_text(encoding='utf-8')
+        text = plain(source)
+        self.assertNotIn('Every future purchase becomes 15% more expensive', text)
+        self.assertIn('Lost eligible input VAT', text)
+        self.assertIn('petrol and diesel as zero-rated', text)
+        pages = json.loads((ROOT / 'content/pages.json').read_text(encoding='utf-8'))
+        page = next(p for p in pages if p['slug'] == 'resources/vat-registration-threshold')
+        answer = next(item['a'] for item in page['faq'] if item['q'] == 'Should I deregister for VAT now that the threshold has increased?')
+        for version in (text.lower(), answer.lower()):
+            self.assertIn('continue charging vat', version)
+            self.assertIn('submitting vat201 returns', version)
+            self.assertIn("until sars's formal cancellation takes effect", version)
+
+    def test_fringe_benefits_keep_business_phone_qualification(self):
+        # SARS Seventh Schedule guidance includes a no-value rule for mainly
+        # business telephone equipment. Do not restore 'all taxable benefits'.
+        for filename in ('service-payroll.html', 'guide-payroll.html'):
+            text = plain((ROOT / 'content' / filename).read_text(encoding='utf-8'))
+            self.assertNotIn('are all taxable benefits', text, filename)
+            self.assertIn('telephone equipment used mainly', text, filename)
+            self.assertRegex(text, r'no(?: taxable)?[ -]value')
 
 
 if __name__ == '__main__':

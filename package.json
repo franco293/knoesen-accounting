@@ -5,6 +5,11 @@
   "scripts": {
     "start": "python preview.py",
     "build": "python publish.py",
-    "test": "python -m unittest discover -s tests"
+    "test": "python -m unittest discover -s tests",
+    "test:browser": "node tools/smoke-browser.cjs",
+    "verify:live": "node tools/verify-live.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
   }
 }

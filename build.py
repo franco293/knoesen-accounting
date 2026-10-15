@@ -780,10 +780,9 @@ JS_VERSION = asset_version("js/main.js")
 #
 # IBM Plex Mono 500 and 700 are deliberately absent. They are real weights the
 # design uses, but only for table headings, step numbers and the notice tag —
-# all below the fold. Measured on the live site they arrive ~24ms after the
-# preloaded faces with cumulative layout shift of 0, so preloading them would
-# buy nothing and would compete for bandwidth with the three faces that do
-# paint the header.
+# below the fold. Keep their discovery in CSS rather than adding more early
+# bandwidth competition. Revisit that choice only with a matched measurement
+# after a change to the above-the-fold typography.
 PRELOAD_FONTS = [
     "ibm-plex-sans-w400-latin-site.woff2",
     "fraunces-normal-w600-latin-site.woff2",
@@ -794,7 +793,7 @@ PRELOAD_FONTS = [
 # <em>who actually answer the phone</em>" — so Fraunces Italic is part of the
 # largest above-the-fold text there, not a decorative afterthought. Unpreloaded
 # it is discovered only after the stylesheet parses and the browser reaches the
-# <em>, landing ~35ms behind the other three faces and repainting the headline.
+# <em>, so the first headline's font can arrive later than its upright face.
 #
 # It is deliberately NOT in the site-wide list. Everywhere else <em> appears in
 # body prose well below the fold, where `font-display: swap` handles it and a
@@ -1434,7 +1433,7 @@ def page_node(page: dict) -> dict:
             "inLanguage": SITE["locale"],
             "datePublished": page.get("published", updated),
             "dateModified": updated,
-            "author": {"@id": f"{DOMAIN}/#lourens-knoesen"},
+            "author": {"@id": f"{DOMAIN}/#organization" if page.get("author_type") == "organization" else f"{DOMAIN}/#lourens-knoesen"},
             "publisher": {"@id": f"{DOMAIN}/#organization"},
             "isAccessibleForFree": True,
             "mainEntityOfPage": {"@type": "WebPage", "@id": url},
@@ -1518,8 +1517,8 @@ def head_for(page: dict) -> str:
     <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.json" />
 
+    <link rel="stylesheet" href="/css/styles.css?v={CSS_VERSION}" fetchpriority="high" />
     {font_preloads_for(page)}
-    <link rel="stylesheet" href="/css/styles.css?v={CSS_VERSION}" />
 
     <noscript><link rel="stylesheet" href="/css/no-js.css?v={asset_version("css/no-js.css")}" /></noscript>
     {jsonld_for(page)}"""
@@ -1694,7 +1693,7 @@ def footer_markup() -> str:
               and medium-sized businesses across the Nelson Mandela Bay Metro.
               Based in {esc(LOCATION['suburb'])}, {esc(LOCATION['city'])} ({esc(LOCATION['city_alt'])}).
             </p>
-            {creds_markup}
+{creds_markup}
           </div>
 
           <div class="footer-cols">

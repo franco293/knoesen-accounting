@@ -1416,13 +1416,20 @@ textarea {
   }
 }
 
-/* Below-fold homepage sections can wait until they approach the viewport.
+/* Main content sections on narrow screens can wait until near the viewport.
    Auto keeps content searchable and available to accessibility tools. The
    remembered size stabilises repeat scrolling; print uses normal layout. */
 @media screen and (max-width: 859px) {
-  #hero ~ section.section {
+  main > section.section {
     content-visibility: auto;
     contain-intrinsic-size: auto 900px;
+  }
+  /* Deep links need the real heights of all preceding sections before the
+     browser places the target. Avoid estimated-height anchor jumps. */
+  main:has(:target) > section.section,
+  main:target > section.section {
+    content-visibility: visible;
+    contain-intrinsic-size: none;
   }
 }
 
@@ -2888,6 +2895,8 @@ body {
   }
   .section {
     padding-block: 1rem;
+    content-visibility: visible;
+    contain-intrinsic-size: none;
   }
   .table-wrap {
     overflow: visible;

@@ -1,7 +1,7 @@
 {
   "": {
-    "date": "2026-10-13",
-    "hash": "80e173dc7f36dad1"
+    "date": "2026-10-15",
+    "hash": "69345fbe982348d3"
   },
   "404": {
     "date": "2026-08-27",
@@ -20,32 +20,36 @@
     "hash": "f2bee7f0b7011af4"
   },
   "disclaimer": {
-    "date": "2026-08-03",
-    "hash": "168a69e4ce723f8d"
+    "date": "2026-10-15",
+    "hash": "1a6279988620009c"
   },
   "privacy-policy": {
     "date": "2026-10-13",
     "hash": "75d02f3dfd316bd5"
   },
   "resources": {
-    "date": "2026-10-13",
-    "hash": "77032a498788d374"
+    "date": "2026-10-15",
+    "hash": "0e47e7e8550e6fc4"
   },
   "resources/cipc-reinstatement": {
-    "date": "2026-10-13",
-    "hash": "c4538d0dff324590"
+    "date": "2026-10-15",
+    "hash": "08b618370b366e78"
   },
   "resources/independent-contractor-or-employee": {
     "date": "2026-10-13",
     "hash": "af0677dc0237fd97"
   },
+  "resources/month-end-bookkeeping-checklist": {
+    "date": "2026-10-15",
+    "hash": "41f6c4ac68b73416"
+  },
   "resources/payroll-compliance-guide": {
-    "date": "2026-10-13",
-    "hash": "c2062df84cd12de9"
+    "date": "2026-10-15",
+    "hash": "bf253581bcf6901f"
   },
   "resources/sars-filing-season-2026": {
-    "date": "2026-10-13",
-    "hash": "12150120612d9f33"
+    "date": "2026-10-15",
+    "hash": "f408edc38a69957a"
   },
   "resources/small-business-tax-guide": {
     "date": "2026-10-13",
@@ -56,24 +60,24 @@
     "hash": "f083cb0d2450efd7"
   },
   "resources/tax-deadlines-calendar": {
-    "date": "2026-10-13",
-    "hash": "676d8e3db35ed459"
+    "date": "2026-10-15",
+    "hash": "f57efe01ee42592d"
   },
   "resources/tax-rates-2026-2027": {
-    "date": "2026-10-13",
-    "hash": "9744a868384b322b"
+    "date": "2026-10-15",
+    "hash": "438fe93e09308bf7"
   },
   "resources/vat-registration-threshold": {
-    "date": "2026-10-13",
-    "hash": "985b00163d7c89ed"
+    "date": "2026-10-15",
+    "hash": "8855f49055c8da4b"
   },
   "services": {
     "date": "2026-10-13",
     "hash": "dafea6f2e602bb48"
   },
   "services/accounting": {
-    "date": "2026-10-13",
-    "hash": "38cdf61f3bfea1af"
+    "date": "2026-10-15",
+    "hash": "011348c290cbbf00"
   },
   "services/annual-financial-statements": {
     "date": "2026-10-07",
@@ -84,11 +88,11 @@
     "hash": "f1bd89753c343bd4"
   },
   "services/payroll": {
-    "date": "2026-10-13",
-    "hash": "73cd5ef3329d71ba"
+    "date": "2026-10-15",
+    "hash": "5d88f7120358dcf1"
   },
   "services/tax": {
-    "date": "2026-10-07",
-    "hash": "dd43383c6f953dfa"
+    "date": "2026-10-15",
+    "hash": "f0e3498d78d08d22"
   }
 }

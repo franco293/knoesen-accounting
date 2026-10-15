@@ -28,6 +28,7 @@ client-ledger*.csv
 client-ledger*.xlsx
 lead-ledger*.csv
 lead-ledger*.xlsx
+weekly-funnel*.csv
 account-review*.md
 account-review*.json
 

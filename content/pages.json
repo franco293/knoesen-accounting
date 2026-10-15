@@ -9,7 +9,7 @@
     "h1": "Knoesen Accounting, Tax & Payroll",
     "changefreq": "weekly",
     "priority": "1.0",
-    "updated": "2026-10-13",
+    "updated": "2026-10-15",
     "faq": [
       {
         "q": "Do you work with small businesses and sole proprietors?",
@@ -79,7 +79,7 @@
     "h1": "Accounting & Bookkeeping for SMEs",
     "lead": "Current books and useful management accounts, with monthly support agreed for your business. Based in Gqeberha (Port Elizabeth), available remotely across South Africa.",
     "priority": "0.8",
-    "updated": "2026-10-13",
+    "updated": "2026-10-15",
     "faq": [
       {
         "q": "What is the difference between an audit, a review and a compilation?",
@@ -143,11 +143,11 @@
     "h1": "Tax & SARS Services",
     "lead": "Returns filed correctly and on time, and a straight answer when SARS sends something you do not understand.",
     "priority": "0.8",
-    "updated": "2026-08-03",
+    "updated": "2026-10-15",
     "faq": [
       {
         "q": "Am I a provisional taxpayer?",
-        "a": "Generally, you are a provisional taxpayer if you earn income that is not subject to PAYE — such as business income, rental income or significant investment income. Someone who earns only a salary usually is not. There is an exemption where income from interest, dividends, foreign dividends, rental from fixed property and remuneration from an unregistered employer totals R30 000 or less for the tax year."
+        "a": "Companies generally fall within the provisional tax system. For an individual, income other than remuneration or remuneration from an employer not registered for employees' tax can create provisional taxpayer status. A natural person who earns no income from carrying on a business is excluded if either their total taxable income does not exceed the applicable age-related tax threshold, or their taxable income from interest, foreign dividends, rental from fixed property and remuneration from an unregistered employer is not more than R30 000 for the tax year. The R30 000 test is not a general exemption for a sole trader's business income. Check your own income mix and circumstances before deciding whether an IRP6 is required."
       },
       {
         "q": "What happens if I file my tax return late?",
@@ -181,7 +181,7 @@
     "h1": "Payroll Services",
     "lead": "Payroll processing and applicable employer submissions, with scope and record deadlines agreed for your business.",
     "priority": "0.8",
-    "updated": "2026-10-13",
+    "updated": "2026-10-15",
     "faq": [
       {
         "q": "When must PAYE, UIF and SDL be paid over to SARS?",
@@ -281,7 +281,7 @@
     "lead": "Free explanations of South African tax, payroll and company-compliance topics. Reference sources and dates are shown so you can check the guidance relevant to your circumstances.",
     "priority": "0.8",
     "changefreq": "weekly",
-    "updated": "2026-10-13"
+    "updated": "2026-10-15"
   },
   {
     "slug": "resources/tax-deadlines-calendar",
@@ -324,7 +324,7 @@
     "priority": "0.9",
     "changefreq": "weekly",
     "published": "2026-08-03",
-    "updated": "2026-08-03",
+    "updated": "2026-10-15",
     "faq": [
       {
         "q": "When does Filing Season 2026 close?",
@@ -359,7 +359,7 @@
     "priority": "0.8",
     "changefreq": "monthly",
     "published": "2026-08-03",
-    "updated": "2026-10-13"
+    "updated": "2026-10-15"
   },
   {
     "slug": "resources/vat-registration-threshold",
@@ -380,7 +380,7 @@
     "priority": "0.9",
     "changefreq": "monthly",
     "published": "2026-08-03",
-    "updated": "2026-08-03",
+    "updated": "2026-10-15",
     "faq": [
       {
         "q": "What is the VAT registration threshold in South Africa?",
@@ -396,9 +396,32 @@
       },
       {
         "q": "Should I deregister for VAT now that the threshold has increased?",
-        "a": "It depends on who your customers are. If you sell mainly to other VAT-registered businesses, they reclaim the VAT you charge, and staying registered lets you keep claiming input VAT on your own costs. If you sell mainly to consumers, deregistering can make you effectively cheaper. There are also exit consequences, including output VAT on assets held at deregistration, so it is worth modelling before deciding."
+        "a": "Compare eligible input VAT, exit adjustments, pricing and your customers' circumstances before deciding. A VAT-registered customer may deduct input VAT only if the applicable requirements are met. Cancellation is not automatic: continue charging VAT on taxable supplies and submitting VAT201 returns until SARS's formal cancellation takes effect, including the final-period requirements it gives you."
       }
     ]
+  },
+  {
+    "slug": "resources/month-end-bookkeeping-checklist",
+    "file": "guide-month-end-bookkeeping-checklist.html",
+    "type": "article",
+    "sources": "SARS (record keeping and tax invoices)",
+    "breadcrumb": "Month-end Bookkeeping Checklist",
+    "breadcrumbs": [
+      {
+        "name": "Resources",
+        "slug": "resources"
+      }
+    ],
+    "eyebrow": "Monthly Bookkeeping",
+    "title": "Month-end Bookkeeping Checklist for SMEs | South Africa",
+    "description": "Prepare bank records, sales, expenses and payroll questions for monthly bookkeeping. A practical checklist for South African SMEs, with remote support available.",
+    "h1": "Month-end bookkeeping checklist for South African SMEs",
+    "lead": "What to organise, what to check and what to ask before closing a month or discussing recurring bookkeeping support.",
+    "priority": "0.7",
+    "changefreq": "monthly",
+    "published": "2026-10-15",
+    "updated": "2026-10-15",
+    "author_type": "organization"
   },
   {
     "slug": "resources/small-business-tax-guide",
@@ -458,7 +481,7 @@
     "priority": "0.8",
     "changefreq": "monthly",
     "published": "2026-08-03",
-    "updated": "2026-10-13"
+    "updated": "2026-10-15"
   },
   {
     "slug": "resources/starting-a-business-in-south-africa",
@@ -542,7 +565,7 @@
     "priority": "0.8",
     "changefreq": "yearly",
     "published": "2026-08-06",
-    "updated": "2026-08-06",
+    "updated": "2026-10-15",
     "faq": [
       {
         "q": "Can a deregistered company be reinstated?",
@@ -554,11 +577,11 @@
       },
       {
         "q": "Do I still need proof the company was trading?",
-        "a": "You no longer submit it with the application, following Practice Note 1 of 2022, but the requirement itself remains. CIPC states the evidence must be retained and that it may request it at any time under Companies Regulation 168. If you cannot produce it, CIPC may withdraw both the reinstatement and the annual returns filed after it."
+        "a": "Yes. The 2025 reinstatement practice note replaced Practice Note 1 of 2022 and retains the evidence requirement. CIPC can request the retained evidence under Companies Regulation 168. Customer Notice 12 of 2026 requires independently verifiable documents in the entity's name relating to the period at or around final deregistration. Failure to provide required evidence may result in withdrawal of the reinstatement and subsequent annual returns."
       },
       {
         "q": "When do I need a court order to reinstate a company?",
-        "a": "When a creditor or another outside party wants the company reinstated in order to enforce a liability against it. The order must do more than reinstate the company: it must also mandate the company to comply with its Companies Act obligations, including outstanding annual returns, the beneficial ownership declaration and financial statements. If it does not, CIPC places the company straight back into deregistration after implementing the order."
+        "a": "A creditor or other outside party seeking reinstatement to enforce a liability may need a court order. CIPC advises that the order also mandate the company to complete its outstanding Companies Act filings within a set period. Reinstatement by court order does not remove those duties: if the outstanding annual returns, beneficial ownership declaration and AFS/FAS are not filed, the entity returns to annual-return deregistration. Obtain legal advice on the appropriate order and follow-through."
       },
       {
         "q": "How much does it cost to reinstate a company with CIPC?",
@@ -566,7 +589,7 @@
       },
       {
         "q": "Is the company back in business once the CoR40.5 is processed?",
-        "a": "No. The status only changes once every outstanding annual return, the latest beneficial ownership declaration and the annual financial statements or financial accountability supplement have all been filed. Amendments such as a director or address change can only be made after that point."
+        "a": "No. All outstanding annual returns, beneficial ownership declarations and AFS/FAS must be filed within 30 business days after the reinstatement application has been processed and paid. Otherwise the entity returns to its previous deregistered status and the application process must start again. Payment alone does not complete reinstatement."
       }
     ],
     "sources": "CIPC"
@@ -786,7 +809,7 @@
     "lead": "Both IRP6 payments for an individual provisional taxpayer, with the basic amount and the under-estimation penalty worked out — including the rule that changes above R1 million.",
     "changefreq": "monthly",
     "priority": "0.9",
-    "updated": "2026-08-06",
+    "updated": "2026-10-15",
     "scripts": [
       "tax-rates.js",
       "sa-tax-core.js",
@@ -811,7 +834,7 @@
       },
       {
         "q": "Who has to pay provisional tax in South Africa?",
-        "a": "Anyone who earns income that is not taxed through a payroll — sole proprietors, freelancers, landlords and company directors drawing income outside PAYE. Someone not carrying on a business is excluded if their taxable income is below the tax threshold, or if their interest, dividends, rental and untaxed remuneration together come to R30 000 or less."
+        "a": "Companies generally fall within the provisional tax system. For an individual, income other than remuneration or remuneration from an employer not registered for employees' tax can create provisional taxpayer status. A natural person who earns no income from carrying on a business is excluded if either their total taxable income does not exceed the applicable age-related tax threshold, or their taxable income from interest, foreign dividends, rental from fixed property and remuneration from an unregistered employer is not more than R30 000 for the tax year. The R30 000 test is not a general exemption for a sole trader's business income. Check your own income mix and circumstances before deciding whether an IRP6 is required."
       }
     ]
   },
@@ -1033,7 +1056,7 @@
     "priority": "0.3",
     "changefreq": "yearly",
     "cta": false,
-    "updated": "2026-08-03"
+    "updated": "2026-10-15"
   },
   {
     "slug": "404",
