@@ -24,3 +24,13 @@ jobs:
           python-version: '3.12'
       - name: Build, validate links and test release boundaries
         run: python -X utf8 publish.py
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6, checked 2026-10-15
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install locked browser tooling
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Install Chromium for the smoke checks
+        run: npx playwright install --with-deps chromium
+      - name: Check navigation, consent, fallbacks and readable pages
+        run: npm run test:browser

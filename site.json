@@ -77,7 +77,9 @@
         "closes": "17:30"
       },
       {
-        "days": ["Friday"],
+        "days": [
+          "Friday"
+        ],
         "opens": "09:00",
         "closes": "17:00"
       }
@@ -142,6 +144,10 @@
       "label": "Resources",
       "href": "/resources",
       "children": [
+        {
+          "label": "Month-end Bookkeeping Checklist",
+          "href": "/resources/month-end-bookkeeping-checklist"
+        },
         {
           "label": "Tax Deadline Calendar",
           "href": "/resources/tax-deadlines-calendar"

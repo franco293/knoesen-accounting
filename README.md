@@ -7,6 +7,7 @@ Live site: https://knoesen-accounting.co.za
 ## Current instructions
 
 - [RELEASE-CHECKLIST.md](RELEASE-CHECKLIST.md): release procedure and dated September history.
+- [AUDIT-FIXES-2026-10-15.md](AUDIT-FIXES-2026-10-15.md): current corrections, browser acceptance and publication checks.
 - [AUDIT-FIXES-2026-10-13.md](AUDIT-FIXES-2026-10-13.md): October corrections, tests and external follow-up.
 - [TODO-BEFORE-LAUNCH.md](TODO-BEFORE-LAUNCH.md): current owner decisions and private access/legal checks.
 - [SEO-PLAYBOOK.md](SEO-PLAYBOOK.md): no-cost growth using useful content and legitimate profiles/links.
@@ -14,7 +15,7 @@ Live site: https://knoesen-accounting.co.za
 
 ## Build and preview
 
-Requires Python 3.9+ and its standard library; no framework or production package dependencies. The optional font maintenance script has separate development dependencies.
+Requires Python 3.10+ and its standard library; CI uses Python 3.12. There are no framework or production package dependencies. The optional font maintenance script has separate development dependencies. Node.js 24 and the locked development-only Playwright package are used for browser acceptance checks.
 
 ```text
 python -X utf8 publish.py
@@ -25,7 +26,17 @@ Open http://127.0.0.1:8000. The preview supports clean URLs and actual 404 respo
 
 Wrangler's configured build also runs `python publish.py` and publishes only `dist/`. The generator does not run on production page requests. Preserve a previous provider version for rollback and verify live files after deployment. A prepared release or GitHub push does not prove deployment.
 
-GitHub's read-only validation workflow builds and tests on main pushes and pull requests. It does not deploy or certify every tax/legal statement.
+GitHub's read-only validation workflow builds and tests on main pushes and pull requests, then checks rendered pages, keyboard navigation, consent, map failures and no-JavaScript content in Chromium. It does not deploy or certify every tax/legal statement.
+
+From a built clean checkout, run the same browser checks with:
+
+```text
+npm ci --ignore-scripts
+npx playwright install chromium
+npm run test:browser
+```
+
+The checks start a local preview and intercept vendor requests; they never send an enquiry. After publication, run `npm run verify:live` to compare prepared pages/assets and verify the provider's actual 404 recovery body, source exclusions and redirects. A local preview pass alone cannot establish provider routing.
 
 ## Sources and generated output
 
@@ -44,6 +55,8 @@ GitHub's read-only validation workflow builds and tests on main pushes and pull 
 Generated HTML, js/tags.js, js/tax-rates.js and _headers should not be edited directly. Rebuild after changing content, CSS or scripts: content-hashed CSS/JS URLs ensure returning visitors receive the new assets. Keep content/lastmod.json in the repository so sitemap dates reflect actual content changes.
 
 Article last-updated dates describe edits. Specific source-check dates describe the facts checked; neither automatically establishes a practitioner review. Correct consequential facts in visible copy and structured FAQ data together. Existing build arithmetic checks establish consistency, not authoritative tax accuracy.
+
+The month-end records checklist is attributed to the practice in Article metadata, without implying personal authorship or practitioner review. Use `author_type: organization` for practice-authored material when individual authorship has not been confirmed. Its illustrative examples are not client case studies.
 
 ## Fonts
 

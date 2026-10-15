@@ -461,6 +461,7 @@
         "subsistence_incidental_only_per_day": 184
       },
       "sars_interest": {
+        "_historical_snapshot": "Historical rate snapshot retained for disabled calculator source only; not the current-rate authority. Tax/VAT rates below apply 1 March–31 August 2026; loan rate below applies 1 December 2025–31 May 2026. Current active interest copy uses data/interest-rates.json. Do not activate a calculator using this snapshot without an effective-date review and tests.",
         "late_or_underpayment": 0.1025,
         "late_vat": 0.1025,
         "refund_of_provisional_overpayment": 0.0625,

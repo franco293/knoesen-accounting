@@ -42,9 +42,14 @@ class ReleaseTests(unittest.TestCase):
 
     def test_interest_effective_dates(self):
         data = json.loads((ROOT / 'data/interest-rates.json').read_text(encoding='utf-8'))
-        # SARS Tables 1, 2 and 3, checked 21 Sep 2026. Update with source review.
-        for key, rate, date in [('tax', '10.50', '1 September 2026'), ('refund', '6.50', '1 September 2026'), ('loan', '8.00', '1 June 2026')]:
+        # SARS Tables 1, 2 and 3, independently checked 15 Oct 2026.
+        # Table 3 is dated October 2026: 8.25% applies from 1 October.
+        for key, rate, date in [('tax', '10.50', '1 September 2026'), ('refund', '6.50', '1 September 2026'), ('loan', '8.25', '1 October 2026')]:
             self.assertEqual((data[key]['rate'], data[key]['effective']), (rate, date))
+        self.assertEqual((data['loan']['previous_rate'], data['loan']['previous_period']),
+                         ('8.00', '1 June–30 September 2026'))
+        self.assertEqual((data['loan']['earlier_rate'], data['loan']['earlier_period']),
+                         ('7.75', '1 December 2025–31 May 2026'))
 
     def test_release_does_not_publish_sources(self):
         import publish
