@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const net = require('node:net');
 const { spawn } = require('node:child_process');
-const { chromium } = require('playwright');
+const browsers = require('playwright');
 
 const root = path.resolve(__dirname, '..');
 const site = JSON.parse(fs.readFileSync(path.join(root, 'site.json'), 'utf8'));
@@ -22,6 +22,8 @@ async function availablePort() {
 }
 
 async function main() {
+  const engine = process.env.SMOKE_BROWSER || 'chromium';
+  assert(['chromium', 'firefox', 'webkit'].includes(engine), 'Unsupported smoke test browser');
   assert(fs.existsSync(path.join(root, 'dist/index.html')), 'Build with python publish.py first');
   const port = await availablePort();
   const base = 'http://127.0.0.1:' + port;
@@ -37,7 +39,9 @@ async function main() {
       await sleep(100);
     }
     assert(ready, 'Preview did not become ready');
-    browser = await chromium.launch({ headless: true });
+    browser = await browsers[engine].launch({ headless: true });
+    results.engine = engine;
+    results.browser = browser.version();
     const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
     const vendors = [];
     await context.route('**/*', route => {
@@ -71,6 +75,28 @@ async function main() {
     assert.equal(await page.locator('.nav-toggle').getAttribute('aria-expanded'), 'false');
     assert(await page.locator('.nav-toggle').evaluate(element => document.activeElement === element));
     results.checks.push('keyboard menu and focus recovery');
+
+    const noMain = await context.newPage();
+    await noMain.route('**/js/main.js*', route => route.abort());
+    await noMain.goto(base + '/services/accounting');
+    if (await noMain.locator('#consent').isVisible()) await noMain.locator('[data-consent-action="reject"]').click();
+    assert(!(await noMain.locator('.nav-toggle').isVisible()));
+    const fallback = noMain.locator('.nav-fallback');
+    assert(await fallback.isVisible(), 'Failed main script retains a working Menu link');
+    await fallback.focus();
+    await noMain.keyboard.press('Enter');
+    assert.equal(new URL(noMain.url()).hash, '#site-navigation');
+    assert(await noMain.locator('#site-navigation a[href="/services/payroll"]').isVisible());
+    assert(await noMain.locator('#site-navigation').evaluate(el => document.activeElement === el));
+    assert(await noMain.locator('#site-navigation').evaluate(el => {
+      const box = el.getBoundingClientRect();
+      return box.top >= 0 && box.top < innerHeight;
+    }), 'Fallback navigation target reaches the viewport');
+    await noMain.keyboard.press('Tab');
+    assert(await noMain.locator('#site-navigation').evaluate(el => el.contains(document.activeElement)),
+      'The next Tab reaches a footer link');
+    await noMain.close();
+    results.checks.push('failed main script retains keyboard-accessible footer navigation');
 
     await page.goto(base);
     const eventCount = () => page.evaluate(() => (window.dataLayer || [])

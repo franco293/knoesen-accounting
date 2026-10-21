@@ -1,6 +1,11 @@
 """Optional font maintenance; not part of the build or deployment runtime.
 
-Install fonttools[woff]==4.60.1 (tested with brotli 1.2.0, zopfli 0.4.3).
+Install fonttools[woff]==4.60.2 (with brotli 1.2.0, zopfli 0.4.3).
+This replaces the old 4.60.1 maintenance pin with the patched release for
+GHSA-768j-98cg-p3fv: https://github.com/fonttools/fonttools/security/advisories/GHSA-768j-98cg-p3fv
+That advisory affects the varLib CLI with untrusted designspace inputs; this
+tool uses bundled WOFF2 files and instantiateVariableFont instead. Neither
+FontTools nor this maintenance tool is used by the website build or runtime.
 Run from any directory. Retain original fonts as inputs. Output filenames are
 distinct because existing font URLs are cached immutable for one year.
 Freeze each used weight to reduce measured blocking layout work, preserving

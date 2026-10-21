@@ -1,6 +1,6 @@
 /* Loaded only when scripting is disabled; keep primary navigation usable. */
 @media (max-width: 859px) {
-  .nav-toggle { display: none; }
+  .nav-toggle, .nav-fallback { display: none; }
   .mobile-panel {
     position: static;
     visibility: visible;

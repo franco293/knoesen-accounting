@@ -55,6 +55,9 @@
     } else if (desktop.addListener) {
       desktop.addListener(syncToViewport);      /* Safari < 14 */
     }
+    /* Replace the working footer-navigation link only after the menu is wired.
+       If this file fails to load, visitors retain a usable Menu link. */
+    document.documentElement.classList.add("nav-ready");
   }
 
   /* The .reveal entrance animation used to live here as an

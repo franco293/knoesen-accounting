@@ -48,6 +48,9 @@
   var granted = {};
   var decided = false;
   var returnFocus = null;
+  var storageFailed = false;
+  var refreshing = false;
+  var channel = null;
 
   /* ---- Storage ---------------------------------------------------------- */
 
@@ -56,6 +59,7 @@
       var match = document.cookie.match(new RegExp("(?:^|; )" + COOKIE + "=([^;]*)"));
       return match ? decodeURIComponent(match[1]) : "";
     } catch (error) {
+      storageFailed = true;
       return "";
     }
   }
@@ -67,8 +71,11 @@
       document.cookie =
         COOKIE + "=" + encodeURIComponent(value) +
         "; Max-Age=" + maxAge + "; Path=/; SameSite=Lax" + secure;
+      /* Some browsers silently discard writes. Never load a tag on the
+         strength of an answer that the next permission check cannot read. */
+      return readCookie() === value;
     } catch (error) {
-      /* The current decision still applies when persistence is unavailable. */
+      return false;
     }
   }
 
@@ -77,12 +84,22 @@
      answers by bumping VERSION rather than silently reinterpreting them. */
   function parse(value) {
     if (!value || value.indexOf(VERSION + ":") !== 0) return null;
-    var result = {};
+    var result = Object.create(null);
+    var valid = true;
     value.slice(VERSION.length + 1).split(",").forEach(function (pair) {
       var bits = pair.split("=");
-      if (bits[0]) result[bits[0]] = bits[1] === "1";
+      if (bits.length !== 2 || !/^[a-z_]+$/.test(bits[0]) ||
+          (bits[1] !== "0" && bits[1] !== "1") ||
+          Object.prototype.hasOwnProperty.call(result, bits[0])) {
+        valid = false;
+        return;
+      }
+      result[bits[0]] = bits[1] === "1";
     });
-    return result;
+    /* A newly offered category must receive an explicit answer too. */
+    return valid && categories.every(function (name) {
+      return Object.prototype.hasOwnProperty.call(result, name);
+    }) ? result : null;
   }
 
   function serialise(state) {
@@ -141,8 +158,8 @@
     }
   }
 
-  function apply(state, remember) {
-    if (remember) decided = true;
+  function apply(state, hasDecision) {
+    decided = hasDecision;
 
     categories.forEach(function (name) {
       granted[name] = !!state[name];
@@ -153,15 +170,43 @@
     });
 
     /* Update permission (and vendor opt-out flags) before loading a new tag. */
-    if (decided) changeListeners.forEach(run);
+    changeListeners.forEach(run);
 
     grantListeners = grantListeners.filter(function (entry) {
       if (!granted[entry.category]) return true;
       run(entry.fn);
       return false;
     });
+  }
 
-    if (remember) writeCookie(serialise(state));
+  /* Cookies are shared between tabs, but this JavaScript state is not. Re-read
+     before permission is used and on browser lifecycle events. A missing,
+     expired, malformed or unreadable answer always revokes loaded vendors as
+     well as preventing the site's next event. Reads never extend its expiry. */
+  function refresh() {
+    if (refreshing) return;
+    refreshing = true;
+    try {
+      var stored = parse(readCookie());
+      if (storageFailed) stored = null;
+      var state = stored || all(false);
+      var changed = decided !== !!stored || categories.some(function (name) {
+        return !!granted[name] !== !!state[name];
+      });
+      if (changed) {
+        apply(state, !!stored);
+        if (!stored) show(options && !options.hidden, false);
+        else if (banner && !banner.hidden) {
+          /* Synchronise an open panel without taking focus or dismissing a
+             visitor's editing context when another tab changes the answer. */
+          toggles.forEach(function (input) {
+            input.checked = !!granted[input.getAttribute("data-consent-category")];
+          });
+        }
+      }
+    } finally {
+      refreshing = false;
+    }
   }
 
   function snapshot() {
@@ -231,7 +276,16 @@
   }
 
   function decide(state) {
-    apply(state, true);
+    /* A previous failure can be resolved by a fresh, successfully persisted
+       choice, but a blocked write must never keep an old grant alive. */
+    storageFailed = false;
+    var saved = writeCookie(serialise(state));
+    storageFailed = !saved;
+    apply(saved ? state : all(false), saved);
+    if (channel) {
+      try { channel.postMessage({ type: "decision", storageFailed: !saved }); }
+      catch (error) { /* Lifecycle and permission checks remain available. */ }
+    }
     hide();
   }
 
@@ -265,7 +319,11 @@
     var opener = event.target.closest && event.target.closest('[data-consent-action="open"]');
     if (!opener || (banner && banner.contains(opener))) return;
     event.preventDefault();
+    refresh();
     show(true, true);
+    /* WebKit does not necessarily focus a button on a pointer click. Restore
+       this actual opener, rather than whatever happened to be focused before. */
+    returnFocus = opener;
   });
 
   /* ---- Public API ------------------------------------------------------- */
@@ -273,40 +331,65 @@
   window.KAConsent = {
     /* True only if that category has been granted. Unknown category: false. */
     get: function (category) {
+      refresh();
       return !!granted[category];
     },
     /* Run fn as soon as `category` is granted — immediately, if it already is,
        so a listener registered after the fact is never lost to load order. */
     onGrant: function (category, fn) {
+      refresh();
       if (granted[category]) run(fn);
       else grantListeners.push({ category: category, fn: fn });
     },
     /* Run fn on every decision, granted or refused, now and in future. */
     onChange: function (fn) {
+      refresh();
       changeListeners.push(fn);
-      if (decided) run(fn);
+      run(fn);
     },
     /* Declare which cookies a category owns, so refusing or withdrawing it
        clears them. Called by js/tags.js; names may end in "*". */
     forget: function (category, names) {
       owned[category] = (owned[category] || []).concat(names);
-      if (decided && !granted[category]) forgetCookies(category);
+      refresh();
+      if (!granted[category]) forgetCookies(category);
     },
     open: function () {
+      refresh();
       show(true, true);
     }
   };
 
   /* ---- Start ------------------------------------------------------------ */
 
-  var stored = parse(readCookie());
-  if (stored) {
-    decided = true;
-    apply(stored, false);
-  } else {
-    /* Nothing granted, nothing stored, and the banner appears. Denied is the
-       starting state precisely because silence is not consent. */
-    apply(all(false), false);
-    show(false, false);
+  window.addEventListener("focus", refresh);
+  window.addEventListener("pageshow", refresh);
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "visible") refresh();
+  });
+
+  /* No localStorage identifier or polling is needed. BroadcastChannel promptly
+     informs other open same-origin tabs; Cookie Store also covers cookie
+     changes outside this UI where the browser supports it. Neither API is
+     required: get(), focus and restored-page checks still fail closed. */
+  if (typeof window.BroadcastChannel === "function") {
+    try {
+      channel = new window.BroadcastChannel("ka-consent");
+      channel.addEventListener("message", function (event) {
+        if (!event.data || event.data.type !== "decision") return;
+        storageFailed = !!event.data.storageFailed;
+        refresh();
+      });
+    } catch (error) { /* Browser privacy settings may disable this API. */ }
   }
+  if (window.cookieStore && window.cookieStore.addEventListener) {
+    window.cookieStore.addEventListener("change", function (event) {
+      var changed = (event.changed || []).concat(event.deleted || []);
+      if (changed.some(function (cookie) { return cookie.name === COOKIE; })) refresh();
+    });
+  }
+
+  apply(all(false), false);
+  refresh();
+  if (!decided) show(false, false);
 })();
