@@ -36,12 +36,17 @@ async function get(url) {
     assert.equal(hash(body), manifest.files[name], name);
     results.assets.push({ path: name, matches: true });
   }
-  for (const route of ['/release-check/nonexistent-page', '/site.json', '/.git/config', '/js/not-a-real-asset.js']) {
+  for (const route of ['/release-check/nonexistent-page', '/site.json', '/.git/config',
+    '/js/not-a-real-asset.js', '/js/main.js.map', '/js/sa-tax-core.js', '/css/not-a-real-asset.css']) {
     const response = await get(base + route);
     const body = await response.text();
     assert.equal(response.status, 404, route);
     assert(body.includes('href="/"') && /<main\b/.test(body), route + ': custom recovery body missing');
-    results.boundaries.push({ route, status: response.status, recovery: true });
+    const cacheControl = response.headers.get('cache-control') || '';
+    if (/^\/(js|css)\//.test(route)) {
+      assert(!/immutable|31536000/i.test(cacheControl), route + ': missing code has immutable caching');
+    }
+    results.boundaries.push({ route, status: response.status, recovery: true, cacheControl });
   }
   for (const [url, location] of [
     [base + '/tools/income-tax-calculator', '/resources'],

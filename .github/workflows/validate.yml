@@ -34,3 +34,7 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Check navigation, consent, fallbacks and readable pages
         run: npm run test:browser
+      - name: Check cross-tab consent and unavailable storage
+        run: npm run test:consent
+      - name: Check dormant numeric input boundaries
+        run: npm run test:tax-core

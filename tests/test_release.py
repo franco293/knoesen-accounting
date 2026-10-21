@@ -9,6 +9,22 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class ReleaseTests(unittest.TestCase):
+    def test_immutable_code_headers_match_only_released_assets(self):
+        import build
+        import publish
+        expected = {path.as_posix() for path in publish.selected_files()
+                    if path.suffix in {'.css', '.js'}}
+        self.assertEqual(set(build.cacheable_code_assets()), expected)
+        with patch.object(build, 'write') as writer:
+            build.write_headers()
+        headers = writer.call_args.args[1]
+        self.assertNotIn('/js/*', headers)
+        self.assertNotIn('/css/*', headers)
+        for path in expected:
+            self.assertIn('/' + path + '\n  Cache-Control: public, max-age=31536000, immutable', headers)
+        self.assertNotIn('/js/main.js.map\n', headers)
+        self.assertNotIn('/js/sa-tax-core.js\n', headers)
+
     def test_unreadable_previous_release_is_never_deleted(self):
         import publish
         with tempfile.TemporaryDirectory(prefix='release-test-', dir=ROOT) as folder:

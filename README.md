@@ -7,6 +7,7 @@ Live site: https://knoesen-accounting.co.za
 ## Current instructions
 
 - [RELEASE-CHECKLIST.md](RELEASE-CHECKLIST.md): release procedure and dated September history.
+- [AUDIT-FIXES-2026-10-21.md](AUDIT-FIXES-2026-10-21.md): board corrections and remaining business follow-up.
 - [AUDIT-FIXES-2026-10-15.md](AUDIT-FIXES-2026-10-15.md): current corrections, browser acceptance and publication checks.
 - [AUDIT-FIXES-2026-10-13.md](AUDIT-FIXES-2026-10-13.md): October corrections, tests and external follow-up.
 - [TODO-BEFORE-LAUNCH.md](TODO-BEFORE-LAUNCH.md): current owner decisions and private access/legal checks.
@@ -34,6 +35,8 @@ From a built clean checkout, run the same browser checks with:
 npm ci --ignore-scripts
 npx playwright install chromium
 npm run test:browser
+npm run test:consent
+npm run test:tax-core
 ```
 
 The checks start a local preview and intercept vendor requests; they never send an enquiry. After publication, run `npm run verify:live` to compare prepared pages/assets and verify the provider's actual 404 recovery body, source exclusions and redirects. A local preview pass alone cannot establish provider routing.
@@ -68,7 +71,7 @@ Give replacement fonts new filenames because their URLs are cached immutable. Up
 
 GA4 is configured; Google Ads and Meta Pixel are not. The generated tag loader waits for analytics consent and respects withdrawal. Cloudflare Web Analytics is separately disclosed and cookieless; do not claim that no measurement runs before a cookie choice.
 
-js/main.js checks current analytics consent for contact_call, contact_email, contact_whatsapp and contact_facebook. Parameters contain placement and page path, not contact details. A contact activation is intent; form-provider acceptance is not proof of receipt, qualification or a paying client. Verify actual GA4 receipt/settings privately and use the outcome record described in LEAD-MEASUREMENT.md.
+js/main.js checks current analytics consent for contact_call, contact_email, contact_whatsapp and contact_facebook. The consent API rereads the shared cookie before permission checks, synchronises open tabs and refreshes on focus, visibility and restored-page events. Missing, expired, malformed or unavailable consent fails closed. Parameters contain placement and page path, not contact details. A contact activation is intent; form-provider acceptance is not proof of receipt, qualification or a paying client. Verify actual GA4 receipt/settings privately and use the outcome record described in LEAD-MEASUREMENT.md.
 
 The user-triggered map keeps a directions alternative and does not infer successful Google Maps rendering from a cross-origin load event.
 

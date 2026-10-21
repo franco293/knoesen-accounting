@@ -710,14 +710,29 @@ textarea {
   margin-bottom: 2px;
 }
 
-.nav-toggle {
+.nav-fallback {
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--brass-light);
+}
+.nav-ready .nav-fallback { display: none; }
+#site-navigation { scroll-margin-top: 7rem; }
+.nav-toggle {
+  display: none;
   flex-direction: column;
   justify-content: center;
   gap: 5px;
   width: 40px;
   height: 40px;
   padding: 0;
+}
+.nav-ready .nav-toggle {
+  display: inline-flex;
 }
 .nav-toggle span {
   display: block;
@@ -792,6 +807,8 @@ textarea {
   .nav-cta {
     display: flex;
   }
+  .nav-fallback,
+  .nav-ready .nav-toggle,
   .nav-toggle,
   .mobile-panel {
     display: none;
@@ -1426,6 +1443,7 @@ textarea {
   }
   /* Deep links need the real heights of all preceding sections before the
      browser places the target. Avoid estimated-height anchor jumps. */
+  body:has(#site-navigation:target) main > section.section,
   main:has(:target) > section.section,
   main:target > section.section {
     content-visibility: visible;

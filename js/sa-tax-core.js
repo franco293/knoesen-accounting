@@ -156,10 +156,20 @@
     return Number(parts[3]) + " " + MONTHS[Number(parts[2]) - 1] + " " + parts[1];
   }
 
-  /* Tolerant of what people actually type: "R45 000", "45,000", " 45000 ". */
+  /* Keep annualised amounts within the integer-cent precision of JavaScript
+     numbers. This is a numerical limit, not a statutory threshold. All input
+     helpers use it, including figures that are already annual. */
+  var MAX_INPUT_AMOUNT = 9007199254740991 / (100 * 12);
+
+  /* Tolerant of "R45 000", "45,000", " 45000 " and decimal points, but only
+     when the entire value is a valid amount. Commas/spaces group thousands;
+     they are not decimal separators. Invalid or oversized input remains zero
+     so the existing calculator field validation can ask for a valid amount. */
   function parseAmount(raw) {
-    var value = parseFloat(String(raw == null ? "" : raw).replace(/[\s,R]/g, ""));
-    return isFinite(value) && value > 0 ? value : 0;
+    var text = String(raw == null ? "" : raw).trim().replace(/^R\s*/, "");
+    if (!/^(?:\d+|\d{1,3}(?:,\d{3})+|\d{1,3}(?:\s+\d{3})+)(?:\.\d+)?$/.test(text)) return 0;
+    var value = Number(text.replace(/[\s,]/g, ""));
+    return isFinite(value) && value > 0 && value <= MAX_INPUT_AMOUNT ? value : 0;
   }
 
   /* ---- The arithmetic ----------------------------------------------------- */

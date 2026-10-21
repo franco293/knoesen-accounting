@@ -6,6 +6,8 @@
     "start": "python preview.py",
     "build": "python publish.py",
     "test": "python -m unittest discover -s tests",
+    "test:tax-core": "node --test tests/tax-core.test.cjs",
+    "test:consent": "node tools/consent-browser.cjs",
     "test:browser": "node tools/smoke-browser.cjs",
     "verify:live": "node tools/verify-live.cjs"
   },
